@@ -1,0 +1,149 @@
+#include "DcmTagKey.h"
+
+const DcmTagKey DcmTagKey::TransferSyntaxUid        (0x0002, 0x0010);
+
+const DcmTagKey DcmTagKey::SpecificCharacterSet     (0x0008, 0x0005);
+
+const DcmTagKey DcmTagKey::PixelData                (0x7FE0, 0x0010);
+const DcmTagKey DcmTagKey::Item                     (0xFFFE, 0xE000);
+const DcmTagKey DcmTagKey::ItemDeliminationItem     (0xFFFE, 0xE00D);
+const DcmTagKey DcmTagKey::SequenceDeliminationItem (0xFFFE, 0xE0DD);
+
+/* Implementation */
+
+DcmTagKey::DcmTagKey()
+    : m_group(0),
+      m_element(0)
+{
+}
+
+DcmTagKey::DcmTagKey(DcmUnsignedShort group, DcmUnsignedShort element)
+    : m_group(group),
+      m_element(element)
+{
+}
+
+DcmTagKey::DcmTagKey(DcmHash hash)
+    : m_group(hash >> 16),
+      m_element(hash & 0xFFFF)
+{
+}
+
+DcmTagKey::DcmTagKey(const DcmTagKey &tagKey)
+    : m_group(tagKey.m_group),
+      m_element(tagKey.m_element)
+{
+}
+
+DcmTagKey& DcmTagKey::operator =(const DcmTagKey &tagKey)
+{
+    if (this != &tagKey) {
+        m_group = tagKey.m_group;
+        m_element = tagKey.m_element;
+    }
+    return *this;
+}
+
+DcmTagKey& DcmTagKey::operator =(DcmHash hash)
+{
+    m_group = hash >> 16;
+    m_element = hash & 0xFFFF;
+    return *this;
+}
+
+bool DcmTagKey::operator ==(const DcmTagKey &tagKey) const
+{
+    return (m_group == tagKey.m_group) && (m_element == tagKey.m_element);
+}
+
+bool DcmTagKey::operator !=(const DcmTagKey &tagKey) const
+{
+    return (m_group != tagKey.m_group) || (m_element != tagKey.m_element);
+}
+
+bool DcmTagKey::operator >(const DcmTagKey &tagKey) const
+{
+    if (m_group == tagKey.m_group) {
+        return m_element > tagKey.m_element;
+    }
+    return m_group > tagKey.m_group;
+}
+
+bool DcmTagKey::operator <(const DcmTagKey &tagKey) const
+{
+    if (m_group == tagKey.m_group) {
+        return m_element < tagKey.m_element;
+    }
+    return m_group < tagKey.m_group;
+}
+
+bool DcmTagKey::operator >=(const DcmTagKey &tagKey) const
+{
+    if (m_group == tagKey.m_group) {
+        return(m_element >= tagKey.m_element);
+    }
+    return m_group > tagKey.m_group;
+}
+
+bool DcmTagKey::operator <=(const DcmTagKey &tagKey) const
+{
+    if (m_group == tagKey.m_group) {
+        return m_element <= tagKey.m_element;
+    }
+    return m_group < tagKey.m_group;
+}
+
+DcmUnsignedShort DcmTagKey::group() const
+{
+    return m_group;
+}
+
+DcmUnsignedShort DcmTagKey::element() const
+{
+    return m_element;
+}
+
+DcmHash DcmTagKey::hash() const
+{
+    return (((DcmUnsignedLong)m_group)<< 16) | m_element;
+}
+
+void DcmTagKey::setGroup(DcmUnsignedShort group)
+{
+    m_group = group;
+}
+
+void DcmTagKey::setElement(DcmUnsignedShort element)
+{
+    m_element = element;
+}
+
+void DcmTagKey::setHash(DcmHash hash)
+{
+    m_group = hash >> 16;
+    m_element = hash & 0xFFFF;
+}
+
+bool DcmTagKey::isPrivate() const
+{
+    return (m_group & 0x0001) != 0;
+}
+
+bool DcmTagKey::isGroupSize() const
+{
+    return m_element == 0;
+}
+
+bool DcmTagKey::isAlwaysImplicit() const
+{
+    return (*this == Item)
+            || (*this == ItemDeliminationItem)
+            || (*this == SequenceDeliminationItem);
+}
+
+QString DcmTagKey::toString() const
+{
+    return QString("(%1, %2)")
+            .arg(QString::number(m_group, 16).rightJustified(4, '0'))
+            .arg(QString::number(m_element, 16).rightJustified(4, '0'));
+}
