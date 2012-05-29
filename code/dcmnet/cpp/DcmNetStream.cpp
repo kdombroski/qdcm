@@ -14,6 +14,7 @@
 #include "DcmAReleaseRequest.h"
 #include "DcmAReleaseResponse.h"
 #include "DcmAAbort.h"
+#include "DcmPDataTf.h"
 #include "DcmNetStream.h"
 
 DcmNetStream::DcmNetStream(DcmStream &stream)
@@ -48,6 +49,7 @@ void DcmNetStream::writePDUItem(const DcmPDUItem &item)
     CASE(DcmPDUType_AReleaseRq, DcmAReleaseRequest);
     CASE(DcmPDUType_AReleaseRp, DcmAReleaseResponse);
     CASE(DcmPDUType_AAbort, DcmAAbort);
+    CASE(DcmPDUType_PData, DcmPDataTf);
     default:
         qWarning() << "Unknown PDU type" << type;
         break;
@@ -90,6 +92,7 @@ DcmPDUItem* DcmNetStream::readPDUItem()
     CASE(DcmPDUType_AReleaseRq, DcmAReleaseRequest);
     CASE(DcmPDUType_AReleaseRp, DcmAReleaseResponse);
     CASE(DcmPDUType_AAbort, DcmAAbort);
+    CASE(DcmPDUType_PData, DcmPDataTf);
     default:
         qWarning() << "Unknown PDU type" << type;
         break;
