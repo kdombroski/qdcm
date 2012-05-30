@@ -342,9 +342,9 @@ private slots:
         QVERIFY(tagPatientName->vr() == DcmVr::PN);
         delete tagPatientName;
 
-        DcmTag *tagSyntax = DcmTag::create(DcmTagKey::TransferSyntaxUid);
+        DcmTag *tagSyntax = DcmTag::create(DcmTagKey::TransferSyntaxUID);
         QVERIFY(tagSyntax);
-        QVERIFY(tagSyntax->tagKey() == DcmTagKey::TransferSyntaxUid);
+        QVERIFY(tagSyntax->tagKey() == DcmTagKey::TransferSyntaxUID);
         QVERIFY(tagSyntax->vr() == DcmVr::UI);
         delete tagSyntax;
     }

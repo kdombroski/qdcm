@@ -32,6 +32,17 @@ DcmPDUType DcmPDUItem::type() const
     return m_type;
 }
 
+bool DcmPDUItem::isAssociationLevel() const
+{
+    return m_type == DcmPDUType_AAssociateRq
+            || m_type == DcmPDUType_AAssociateAc
+            || m_type == DcmPDUType_AAssociateRj
+            || m_type == DcmPDUType_AReleaseRq
+            || m_type == DcmPDUType_AReleaseRp
+            || m_type == DcmPDUType_AAbort
+            || m_type == DcmPDUType_PData;
+}
+
 DcmSize DcmPDUItem::size() const
 {
     // DcmPDUType, 00, content length (2 bytes), ...content...

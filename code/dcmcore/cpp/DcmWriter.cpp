@@ -45,7 +45,7 @@ void DcmWriter::writeDataset(DcmDataset *datasetPtr)
     DcmTransferSyntax streamTransferSyntax = m_streamPtr->transferSyntax();
     DcmTransferSyntax metaTransferSyntax = streamTransferSyntax;
 
-    DcmTag *tagTransferSyntax = datasetPtr->findTag(DcmTagKey::TransferSyntaxUid);
+    DcmTag *tagTransferSyntax = datasetPtr->findTag(DcmTagKey::TransferSyntaxUID);
     if (tagTransferSyntax && !isIgnoreMetaInfoHeader()) {
         // Meta info header exists, it must be written using explicit little endian syntax
         metaTransferSyntax = DcmTransferSyntax::fromUid(tagTransferSyntax->value().toString());

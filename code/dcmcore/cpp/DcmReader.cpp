@@ -229,7 +229,7 @@ DcmTag* DcmReader::readTag()
         tagPtr = readTagAsBinary();
     } else if (m_vr.isString()) {
         tagPtr = readTagAsString();
-        if (tagPtr && m_tagKey == DcmTagKey::TransferSyntaxUid) {
+        if (tagPtr && m_tagKey == DcmTagKey::TransferSyntaxUID) {
             // Save transfer syntax defined in meta info header for further use
             m_transferSyntax = DcmTransferSyntax::fromUid(tagPtr->value().toString());
         } else if (tagPtr && m_tagKey == DcmTagKey::SpecificCharacterSet) {

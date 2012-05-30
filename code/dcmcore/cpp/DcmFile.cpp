@@ -73,7 +73,7 @@ void DcmFile::write(DcmDataset *datasetPtr, const DcmTransferSyntax &transferSyn
     }
 
     // Injecting transfer syntax to meta information header
-    DcmTagUI tag(DcmTagKey::TransferSyntaxUid);
+    DcmTagUI tag(DcmTagKey::TransferSyntaxUID);
     tag.setString(transferSyntax.uid());
     datasetPtr->insert(tag);
 

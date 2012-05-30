@@ -25,7 +25,24 @@ public:
     /*
         Some frequently used tag keys.
     */
-    static const DcmTagKey TransferSyntaxUid;
+    static const DcmTagKey CommandServiceClassUID;
+    static const DcmTagKey CommandField;
+    static const DcmTagKey CommandMessageId;
+    static const DcmTagKey CommandResponseMessageId;
+    static const DcmTagKey CommandMoveDestinationAE;
+    static const DcmTagKey CommandPriority;
+    static const DcmTagKey CommandDataSetType;
+    static const DcmTagKey CommandStatus;
+    static const DcmTagKey CommandAffectedSOPInstanceUID;
+    static const DcmTagKey CommandRequestedSOPInstanceUID;
+    static const DcmTagKey CommandNumberOfRemainedSuboperations;
+    static const DcmTagKey CommandNumberOfCompletedSuboperations;
+    static const DcmTagKey CommandNumberOfFailedSuboperations;
+    static const DcmTagKey CommandNumberOfWarningSuboperations;
+    static const DcmTagKey CommandMoveOriginatorAE;
+    static const DcmTagKey CommandMoveOriginatorMessageId;
+
+    static const DcmTagKey TransferSyntaxUID;
 
     static const DcmTagKey SpecificCharacterSet;
 

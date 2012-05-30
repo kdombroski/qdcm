@@ -52,6 +52,13 @@ public:
     DcmPDUType type() const;
 
     /**
+     * Tells whether this PDU item is at the association level.
+     * Such PDUs are AAssociateRq, AAssociareAc, AAssociateRj,
+     * AAbort, AReleaseRq, AReleaseRp, and P-Data-TF.
+     */
+    bool isAssociationLevel() const;
+
+    /**
      * Returns raw size of the PDU item in bytes.
      * This method accounts for the item content size
      * and add 4 bytes to encode item type and content size:

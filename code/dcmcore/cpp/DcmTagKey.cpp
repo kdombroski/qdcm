@@ -1,13 +1,30 @@
 #include "DcmTagKey.h"
 
-const DcmTagKey DcmTagKey::TransferSyntaxUid        (0x0002, 0x0010);
+const DcmTagKey DcmTagKey::CommandServiceClassUID                   (0x0000, 0x0002);
+const DcmTagKey DcmTagKey::CommandField                             (0x0000, 0x0100);
+const DcmTagKey DcmTagKey::CommandMessageId                         (0x0000, 0x0110);
+const DcmTagKey DcmTagKey::CommandResponseMessageId                 (0x0000, 0x0120);
+const DcmTagKey DcmTagKey::CommandMoveDestinationAE                 (0x0000, 0x0600);
+const DcmTagKey DcmTagKey::CommandPriority                          (0x0000, 0x0700);
+const DcmTagKey DcmTagKey::CommandDataSetType                       (0x0000, 0x0800);
+const DcmTagKey DcmTagKey::CommandStatus                            (0x0000, 0x0900);
+const DcmTagKey DcmTagKey::CommandAffectedSOPInstanceUID            (0x0000, 0x1000);
+const DcmTagKey DcmTagKey::CommandRequestedSOPInstanceUID           (0x0000, 0x1001);
+const DcmTagKey DcmTagKey::CommandNumberOfRemainedSuboperations     (0x0000, 0x1020);
+const DcmTagKey DcmTagKey::CommandNumberOfCompletedSuboperations    (0x0000, 0x1021);
+const DcmTagKey DcmTagKey::CommandNumberOfFailedSuboperations       (0x0000, 0x1022);
+const DcmTagKey DcmTagKey::CommandNumberOfWarningSuboperations      (0x0000, 0x1023);
+const DcmTagKey DcmTagKey::CommandMoveOriginatorAE                  (0x0000, 0x1030);
+const DcmTagKey DcmTagKey::CommandMoveOriginatorMessageId           (0x0000, 0x1031);
 
-const DcmTagKey DcmTagKey::SpecificCharacterSet     (0x0008, 0x0005);
+const DcmTagKey DcmTagKey::TransferSyntaxUID                        (0x0002, 0x0010);
 
-const DcmTagKey DcmTagKey::PixelData                (0x7FE0, 0x0010);
-const DcmTagKey DcmTagKey::Item                     (0xFFFE, 0xE000);
-const DcmTagKey DcmTagKey::ItemDeliminationItem     (0xFFFE, 0xE00D);
-const DcmTagKey DcmTagKey::SequenceDeliminationItem (0xFFFE, 0xE0DD);
+const DcmTagKey DcmTagKey::SpecificCharacterSet                     (0x0008, 0x0005);
+
+const DcmTagKey DcmTagKey::PixelData                                (0x7FE0, 0x0010);
+const DcmTagKey DcmTagKey::Item                                     (0xFFFE, 0xE000);
+const DcmTagKey DcmTagKey::ItemDeliminationItem                     (0xFFFE, 0xE00D);
+const DcmTagKey DcmTagKey::SequenceDeliminationItem                 (0xFFFE, 0xE0DD);
 
 /* Implementation */
 
