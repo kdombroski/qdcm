@@ -121,6 +121,11 @@ DcmDataset& DcmDimseMessage::commandDataset()
     return m_commandDataset;
 }
 
+DcmDataset DcmDimseMessage::constCommandDataset() const
+{
+    return m_commandDataset;
+}
+
 void DcmDimseMessage::setCommandDataset(const DcmDataset &dataset)
 {
     m_commandDataset = dataset;

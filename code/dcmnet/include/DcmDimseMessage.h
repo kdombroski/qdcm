@@ -124,6 +124,12 @@ public:
     DcmDataset& commandDataset();
 
     /**
+     * Returns constant copy of the command dataset.
+     * \return Command dataset.
+     */
+    DcmDataset constCommandDataset() const;
+
+    /**
      * Assign command dataset.
      * \param dataset Command dataset to be assigned.
      */
