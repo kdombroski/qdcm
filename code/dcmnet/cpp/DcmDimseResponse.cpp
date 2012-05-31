@@ -15,7 +15,7 @@ DcmDimseResponse::DcmDimseResponse(const DcmDimseRequest &request)
     : DcmDimseMessage()
 {
     setServiceClassUID(request.serviceClassUID());
-    setCommand(request.command());
+    setCommand(DcmCommandType(request.command() | 0x8000));
     setResponseMessageId(request.messageId());
     setStatus(DcmDimseResponse::Status_Success);
 }
