@@ -3,9 +3,8 @@
 
 #include <QString>
 #include "DcmTypes.h"
+#include "DcmDataset.h"
 #include "DcmNetApi.h"
-
-class DcmDataset;
 
 /*! Base class for DIMSE messages.
  * DIMSE message is composed of command set of DICOM tags,

@@ -134,6 +134,18 @@ typedef enum {
     DcmCommandType_NDeleteResponse      = 0x8150
 } DcmCommandType;
 
+/**
+ * DIMSE message priority.
+ */
+typedef enum {
+    DcmPriorityType_Medium  = 0x0000,
+    DcmPriorityType_High    = 0x0001,
+    DcmPriorityType_Low     = 0x0002
+} DcmPriorityType;
+
+/**
+ * Assiciation rejection result.
+ */
 typedef enum {
     DcmAssociationResultType_RejectPermanent = 1,
     DcmAssocuationResultType_RejectTransient = 2
