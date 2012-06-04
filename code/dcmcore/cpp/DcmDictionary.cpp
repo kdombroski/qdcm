@@ -310,16 +310,19 @@ bool DcmDictionary::parseMultiplicity(const QString &str, int &vmMin, int &vmMax
         return false;
     }
 
-
     if (mult.count() > 1) {
         // Multiplicity is defined as a range
         if (mult.at(1).right(1).toLower() == "n") {
             max = DcmMultiplicity_Unknown;
             QString strNum = mult.at(1).left(mult.at(1).length() - 1);
-            mod = strNum.toInt(&ok);
-            if (!ok) {
-                // Module value is invalid
-                return false;
+            if (!strNum.isEmpty()) {
+                mod = strNum.toInt(&ok);
+                if (!ok) {
+                    // Module value is invalid
+                    return false;
+                }
+            } else {
+                mod = 1;
             }
         } else {
             max = mult.at(1).toInt(&ok);
