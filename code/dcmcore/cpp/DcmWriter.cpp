@@ -37,9 +37,13 @@ void DcmWriter::writeDataset(DcmDataset *datasetPtr)
         return;
     }
 
-    DcmCharSet cs = DcmCharSet::forName(datasetPtr->tagValue(DcmTagKey::SpecificCharacterSet).toString());
-    if (cs.isValid()) {
-        m_charSet = cs;
+    // Check whether there is a character set in the dataset
+    DcmTag *tagPtr = datasetPtr->findTag(DcmTagKey::SpecificCharacterSet);
+    if (tagPtr) {
+        DcmCharSet cs = DcmCharSet::forName(tagPtr->value().toString());
+        if (cs.isValid()) {
+            m_charSet = cs;
+        }
     }
 
     DcmTransferSyntax streamTransferSyntax = m_streamPtr->transferSyntax();

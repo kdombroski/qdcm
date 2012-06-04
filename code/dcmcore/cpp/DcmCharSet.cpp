@@ -95,7 +95,7 @@ QString DcmCharSet::decode(const QByteArray &byteArray) const
 {
     QString str;
     if (m_decoderPtr) {
-        m_decoderPtr->toUnicode(byteArray);
+        str = m_decoderPtr->toUnicode(byteArray);
     } else {
         str = QString::fromLatin1(byteArray.constData());
     }

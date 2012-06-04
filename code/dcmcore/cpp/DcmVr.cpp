@@ -179,6 +179,7 @@ bool DcmVr::isText() const
     case DcmVrKey_UT:
     case DcmVrKey_AE:
     case DcmVrKey_PN:
+        return true;
     default:
         return false;
     }

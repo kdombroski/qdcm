@@ -62,7 +62,26 @@ private slots:
 
         delete ds;
     }
+/*
+    void testReadFile()
+    {
+        QString path = "E:/DICOM/BAD_DICOM/badrs.dcm";
+        DcmFile dcmFile(path);
+        QVERIFY(dcmFile.exists());
 
+        DcmDataset *dataset = dcmFile.read();
+        if (dcmFile.isError()) {
+            qDebug() << "ERROR:" << dcmFile.errorText();
+        }
+
+        qDebug() << "CharSet:" << dataset->tagValue(DcmTagKey::SpecificCharacterSet).toString();
+
+        DcmFile dcmOutputFile("output.dcm");
+        dcmOutputFile.write(dataset, DcmTransferSyntax::ImplicitLittleEndian);
+
+        delete dataset;
+    }
+*/
 #if 0
     void testReadFile()
     {

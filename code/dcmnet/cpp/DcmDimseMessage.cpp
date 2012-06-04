@@ -106,7 +106,7 @@ bool DcmDimseMessage::hasData() const
     if (tagPtr) {
         return tagPtr->value().toInt() == DcmDimseMessage::Data_Present;
     }
-    return DcmDimseMessage::Data_NotPresent;
+    return false;   // No data by default
 }
 
 void DcmDimseMessage::setHasData(bool flag)

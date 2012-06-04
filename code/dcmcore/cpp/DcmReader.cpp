@@ -470,7 +470,8 @@ DcmTag* DcmReader::readTagAsString()
         while (s > 0 && buffer[s - 1] == 0)
             s--;
         if (m_vr.isText()) {
-            sValue = m_charSet.decode(QByteArray(buffer));
+            QByteArray byteArray(buffer, s);
+            sValue = m_charSet.decode(byteArray);
         } else {
             sValue = QString::fromAscii(buffer, s);
         }
