@@ -30,7 +30,7 @@ private slots:
 
         QVERIFY(mod.isValid());
 
-        mod.setSoftwareVersion("QDCM-1.0");
+        mod.setSoftwareVersions("QDCM-1.0");
 
         DcmDataset dataset;
         dataset.attachModule(mod);
@@ -40,7 +40,7 @@ private slots:
         QVERIFY(dataset.findTag("InstanceCreatorUID"));
         QVERIFY(dataset.findTag("InstanceCreationDate"));
         QVERIFY(dataset.findTag("InstanceCreationTime"));
-        QVERIFY(dataset.findTag("SoftwareVersion"));
+        QVERIFY(dataset.findTag("SoftwareVersions"));
 
         DcmModuleSOPCommon mod2;
         mod2.fetchFromDataset(dataset);
@@ -51,7 +51,7 @@ private slots:
         QCOMPARE(mod2.instanceCreatorUID(), QString("3.4.5.6.7"));
         QCOMPARE(mod2.instanceCreationDate(), QDate(2010, 03, 15));
         QCOMPARE(mod2.instanceCreationTime(), QTime(13, 45, 16, 325));
-        QCOMPARE(mod2.softwareVersion(), QString("QDCM-1.0"));
+        QCOMPARE(mod2.softwareVersions(), QString("QDCM-1.0"));
     }
 
     void testDcmModulePatient()

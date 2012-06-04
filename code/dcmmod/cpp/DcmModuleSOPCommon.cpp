@@ -8,7 +8,7 @@ DcmModuleSOPCommon::DcmModuleSOPCommon()
 {
     initializeTags();
     // Injecting QDCM version tag
-    setTagValue("SoftwareVersion", QString("QDCM-%1").arg(VERSION));
+    setTagValue("SoftwareVersions", QString("QDCM-%1").arg(VERSION));
 }
 
 DcmModuleSOPCommon::DcmModuleSOPCommon(const DcmModuleSOPCommon &module)
@@ -96,14 +96,14 @@ void DcmModuleSOPCommon::setInstanceCreatorUID(const QString &uid)
     setTagValue("InstanceCreatorUID", uid);
 }
 
-QString DcmModuleSOPCommon::softwareVersion() const
+QString DcmModuleSOPCommon::softwareVersions() const
 {
-    return tagValue("softwareVersion").toString();
+    return tagValue("softwareVersions").toString();
 }
 
-void DcmModuleSOPCommon::setSoftwareVersion(const QString &v)
+void DcmModuleSOPCommon::setSoftwareVersions(const QString &v)
 {
-    setTagValue("SoftwareVersion", v);
+    setTagValue("SoftwareVersions", v);
 }
 
 void DcmModuleSOPCommon::initializeTags()
@@ -113,6 +113,6 @@ void DcmModuleSOPCommon::initializeTags()
     addSupportedTag("InstanceCreationDate", true);
     addSupportedTag("InstanceCreationTime", true);
     addSupportedTag("InstanceCreatorUID", false);
-    addSupportedTag("SoftwareVersion", false);
+    addSupportedTag("SoftwareVersions", false);
 }
 

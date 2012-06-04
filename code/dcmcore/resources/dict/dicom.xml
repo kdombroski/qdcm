@@ -17,11 +17,13 @@
     <tag key="0000,0850" vr="US" vm="1">ACR_NEMA_NumberOfMatches</tag>
     <tag key="0000,0860" vr="US" vm="1">ACR_NEMA_ResponseSequenceNumber</tag>
     <tag key="0000,0900" vr="US" vm="1">Status</tag>
+    <tag key="0000,0901" vr="AT" vm="1-n">OffendingElement</tag>
     <tag key="0000,0902" vr="LO" vm="1">ErrorComment</tag>
     <tag key="0000,0903" vr="US" vm="1">ErrorID</tag>
     <tag key="0000,1000" vr="UI" vm="1">AffectedSOPInstanceUID</tag>
     <tag key="0000,1001" vr="UI" vm="1">RequestedSOPInstanceUID</tag>
     <tag key="0000,1002" vr="US" vm="1">EventTypeID</tag>
+    <tag key="0000,1005" vr="AT" vm="1-n">AttributeIdentifierList</tag>
     <tag key="0000,1008" vr="US" vm="1">ActionTypeID</tag>
     <tag key="0000,1020" vr="US" vm="1">NumberOfRemainingSubOperations</tag>
     <tag key="0000,1021" vr="US" vm="1">NumberOfCompletedSubOperations</tag>
@@ -41,8 +43,9 @@
     <tag key="0000,5160" vr="CS" vm="1">ACR_NEMA_Borders</tag>
     <tag key="0000,5170" vr="IS" vm="1">ACR_NEMA_Copies</tag>
     <tag key="0000,5180" vr="LO" vm="1">ACR_NEMA_MagnificationType</tag>
-    <tag key="0000,5190" vr="CS" vm="1">RETIRED_Erase</tag>
+    <tag key="0000,5190" vr="LO" vm="1-n">ACR_NEMA_Erase</tag>
     <tag key="0000,51a0" vr="CS" vm="1">ACR_NEMA_Print</tag>
+    <tag key="0000,51b0" vr="US" vm="1-n">ACR_NEMA_Overlays</tag>
     <tag key="0002,0000" vr="UL" vm="1">FileMetaInformationGroupLength</tag>
     <tag key="0002,0001" vr="OB" vm="1">FileMetaInformationVersion</tag>
     <tag key="0002,0002" vr="UI" vm="1">MediaStorageSOPClassUID</tag>
@@ -65,15 +68,19 @@
     <tag key="0004,1510" vr="UI" vm="1">ReferencedSOPClassUIDInFile</tag>
     <tag key="0004,1511" vr="UI" vm="1">ReferencedSOPInstanceUIDInFile</tag>
     <tag key="0004,1512" vr="UI" vm="1">ReferencedTransferSyntaxUIDInFile</tag>
+    <tag key="0004,151a" vr="UI" vm="1-n">ReferencedRelatedGeneralSOPClassUIDInFile</tag>
     <tag key="0004,1600" vr="UL" vm="1">RETIRED_NumberOfReferences</tag>
     <tag key="0008,0001" vr="UL" vm="1">ACR_NEMA_IdentifyingGroupLengthToEnd</tag>
+    <tag key="0008,0005" vr="CS" vm="1-n">SpecificCharacterSet</tag>
     <tag key="0008,0006" vr="SQ" vm="1">LanguageCodeSequence</tag>
+    <tag key="0008,0008" vr="CS" vm="2-n">ImageType</tag>
     <tag key="0008,0010" vr="LO" vm="1">ACR_NEMA_RecognitionCode</tag>
     <tag key="0008,0012" vr="DA" vm="1">InstanceCreationDate</tag>
     <tag key="0008,0013" vr="TM" vm="1">InstanceCreationTime</tag>
     <tag key="0008,0014" vr="UI" vm="1">InstanceCreatorUID</tag>
     <tag key="0008,0016" vr="UI" vm="1">SOPClassUID</tag>
     <tag key="0008,0018" vr="UI" vm="1">SOPInstanceUID</tag>
+    <tag key="0008,001a" vr="UI" vm="1-n">RelatedGeneralSOPClassUID</tag>
     <tag key="0008,001b" vr="UI" vm="1">OriginalSpecializedSOPClassUID</tag>
     <tag key="0008,0020" vr="DA" vm="1">StudyDate</tag>
     <tag key="0008,0021" vr="DA" vm="1">SeriesDate</tag>
@@ -94,8 +101,12 @@
     <tag key="0008,0050" vr="SH" vm="1">AccessionNumber</tag>
     <tag key="0008,0051" vr="SQ" vm="1">IssuerOfAccessionNumberSequence</tag>
     <tag key="0008,0052" vr="CS" vm="1">QueryRetrieveLevel</tag>
+    <tag key="0008,0054" vr="AE" vm="1-n">RetrieveAETitle</tag>
     <tag key="0008,0056" vr="CS" vm="1">InstanceAvailability</tag>
+    <tag key="0008,0058" vr="UI" vm="1-n">FailedSOPInstanceUIDList</tag>
     <tag key="0008,0060" vr="CS" vm="1">Modality</tag>
+    <tag key="0008,0061" vr="CS" vm="1-n">ModalitiesInStudy</tag>
+    <tag key="0008,0062" vr="UI" vm="1-n">SOPClassesInStudy</tag>
     <tag key="0008,0064" vr="CS" vm="1">ConversionType</tag>
     <tag key="0008,0068" vr="CS" vm="1">PresentationIntentType</tag>
     <tag key="0008,0070" vr="LO" vm="1">Manufacturer</tag>
@@ -104,6 +115,7 @@
     <tag key="0008,0082" vr="SQ" vm="1">InstitutionCodeSequence</tag>
     <tag key="0008,0090" vr="PN" vm="1">ReferringPhysicianName</tag>
     <tag key="0008,0092" vr="ST" vm="1">ReferringPhysicianAddress</tag>
+    <tag key="0008,0094" vr="SH" vm="1-n">ReferringPhysicianTelephoneNumbers</tag>
     <tag key="0008,0096" vr="SQ" vm="1">ReferringPhysicianIdentificationSequence</tag>
     <tag key="0008,0100" vr="SH" vm="1">CodeValue</tag>
     <tag key="0008,0102" vr="SH" vm="1">CodingSchemeDesignator</tag>
@@ -125,16 +137,20 @@
     <tag key="0008,0201" vr="SH" vm="1">TimezoneOffsetFromUTC</tag>
     <tag key="0008,1000" vr="LO" vm="1">ACR_NEMA_NetworkID</tag>
     <tag key="0008,1010" vr="SH" vm="1">StationName</tag>
-    <tag key="0008,1020" vr="CS" vm="1">SoftwareVersion</tag>
     <tag key="0008,1030" vr="LO" vm="1">StudyDescription</tag>
     <tag key="0008,1032" vr="SQ" vm="1">ProcedureCodeSequence</tag>
     <tag key="0008,103e" vr="LO" vm="1">SeriesDescription</tag>
     <tag key="0008,103f" vr="SQ" vm="1">SeriesDescriptionCodeSequence</tag>
     <tag key="0008,1040" vr="LO" vm="1">InstitutionalDepartmentName</tag>
+    <tag key="0008,1048" vr="PN" vm="1-n">PhysiciansOfRecord</tag>
     <tag key="0008,1049" vr="SQ" vm="1">PhysiciansOfRecordIdentificationSequence</tag>
+    <tag key="0008,1050" vr="PN" vm="1-n">PerformingPhysicianName</tag>
     <tag key="0008,1052" vr="SQ" vm="1">PerformingPhysicianIdentificationSequence</tag>
+    <tag key="0008,1060" vr="PN" vm="1-n">NameOfPhysiciansReadingStudy</tag>
     <tag key="0008,1062" vr="SQ" vm="1">PhysiciansReadingStudyIdentificationSequence</tag>
+    <tag key="0008,1070" vr="PN" vm="1-n">OperatorsName</tag>
     <tag key="0008,1072" vr="SQ" vm="1">OperatorIdentificationSequence</tag>
+    <tag key="0008,1080" vr="LO" vm="1-n">AdmittingDiagnosesDescription</tag>
     <tag key="0008,1084" vr="SQ" vm="1">AdmittingDiagnosesCodeSequence</tag>
     <tag key="0008,1090" vr="LO" vm="1">ManufacturerModelName</tag>
     <tag key="0008,1100" vr="SQ" vm="1">RETIRED_ReferencedResultsSequence</tag>
@@ -152,6 +168,9 @@
     <tag key="0008,114b" vr="SQ" vm="1">ReferencedRealWorldValueMappingInstanceSequence</tag>
     <tag key="0008,1150" vr="UI" vm="1">ReferencedSOPClassUID</tag>
     <tag key="0008,1155" vr="UI" vm="1">ReferencedSOPInstanceUID</tag>
+    <tag key="0008,115a" vr="UI" vm="1-n">SOPClassesSupported</tag>
+    <tag key="0008,1160" vr="IS" vm="1-n">ReferencedFrameNumber</tag>
+    <tag key="0008,1161" vr="UL" vm="1-n">SimpleFrameList</tag>
     <tag key="0008,1162" vr="UL" vm="3-3n">CalculatedFrameList</tag>
     <tag key="0008,1163" vr="FD" vm="2">TimeRange</tag>
     <tag key="0008,1164" vr="SQ" vm="1">FrameExtractionSequence</tag>
@@ -172,6 +191,8 @@
     <tag key="0008,2128" vr="IS" vm="1">ViewNumber</tag>
     <tag key="0008,2129" vr="IS" vm="1">NumberOfEventTimers</tag>
     <tag key="0008,212a" vr="IS" vm="1">NumberOfViewsInStage</tag>
+    <tag key="0008,2130" vr="DS" vm="1-n">EventElapsedTimes</tag>
+    <tag key="0008,2132" vr="LO" vm="1-n">EventTimerNames</tag>
     <tag key="0008,2133" vr="SQ" vm="1">EventTimerSequence</tag>
     <tag key="0008,2134" vr="FD" vm="1">EventTimeOffset</tag>
     <tag key="0008,2135" vr="SQ" vm="1">EventCodeSequence</tag>
@@ -201,7 +222,7 @@
     <tag key="0008,225c" vr="SQ" vm="1">RETIRED_OnAxisBackgroundAnatomicStructureCodeSequenceTrial</tag>
     <tag key="0008,3001" vr="SQ" vm="1">AlternateRepresentationSequence</tag>
     <tag key="0008,3010" vr="UI" vm="1">IrradiationEventUID</tag>
-    <tag key="0008,4000" vr="LT" vm="1">RETIRED_IdentifyingComments</tag>
+    <tag key="0008,4000" vr="LT" vm="1-n">ACR_NEMA_IdentifyingComments</tag>
     <tag key="0008,9007" vr="CS" vm="4">FrameType</tag>
     <tag key="0008,9092" vr="SQ" vm="1">ReferencedImageEvidenceSequence</tag>
     <tag key="0008,9121" vr="SQ" vm="1">ReferencedRawDataSequence</tag>
@@ -230,6 +251,8 @@
     <tag key="0010,0050" vr="SQ" vm="1">PatientInsurancePlanCodeSequence</tag>
     <tag key="0010,0101" vr="SQ" vm="1">PatientPrimaryLanguageCodeSequence</tag>
     <tag key="0010,0102" vr="SQ" vm="1">PatientPrimaryLanguageModifierCodeSequence</tag>
+    <tag key="0010,1000" vr="LO" vm="1-n">OtherPatientIDs</tag>
+    <tag key="0010,1001" vr="PN" vm="1-n">OtherPatientNames</tag>
     <tag key="0010,1002" vr="SQ" vm="1">OtherPatientIDsSequence</tag>
     <tag key="0010,1005" vr="PN" vm="1">PatientBirthName</tag>
     <tag key="0010,1010" vr="AS" vm="1">PatientAge</tag>
@@ -237,12 +260,16 @@
     <tag key="0010,1021" vr="SQ" vm="1">PatientSizeCodeSequence</tag>
     <tag key="0010,1030" vr="DS" vm="1">PatientWeight</tag>
     <tag key="0010,1040" vr="LO" vm="1">PatientAddress</tag>
+    <tag key="0010,1050" vr="LT" vm="1-n">ACR_NEMA_InsurancePlanIdentification</tag>
     <tag key="0010,1060" vr="PN" vm="1">PatientMotherBirthName</tag>
     <tag key="0010,1080" vr="LO" vm="1">MilitaryRank</tag>
     <tag key="0010,1081" vr="LO" vm="1">BranchOfService</tag>
     <tag key="0010,1090" vr="LO" vm="1">MedicalRecordLocator</tag>
+    <tag key="0010,2000" vr="LO" vm="1-n">MedicalAlerts</tag>
+    <tag key="0010,2110" vr="LO" vm="1-n">Allergies</tag>
     <tag key="0010,2150" vr="LO" vm="1">CountryOfResidence</tag>
     <tag key="0010,2152" vr="LO" vm="1">RegionOfResidence</tag>
+    <tag key="0010,2154" vr="SH" vm="1-n">PatientTelephoneNumbers</tag>
     <tag key="0010,2160" vr="SH" vm="1">EthnicGroup</tag>
     <tag key="0010,2180" vr="SH" vm="1">Occupation</tag>
     <tag key="0010,21a0" vr="CS" vm="1">SmokingStatus</tag>
@@ -275,6 +302,7 @@
     <tag key="0012,0051" vr="ST" vm="1">ClinicalTrialTimePointDescription</tag>
     <tag key="0012,0060" vr="LO" vm="1">ClinicalTrialCoordinatingCenterName</tag>
     <tag key="0012,0062" vr="CS" vm="1">PatientIdentityRemoved</tag>
+    <tag key="0012,0063" vr="LO" vm="1-n">DeidentificationMethod</tag>
     <tag key="0012,0064" vr="SQ" vm="1">DeidentificationMethodCodeSequence</tag>
     <tag key="0012,0071" vr="LO" vm="1">ClinicalTrialSeriesID</tag>
     <tag key="0012,0072" vr="LO" vm="1">ClinicalTrialSeriesDescription</tag>
@@ -287,6 +315,9 @@
     <tag key="0018,0012" vr="SQ" vm="1">ContrastBolusAgentSequence</tag>
     <tag key="0018,0014" vr="SQ" vm="1">ContrastBolusAdministrationRouteSequence</tag>
     <tag key="0018,0015" vr="CS" vm="1">BodyPartExamined</tag>
+    <tag key="0018,0020" vr="CS" vm="1-n">ScanningSequence</tag>
+    <tag key="0018,0021" vr="CS" vm="1-n">SequenceVariant</tag>
+    <tag key="0018,0022" vr="CS" vm="1-n">ScanOptions</tag>
     <tag key="0018,0023" vr="CS" vm="1">MRAcquisitionType</tag>
     <tag key="0018,0024" vr="SH" vm="1">SequenceName</tag>
     <tag key="0018,0025" vr="CS" vm="1">AngioFlag</tag>
@@ -295,8 +326,10 @@
     <tag key="0018,0028" vr="DS" vm="1">InterventionDrugDose</tag>
     <tag key="0018,0029" vr="SQ" vm="1">InterventionDrugCodeSequence</tag>
     <tag key="0018,002a" vr="SQ" vm="1">AdditionalDrugSequence</tag>
+    <tag key="0018,0030" vr="LO" vm="1-n">RETIRED_Radionuclide</tag>
     <tag key="0018,0031" vr="LO" vm="1">Radiopharmaceutical</tag>
     <tag key="0018,0032" vr="DS" vm="1">RETIRED_EnergyWindowCenterline</tag>
+    <tag key="0018,0033" vr="DS" vm="1-n">RETIRED_EnergyWindowTotalWidth</tag>
     <tag key="0018,0034" vr="LO" vm="1">InterventionDrugName</tag>
     <tag key="0018,0035" vr="TM" vm="1">InterventionDrugStartTime</tag>
     <tag key="0018,0036" vr="SQ" vm="1">InterventionSequence</tag>
@@ -320,6 +353,7 @@
     <tag key="0018,0083" vr="DS" vm="1">NumberOfAverages</tag>
     <tag key="0018,0084" vr="DS" vm="1">ImagingFrequency</tag>
     <tag key="0018,0085" vr="SH" vm="1">ImagedNucleus</tag>
+    <tag key="0018,0086" vr="IS" vm="1-n">EchoNumbers</tag>
     <tag key="0018,0087" vr="DS" vm="1">MagneticFieldStrength</tag>
     <tag key="0018,0088" vr="DS" vm="1">SpacingBetweenSlices</tag>
     <tag key="0018,0089" vr="IS" vm="1">NumberOfPhaseEncodingSteps</tag>
@@ -343,7 +377,10 @@
     <tag key="0018,1016" vr="LO" vm="1">SecondaryCaptureDeviceManufacturer</tag>
     <tag key="0018,1017" vr="LO" vm="1">RETIRED_HardcopyDeviceManufacturer</tag>
     <tag key="0018,1018" vr="LO" vm="1">SecondaryCaptureDeviceManufacturerModelName</tag>
+    <tag key="0018,1019" vr="LO" vm="1-n">SecondaryCaptureDeviceSoftwareVersions</tag>
+    <tag key="0018,101a" vr="LO" vm="1-n">RETIRED_HardcopyDeviceSoftwareVersion</tag>
     <tag key="0018,101b" vr="LO" vm="1">RETIRED_HardcopyDeviceManufacturerModelName</tag>
+    <tag key="0018,1020" vr="LO" vm="1-n">SoftwareVersions</tag>
     <tag key="0018,1022" vr="SH" vm="1">VideoImageFormatAcquired</tag>
     <tag key="0018,1023" vr="LO" vm="1">DigitalImageFormatAcquired</tag>
     <tag key="0018,1030" vr="LO" vm="1">ProtocolName</tag>
@@ -353,6 +390,8 @@
     <tag key="0018,1043" vr="TM" vm="1">ContrastBolusStopTime</tag>
     <tag key="0018,1044" vr="DS" vm="1">ContrastBolusTotalDose</tag>
     <tag key="0018,1045" vr="IS" vm="1">SyringeCounts</tag>
+    <tag key="0018,1046" vr="DS" vm="1-n">ContrastFlowRate</tag>
+    <tag key="0018,1047" vr="DS" vm="1-n">ContrastFlowDuration</tag>
     <tag key="0018,1048" vr="CS" vm="1">ContrastBolusIngredient</tag>
     <tag key="0018,1049" vr="DS" vm="1">ContrastBolusIngredientConcentration</tag>
     <tag key="0018,1050" vr="DS" vm="1">SpatialResolution</tag>
@@ -361,6 +400,7 @@
     <tag key="0018,1062" vr="IS" vm="1">NominalInterval</tag>
     <tag key="0018,1063" vr="DS" vm="1">FrameTime</tag>
     <tag key="0018,1064" vr="LO" vm="1">CardiacFramingType</tag>
+    <tag key="0018,1065" vr="DS" vm="1-n">FrameTimeVector</tag>
     <tag key="0018,1066" vr="DS" vm="1">FrameDelay</tag>
     <tag key="0018,1067" vr="DS" vm="1">ImageTriggerDelay</tag>
     <tag key="0018,1068" vr="DS" vm="1">MultiplexGroupTimeOffset</tag>
@@ -397,13 +437,18 @@
     <tag key="0018,1130" vr="DS" vm="1">TableHeight</tag>
     <tag key="0018,1131" vr="DS" vm="1">TableTraverse</tag>
     <tag key="0018,1134" vr="CS" vm="1">TableMotion</tag>
+    <tag key="0018,1135" vr="DS" vm="1-n">TableVerticalIncrement</tag>
+    <tag key="0018,1136" vr="DS" vm="1-n">TableLateralIncrement</tag>
+    <tag key="0018,1137" vr="DS" vm="1-n">TableLongitudinalIncrement</tag>
     <tag key="0018,1138" vr="DS" vm="1">TableAngle</tag>
     <tag key="0018,113a" vr="CS" vm="1">TableType</tag>
     <tag key="0018,1140" vr="CS" vm="1">RotationDirection</tag>
     <tag key="0018,1141" vr="DS" vm="1">RETIRED_AngularPosition</tag>
+    <tag key="0018,1142" vr="DS" vm="1-n">RadialPosition</tag>
     <tag key="0018,1143" vr="DS" vm="1">ScanArc</tag>
     <tag key="0018,1144" vr="DS" vm="1">AngularStep</tag>
     <tag key="0018,1145" vr="DS" vm="1">CenterOfRotationOffset</tag>
+    <tag key="0018,1146" vr="DS" vm="1-n">RETIRED_RotationOffset</tag>
     <tag key="0018,1147" vr="CS" vm="1">FieldOfViewShape</tag>
     <tag key="0018,1149" vr="IS" vm="1-2">FieldOfViewDimensions</tag>
     <tag key="0018,1150" vr="IS" vm="1">ExposureTime</tag>
@@ -416,17 +461,24 @@
     <tag key="0018,115a" vr="CS" vm="1">RadiationMode</tag>
     <tag key="0018,115e" vr="DS" vm="1">ImageAndFluoroscopyAreaDoseProduct</tag>
     <tag key="0018,1160" vr="SH" vm="1">FilterType</tag>
+    <tag key="0018,1161" vr="LO" vm="1-n">TypeOfFilters</tag>
     <tag key="0018,1162" vr="DS" vm="1">IntensifierSize</tag>
     <tag key="0018,1164" vr="DS" vm="2">ImagerPixelSpacing</tag>
+    <tag key="0018,1166" vr="CS" vm="1-n">Grid</tag>
     <tag key="0018,1170" vr="IS" vm="1">GeneratorPower</tag>
     <tag key="0018,1180" vr="SH" vm="1">CollimatorGridName</tag>
     <tag key="0018,1181" vr="CS" vm="1">CollimatorType</tag>
     <tag key="0018,1182" vr="IS" vm="1-2">FocalDistance</tag>
     <tag key="0018,1183" vr="DS" vm="1-2">XFocusCenter</tag>
     <tag key="0018,1184" vr="DS" vm="1-2">YFocusCenter</tag>
+    <tag key="0018,1190" vr="DS" vm="1-n">FocalSpots</tag>
     <tag key="0018,1191" vr="CS" vm="1">AnodeTargetMaterial</tag>
     <tag key="0018,11a0" vr="DS" vm="1">BodyPartThickness</tag>
     <tag key="0018,11a2" vr="DS" vm="1">CompressionForce</tag>
+    <tag key="0018,1200" vr="DA" vm="1-n">DateOfLastCalibration</tag>
+    <tag key="0018,1201" vr="TM" vm="1-n">TimeOfLastCalibration</tag>
+    <tag key="0018,1210" vr="SH" vm="1-n">ConvolutionKernel</tag>
+    <tag key="0018,1240" vr="IS" vm="1-n">ACR_NEMA_UpperLowerPixelValues</tag>
     <tag key="0018,1242" vr="IS" vm="1">ActualFrameDuration</tag>
     <tag key="0018,1243" vr="IS" vm="1">CountRate</tag>
     <tag key="0018,1244" vr="US" vm="1">PreferredPlaybackSequencing</tag>
@@ -435,6 +487,7 @@
     <tag key="0018,1260" vr="SH" vm="1">PlateType</tag>
     <tag key="0018,1261" vr="LO" vm="1">PhosphorType</tag>
     <tag key="0018,1300" vr="DS" vm="1">ScanVelocity</tag>
+    <tag key="0018,1301" vr="CS" vm="1-n">WholeBodyTechnique</tag>
     <tag key="0018,1302" vr="IS" vm="1">ScanLength</tag>
     <tag key="0018,1310" vr="US" vm="4">AcquisitionMatrix</tag>
     <tag key="0018,1312" vr="CS" vm="1">InPlanePhaseEncodingDirection</tag>
@@ -462,6 +515,8 @@
     <tag key="0018,1508" vr="CS" vm="1">PositionerType</tag>
     <tag key="0018,1510" vr="DS" vm="1">PositionerPrimaryAngle</tag>
     <tag key="0018,1511" vr="DS" vm="1">PositionerSecondaryAngle</tag>
+    <tag key="0018,1520" vr="DS" vm="1-n">PositionerPrimaryAngleIncrement</tag>
+    <tag key="0018,1521" vr="DS" vm="1-n">PositionerSecondaryAngleIncrement</tag>
     <tag key="0018,1530" vr="DS" vm="1">DetectorPrimaryAngle</tag>
     <tag key="0018,1531" vr="DS" vm="1">DetectorSecondaryAngle</tag>
     <tag key="0018,1600" vr="CS" vm="1-3">ShutterShape</tag>
@@ -487,6 +542,12 @@
     <tag key="0018,1801" vr="SH" vm="1">TimeSource</tag>
     <tag key="0018,1802" vr="CS" vm="1">TimeDistributionProtocol</tag>
     <tag key="0018,1803" vr="LO" vm="1">NTPSourceAddress</tag>
+    <tag key="0018,2001" vr="IS" vm="1-n">PageNumberVector</tag>
+    <tag key="0018,2002" vr="SH" vm="1-n">FrameLabelVector</tag>
+    <tag key="0018,2003" vr="DS" vm="1-n">FramePrimaryAngleVector</tag>
+    <tag key="0018,2004" vr="DS" vm="1-n">FrameSecondaryAngleVector</tag>
+    <tag key="0018,2005" vr="DS" vm="1-n">SliceLocationVector</tag>
+    <tag key="0018,2006" vr="SH" vm="1-n">DisplayWindowLabelVector</tag>
     <tag key="0018,2010" vr="DS" vm="2">NominalScannedPixelSpacing</tag>
     <tag key="0018,2020" vr="CS" vm="1">DigitizingDeviceTransportDirection</tag>
     <tag key="0018,2030" vr="DS" vm="1">RotationOfScannedFilm</tag>
@@ -495,7 +556,10 @@
     <tag key="0018,3102" vr="DS" vm="1">IVUSGatedRate</tag>
     <tag key="0018,3103" vr="IS" vm="1">IVUSPullbackStartFrameNumber</tag>
     <tag key="0018,3104" vr="IS" vm="1">IVUSPullbackStopFrameNumber</tag>
-    <tag key="0018,4000" vr="LT" vm="1">RETIRED_AcquisitionComments</tag>
+    <tag key="0018,3105" vr="IS" vm="1-n">LesionNumber</tag>
+    <tag key="0018,4000" vr="LT" vm="1-n">ACR_NEMA_AcquisitionComments</tag>
+    <tag key="0018,5000" vr="SH" vm="1-n">OutputPower</tag>
+    <tag key="0018,5010" vr="LO" vm="1-n">TransducerData</tag>
     <tag key="0018,5012" vr="DS" vm="1">FocusDepth</tag>
     <tag key="0018,5020" vr="LO" vm="1">ProcessingFunction</tag>
     <tag key="0018,5021" vr="LO" vm="1">RETIRED_PostprocessingFunction</tag>
@@ -554,7 +618,12 @@
     <tag key="0018,604c" vr="US" vm="1">PixelComponentPhysicalUnits</tag>
     <tag key="0018,604e" vr="US" vm="1">PixelComponentDataType</tag>
     <tag key="0018,6050" vr="UL" vm="1">NumberOfTableBreakPoints</tag>
+    <tag key="0018,6052" vr="UL" vm="1-n">TableOfXBreakPoints</tag>
+    <tag key="0018,6054" vr="FD" vm="1-n">TableOfYBreakPoints</tag>
     <tag key="0018,6056" vr="UL" vm="1">NumberOfTableEntries</tag>
+    <tag key="0018,6058" vr="UL" vm="1-n">TableOfPixelValues</tag>
+    <tag key="0018,605a" vr="FL" vm="1-n">TableOfParameterValues</tag>
+    <tag key="0018,6060" vr="FL" vm="1-n">RWaveTimeVector</tag>
     <tag key="0018,7000" vr="CS" vm="1">DetectorConditionsNominalFlag</tag>
     <tag key="0018,7001" vr="DS" vm="1">DetectorTemperature</tag>
     <tag key="0018,7004" vr="CS" vm="1">DetectorType</tag>
@@ -587,6 +656,11 @@
     <tag key="0018,7046" vr="IS" vm="2">GridAspectRatio</tag>
     <tag key="0018,7048" vr="DS" vm="1">GridPeriod</tag>
     <tag key="0018,704c" vr="DS" vm="1">GridFocalDistance</tag>
+    <tag key="0018,7050" vr="CS" vm="1-n">FilterMaterial</tag>
+    <tag key="0018,7052" vr="DS" vm="1-n">FilterThicknessMinimum</tag>
+    <tag key="0018,7054" vr="DS" vm="1-n">FilterThicknessMaximum</tag>
+    <tag key="0018,7056" vr="FL" vm="1-n">FilterBeamPathLengthMinimum</tag>
+    <tag key="0018,7058" vr="FL" vm="1-n">FilterBeamPathLengthMaximum</tag>
     <tag key="0018,7060" vr="CS" vm="1">ExposureControlMode</tag>
     <tag key="0018,7062" vr="LT" vm="1">ExposureControlModeDescription</tag>
     <tag key="0018,7064" vr="CS" vm="1">ExposureStatus</tag>
@@ -655,6 +729,7 @@
     <tag key="0018,9076" vr="SQ" vm="1">DiffusionGradientDirectionSequence</tag>
     <tag key="0018,9077" vr="CS" vm="1">ParallelAcquisition</tag>
     <tag key="0018,9078" vr="CS" vm="1">ParallelAcquisitionTechnique</tag>
+    <tag key="0018,9079" vr="FD" vm="1-n">InversionTimes</tag>
     <tag key="0018,9080" vr="ST" vm="1">MetaboliteMapDescription</tag>
     <tag key="0018,9081" vr="CS" vm="1">PartialFourier</tag>
     <tag key="0018,9082" vr="FD" vm="1">EffectiveEchoTime</tag>
@@ -809,6 +884,7 @@
     <tag key="0018,9439" vr="SS" vm="1">ExposureControlSensingRegionLowerHorizontalEdge</tag>
     <tag key="0018,9440" vr="SS" vm="2">CenterOfCircularExposureControlSensingRegion</tag>
     <tag key="0018,9441" vr="US" vm="1">RadiusOfCircularExposureControlSensingRegion</tag>
+    <tag key="0018,9442" vr="SS" vm="2-n">VerticesOfThePolygonalExposureControlSensingRegion</tag>
     <tag key="0018,9447" vr="FL" vm="1">ColumnAngulationPatient</tag>
     <tag key="0018,9449" vr="FL" vm="1">BeamAngle</tag>
     <tag key="0018,9451" vr="SQ" vm="1">FrameDetectorParametersSequence</tag>
@@ -901,6 +977,7 @@
     <tag key="0018,9770" vr="CS" vm="1">AttenuationCorrectionTemporalRelationship</tag>
     <tag key="0018,9771" vr="SQ" vm="1">PatientPhysiologicalStateSequence</tag>
     <tag key="0018,9772" vr="SQ" vm="1">PatientPhysiologicalStateCodeSequence</tag>
+    <tag key="0018,9801" vr="FD" vm="1-n">DepthsOfFocus</tag>
     <tag key="0018,9803" vr="SQ" vm="1">ExcludedIntervalsSequence</tag>
     <tag key="0018,9804" vr="DT" vm="1">ExclusionStartDatetime</tag>
     <tag key="0018,9805" vr="FD" vm="1">ExclusionDuration</tag>
@@ -941,6 +1018,7 @@
     <tag key="0020,0060" vr="CS" vm="1">Laterality</tag>
     <tag key="0020,0062" vr="CS" vm="1">ImageLaterality</tag>
     <tag key="0020,0070" vr="LO" vm="1">ACR_NEMA_ImageGeometryType</tag>
+    <tag key="0020,0080" vr="LO" vm="1-n">ACR_NEMA_MaskingImage</tag>
     <tag key="0020,0100" vr="IS" vm="1">TemporalPositionIdentifier</tag>
     <tag key="0020,0105" vr="IS" vm="1">NumberOfTemporalPositions</tag>
     <tag key="0020,0110" vr="DS" vm="1">TemporalResolution</tag>
@@ -952,14 +1030,17 @@
     <tag key="0020,1003" vr="IS" vm="1">ACR_NEMA_ImagesInSeries</tag>
     <tag key="0020,1004" vr="IS" vm="1">RETIRED_AcquisitionsInStudy</tag>
     <tag key="0020,1005" vr="IS" vm="1">ACR_NEMA_ImagesInStudy</tag>
+    <tag key="0020,1020" vr="LO" vm="1-n">ACR_NEMA_Reference</tag>
     <tag key="0020,1040" vr="LO" vm="1">PositionReferenceIndicator</tag>
     <tag key="0020,1041" vr="DS" vm="1">SliceLocation</tag>
+    <tag key="0020,1070" vr="IS" vm="1-n">RETIRED_OtherStudyNumbers</tag>
     <tag key="0020,1200" vr="IS" vm="1">NumberOfPatientRelatedStudies</tag>
     <tag key="0020,1202" vr="IS" vm="1">NumberOfPatientRelatedSeries</tag>
     <tag key="0020,1204" vr="IS" vm="1">NumberOfPatientRelatedInstances</tag>
     <tag key="0020,1206" vr="IS" vm="1">NumberOfStudyRelatedSeries</tag>
     <tag key="0020,1208" vr="IS" vm="1">NumberOfStudyRelatedInstances</tag>
     <tag key="0020,1209" vr="IS" vm="1">NumberOfSeriesRelatedInstances</tag>
+    <tag key="0020,3100" vr="LO" vm="1-n">ACR_NEMA_SourceImageID</tag>
     <tag key="0020,3401" vr="LO" vm="1">ACR_NEMA_ModifyingDeviceID</tag>
     <tag key="0020,3402" vr="LO" vm="1">ACR_NEMA_ModifiedImageID</tag>
     <tag key="0020,3403" vr="DA" vm="1">ACR_NEMA_ModifiedImageDate</tag>
@@ -967,6 +1048,8 @@
     <tag key="0020,3405" vr="TM" vm="1">ACR_NEMA_ModifiedImageTime</tag>
     <tag key="0020,3406" vr="LO" vm="1">ACR_NEMA_ModifiedImageDescription</tag>
     <tag key="0020,4000" vr="LT" vm="1">ImageComments</tag>
+    <tag key="0020,5000" vr="AT" vm="1-n">ACR_NEMA_OriginalImageIdentification</tag>
+    <tag key="0020,5002" vr="LO" vm="1-n">ACR_NEMA_OriginalImageIdentificationNomenclature</tag>
     <tag key="0020,9056" vr="SH" vm="1">StackID</tag>
     <tag key="0020,9057" vr="UL" vm="1">InStackPositionNumber</tag>
     <tag key="0020,9071" vr="SQ" vm="1">FrameAnatomySequence</tag>
@@ -977,6 +1060,7 @@
     <tag key="0020,9128" vr="UL" vm="1">TemporalPositionIndex</tag>
     <tag key="0020,9153" vr="FD" vm="1">NominalCardiacTriggerDelayTime</tag>
     <tag key="0020,9156" vr="US" vm="1">FrameAcquisitionNumber</tag>
+    <tag key="0020,9157" vr="UL" vm="1-n">DimensionIndexValues</tag>
     <tag key="0020,9158" vr="LT" vm="1">FrameComments</tag>
     <tag key="0020,9161" vr="UI" vm="1">ConcatenationUID</tag>
     <tag key="0020,9162" vr="US" vm="1">InConcatenationNumber</tag>
@@ -1020,6 +1104,7 @@
     <tag key="0020,9421" vr="LO" vm="1">DimensionDescriptionLabel</tag>
     <tag key="0020,9450" vr="SQ" vm="1">PatientOrientationInFrameSequence</tag>
     <tag key="0020,9453" vr="LO" vm="1">FrameLabel</tag>
+    <tag key="0020,9518" vr="US" vm="1-n">AcquisitionIndex</tag>
     <tag key="0020,9529" vr="SQ" vm="1">ContributingSOPInstancesReferenceSequence</tag>
     <tag key="0020,9536" vr="US" vm="1">ReconstructionIndex</tag>
     <tag key="0022,0001" vr="US" vm="1">LightPathFilterPassThroughWavelength</tag>
@@ -1237,6 +1322,8 @@
     <tag key="0028,0005" vr="US" vm="1">ACR_NEMA_ImageDimensions</tag>
     <tag key="0028,0006" vr="US" vm="1">PlanarConfiguration</tag>
     <tag key="0028,0008" vr="IS" vm="1">NumberOfFrames</tag>
+    <tag key="0028,0009" vr="AT" vm="1-n">FrameIncrementPointer</tag>
+    <tag key="0028,000a" vr="AT" vm="1-n">FrameDimensionPointer</tag>
     <tag key="0028,0010" vr="US" vm="1">Rows</tag>
     <tag key="0028,0011" vr="US" vm="1">Columns</tag>
     <tag key="0028,0012" vr="US" vm="1">RETIRED_Planes</tag>
@@ -1246,15 +1333,21 @@
     <tag key="0028,0032" vr="DS" vm="2">ZoomCenter</tag>
     <tag key="0028,0034" vr="IS" vm="2">PixelAspectRatio</tag>
     <tag key="0028,0040" vr="CS" vm="1">ACR_NEMA_ImageFormat</tag>
+    <tag key="0028,0050" vr="LO" vm="1-n">ACR_NEMA_ManipulatedImage</tag>
+    <tag key="0028,0051" vr="CS" vm="1-n">CorrectedImage</tag>
     <tag key="0028,005f" vr="CS" vm="1">ACR_NEMA_2C_CompressionRecognitionCode</tag>
     <tag key="0028,0060" vr="CS" vm="1">ACR_NEMA_CompressionCode</tag>
     <tag key="0028,0061" vr="SH" vm="1">ACR_NEMA_2C_CompressionOriginator</tag>
     <tag key="0028,0062" vr="SH" vm="1">ACR_NEMA_2C_CompressionLabel</tag>
     <tag key="0028,0063" vr="SH" vm="1">ACR_NEMA_2C_CompressionDescription</tag>
+    <tag key="0028,0065" vr="CS" vm="1-n">ACR_NEMA_2C_CompressionSequence</tag>
+    <tag key="0028,0066" vr="AT" vm="1-n">ACR_NEMA_2C_CompressionStepPointers</tag>
     <tag key="0028,0068" vr="US" vm="1">ACR_NEMA_2C_RepeatInterval</tag>
     <tag key="0028,0069" vr="US" vm="1">ACR_NEMA_2C_BitsGrouped</tag>
+    <tag key="0028,0070" vr="US" vm="1-n">ACR_NEMA_2C_PerimeterTable</tag>
     <tag key="0028,0080" vr="US" vm="1">ACR_NEMA_2C_PredictorRows</tag>
     <tag key="0028,0081" vr="US" vm="1">ACR_NEMA_2C_PredictorColumns</tag>
+    <tag key="0028,0082" vr="US" vm="1-n">ACR_NEMA_2C_PredictorConstants</tag>
     <tag key="0028,0090" vr="CS" vm="1">ACR_NEMA_2C_BlockedPixels</tag>
     <tag key="0028,0091" vr="US" vm="1">ACR_NEMA_2C_BlockRows</tag>
     <tag key="0028,0092" vr="US" vm="1">ACR_NEMA_2C_BlockColumns</tag>
@@ -1270,28 +1363,42 @@
     <tag key="0028,0400" vr="CS" vm="1">ACR_NEMA_2C_TransformLabel</tag>
     <tag key="0028,0401" vr="CS" vm="1">ACR_NEMA_2C_TransformVersionNumber</tag>
     <tag key="0028,0402" vr="US" vm="1">ACR_NEMA_2C_NumberOfTransformSteps</tag>
+    <tag key="0028,0403" vr="CS" vm="1-n">ACR_NEMA_2C_SequenceOfCompressedData</tag>
+    <tag key="0028,0404" vr="AT" vm="1-n">ACR_NEMA_2C_DetailsOfCoefficients</tag>
     <tag key="0028,0410" vr="US" vm="1">ACR_NEMA_2C_RowsForNthOrderCoefficients</tag>
     <tag key="0028,0411" vr="US" vm="1">ACR_NEMA_2C_ColumnsForNthOrderCoefficients</tag>
+    <tag key="0028,0412" vr="CS" vm="1-n">ACR_NEMA_2C_CoefficientCoding</tag>
+    <tag key="0028,0413" vr="AT" vm="1-n">ACR_NEMA_2C_CoefficientCodingPointers</tag>
     <tag key="0028,0700" vr="CS" vm="1">ACR_NEMA_2C_DCTLabel</tag>
+    <tag key="0028,0701" vr="CS" vm="1-n">ACR_NEMA_2C_DataBlockDescription</tag>
+    <tag key="0028,0702" vr="AT" vm="1-n">ACR_NEMA_2C_DataBlock</tag>
     <tag key="0028,0710" vr="US" vm="1">ACR_NEMA_2C_NormalizationFactorFormat</tag>
     <tag key="0028,0720" vr="US" vm="1">ACR_NEMA_2C_ZonalMapNumberFormat</tag>
+    <tag key="0028,0721" vr="AT" vm="1-n">ACR_NEMA_2C_ZonalMapLocation</tag>
     <tag key="0028,0722" vr="US" vm="1">ACR_NEMA_2C_ZonalMapFormat</tag>
     <tag key="0028,0730" vr="US" vm="1">ACR_NEMA_2C_AdaptiveMapFormat</tag>
     <tag key="0028,0740" vr="US" vm="1">ACR_NEMA_2C_CodeNumberFormat</tag>
+    <tag key="0028,0800" vr="CS" vm="1-n">ACR_NEMA_2C_CodeLabel</tag>
     <tag key="0028,0802" vr="US" vm="1">ACR_NEMA_2C_NumberOfTables</tag>
+    <tag key="0028,0803" vr="AT" vm="1-n">ACR_NEMA_2C_CodeTableLocation</tag>
     <tag key="0028,0804" vr="US" vm="1">ACR_NEMA_2C_BitsForCodeWord</tag>
+    <tag key="0028,0808" vr="AT" vm="1-n">ACR_NEMA_2C_ImageDataLocation</tag>
     <tag key="0028,0a02" vr="CS" vm="1">PixelSpacingCalibrationType</tag>
     <tag key="0028,0a04" vr="LO" vm="1">PixelSpacingCalibrationDescription</tag>
     <tag key="0028,1040" vr="CS" vm="1">PixelIntensityRelationship</tag>
     <tag key="0028,1041" vr="SS" vm="1">PixelIntensityRelationshipSign</tag>
+    <tag key="0028,1050" vr="DS" vm="1-n">WindowCenter</tag>
+    <tag key="0028,1051" vr="DS" vm="1-n">WindowWidth</tag>
     <tag key="0028,1052" vr="DS" vm="1">RescaleIntercept</tag>
     <tag key="0028,1053" vr="DS" vm="1">RescaleSlope</tag>
     <tag key="0028,1054" vr="LO" vm="1">RescaleType</tag>
+    <tag key="0028,1055" vr="LO" vm="1-n">WindowCenterWidthExplanation</tag>
     <tag key="0028,1056" vr="CS" vm="1">VOILUTFunction</tag>
     <tag key="0028,1080" vr="CS" vm="1">ACR_NEMA_GrayScale</tag>
     <tag key="0028,1090" vr="CS" vm="1">RecommendedViewingMode</tag>
     <tag key="0028,1104" vr="US" vm="3">AlphaPaletteColorLookupTableDescriptor</tag>
     <tag key="0028,1199" vr="UI" vm="1">PaletteColorLookupTableUID</tag>
+    <tag key="0028,1200" vr="LT" vm="1-n">RETIRED_GrayLookupTableData</tag>
     <tag key="0028,1201" vr="OW" vm="1">RedPaletteColorLookupTableData</tag>
     <tag key="0028,1202" vr="OW" vm="1">GreenPaletteColorLookupTableData</tag>
     <tag key="0028,1203" vr="OW" vm="1">BluePaletteColorLookupTableData</tag>
@@ -1324,17 +1431,26 @@
     <tag key="0028,1410" vr="CS" vm="1">AlphaLUTTransferFunction</tag>
     <tag key="0028,2000" vr="OB" vm="1">ICCProfile</tag>
     <tag key="0028,2110" vr="CS" vm="1">LossyImageCompression</tag>
+    <tag key="0028,2112" vr="DS" vm="1-n">LossyImageCompressionRatio</tag>
+    <tag key="0028,2114" vr="CS" vm="1-n">LossyImageCompressionMethod</tag>
     <tag key="0028,3000" vr="SQ" vm="1">ModalityLUTSequence</tag>
     <tag key="0028,3003" vr="LO" vm="1">LUTExplanation</tag>
     <tag key="0028,3004" vr="LO" vm="1">ModalityLUTType</tag>
+    <tag key="0028,3006" vr="LT" vm="1-n">LUTData</tag>
     <tag key="0028,3010" vr="SQ" vm="1">VOILUTSequence</tag>
     <tag key="0028,3110" vr="SQ" vm="1">SoftcopyVOILUTSequence</tag>
-    <tag key="0028,4000" vr="LT" vm="1">RETIRED_ImagePresentationComments</tag>
+    <tag key="0028,4000" vr="LT" vm="1-n">ACR_NEMA_ImagePresentationComments</tag>
     <tag key="0028,5000" vr="SQ" vm="1">RETIRED_BiPlaneAcquisitionSequence</tag>
     <tag key="0028,6010" vr="US" vm="1">RepresentativeFrameNumber</tag>
+    <tag key="0028,6020" vr="US" vm="1-n">FrameNumbersOfInterest</tag>
+    <tag key="0028,6022" vr="LO" vm="1-n">FrameOfInterestDescription</tag>
+    <tag key="0028,6023" vr="CS" vm="1-n">FrameOfInterestType</tag>
+    <tag key="0028,6030" vr="US" vm="1-n">RETIRED_MaskPointers</tag>
+    <tag key="0028,6040" vr="US" vm="1-n">RWavePointer</tag>
     <tag key="0028,6100" vr="SQ" vm="1">MaskSubtractionSequence</tag>
     <tag key="0028,6101" vr="CS" vm="1">MaskOperation</tag>
     <tag key="0028,6102" vr="US" vm="2-2n">ApplicableFrameRange</tag>
+    <tag key="0028,6110" vr="US" vm="1-n">MaskFrameNumbers</tag>
     <tag key="0028,6112" vr="US" vm="1">ContrastFrameAveraging</tag>
     <tag key="0028,6114" vr="FL" vm="2">MaskSubPixelShift</tag>
     <tag key="0028,6120" vr="SS" vm="1">TIDOffset</tag>
@@ -1356,6 +1472,7 @@
     <tag key="0028,9443" vr="SQ" vm="1">FramePixelDataPropertiesSequence</tag>
     <tag key="0028,9444" vr="CS" vm="1">GeometricalProperties</tag>
     <tag key="0028,9445" vr="FL" vm="1">GeometricMaximumDistortion</tag>
+    <tag key="0028,9446" vr="CS" vm="1-n">ImageProcessingApplied</tag>
     <tag key="0028,9454" vr="CS" vm="1">MaskSelectionMode</tag>
     <tag key="0028,9474" vr="CS" vm="1">LUTFunction</tag>
     <tag key="0028,9478" vr="FL" vm="1">MaskVisibilityPercentage</tag>
@@ -1379,6 +1496,7 @@
     <tag key="0032,1010" vr="DA" vm="1">RETIRED_ScheduledStudyStopDate</tag>
     <tag key="0032,1011" vr="TM" vm="1">RETIRED_ScheduledStudyStopTime</tag>
     <tag key="0032,1020" vr="LO" vm="1">RETIRED_ScheduledStudyLocation</tag>
+    <tag key="0032,1021" vr="AE" vm="1-n">RETIRED_ScheduledStudyLocationAETitle</tag>
     <tag key="0032,1030" vr="LO" vm="1">RETIRED_ReasonForStudy</tag>
     <tag key="0032,1031" vr="SQ" vm="1">RequestingPhysicianIdentificationSequence</tag>
     <tag key="0032,1032" vr="PN" vm="1">RequestingPhysician</tag>
@@ -1429,6 +1547,7 @@
     <tag key="003a,0200" vr="SQ" vm="1">ChannelDefinitionSequence</tag>
     <tag key="003a,0202" vr="IS" vm="1">WaveformChannelNumber</tag>
     <tag key="003a,0203" vr="SH" vm="1">ChannelLabel</tag>
+    <tag key="003a,0205" vr="CS" vm="1-n">ChannelStatus</tag>
     <tag key="003a,0208" vr="SQ" vm="1">ChannelSourceSequence</tag>
     <tag key="003a,0209" vr="SQ" vm="1">ChannelSourceModifiersSequence</tag>
     <tag key="003a,020a" vr="SQ" vm="1">SourceWaveformSequence</tag>
@@ -1458,6 +1577,7 @@
     <tag key="003a,0300" vr="SQ" vm="1">MultiplexedAudioChannelsDescriptionCodeSequence</tag>
     <tag key="003a,0301" vr="IS" vm="1">ChannelIdentificationCode</tag>
     <tag key="003a,0302" vr="CS" vm="1">ChannelMode</tag>
+    <tag key="0040,0001" vr="AE" vm="1-n">ScheduledStationAETitle</tag>
     <tag key="0040,0002" vr="DA" vm="1">ScheduledProcedureStepStartDate</tag>
     <tag key="0040,0003" vr="TM" vm="1">ScheduledProcedureStepStartTime</tag>
     <tag key="0040,0004" vr="DA" vm="1">ScheduledProcedureStepEndDate</tag>
@@ -1468,6 +1588,7 @@
     <tag key="0040,0009" vr="SH" vm="1">ScheduledProcedureStepID</tag>
     <tag key="0040,000a" vr="SQ" vm="1">StageCodeSequence</tag>
     <tag key="0040,000b" vr="SQ" vm="1">ScheduledPerformingPhysicianIdentificationSequence</tag>
+    <tag key="0040,0010" vr="SH" vm="1-n">ScheduledStationName</tag>
     <tag key="0040,0011" vr="SH" vm="1">ScheduledProcedureStepLocation</tag>
     <tag key="0040,0012" vr="LO" vm="1">PreMedication</tag>
     <tag key="0040,0020" vr="CS" vm="1">ScheduledProcedureStepStatus</tag>
@@ -1565,10 +1686,12 @@
     <tag key="0040,1008" vr="LO" vm="1">ConfidentialityCode</tag>
     <tag key="0040,1009" vr="SH" vm="1">ReportingPriority</tag>
     <tag key="0040,100a" vr="SQ" vm="1">ReasonForRequestedProcedureCodeSequence</tag>
+    <tag key="0040,1010" vr="PN" vm="1-n">NamesOfIntendedRecipientsOfResults</tag>
     <tag key="0040,1011" vr="SQ" vm="1">IntendedRecipientsOfResultsIdentificationSequence</tag>
     <tag key="0040,1012" vr="SQ" vm="1">ReasonForPerformedProcedureCodeSequence</tag>
     <tag key="0040,1101" vr="SQ" vm="1">PersonIdentificationCodeSequence</tag>
     <tag key="0040,1102" vr="ST" vm="1">PersonAddress</tag>
+    <tag key="0040,1103" vr="LO" vm="1-n">PersonTelephoneNumbers</tag>
     <tag key="0040,1400" vr="LT" vm="1">RequestedProcedureComments</tag>
     <tag key="0040,2001" vr="LO" vm="1">RETIRED_ReasonForTheImagingServiceRequest</tag>
     <tag key="0040,2004" vr="DA" vm="1">IssueDateOfImagingServiceRequest</tag>
@@ -1619,6 +1742,7 @@
     <tag key="0040,9096" vr="SQ" vm="1">RealWorldValueMappingSequence</tag>
     <tag key="0040,9098" vr="SQ" vm="1">PixelValueMappingCodeSequence</tag>
     <tag key="0040,9210" vr="SH" vm="1">LUTLabel</tag>
+    <tag key="0040,9212" vr="FD" vm="1-n">RealWorldValueLUTData</tag>
     <tag key="0040,9224" vr="FD" vm="1">RealWorldValueIntercept</tag>
     <tag key="0040,9225" vr="FD" vm="1">RealWorldValueSlope</tag>
     <tag key="0040,a010" vr="CS" vm="1">RelationshipType</tag>
@@ -1645,6 +1769,10 @@
     <tag key="0040,a123" vr="PN" vm="1">PersonName</tag>
     <tag key="0040,a124" vr="UI" vm="1">UID</tag>
     <tag key="0040,a130" vr="CS" vm="1">TemporalRangeType</tag>
+    <tag key="0040,a132" vr="UL" vm="1-n">ReferencedSamplePositions</tag>
+    <tag key="0040,a136" vr="US" vm="1-n">ReferencedFrameNumbers</tag>
+    <tag key="0040,a138" vr="DS" vm="1-n">ReferencedTimeOffsets</tag>
+    <tag key="0040,a13a" vr="DT" vm="1-n">ReferencedDateTime</tag>
     <tag key="0040,a160" vr="UT" vm="1">TextValue</tag>
     <tag key="0040,a168" vr="SQ" vm="1">ConceptCodeSequence</tag>
     <tag key="0040,a170" vr="SQ" vm="1">PurposeOfReferenceCodeSequence</tag>
@@ -1652,6 +1780,7 @@
     <tag key="0040,a195" vr="SQ" vm="1">ModifierCodeSequence</tag>
     <tag key="0040,a300" vr="SQ" vm="1">MeasuredValueSequence</tag>
     <tag key="0040,a301" vr="SQ" vm="1">NumericValueQualifierCodeSequence</tag>
+    <tag key="0040,a30a" vr="DS" vm="1-n">NumericValue</tag>
     <tag key="0040,a353" vr="ST" vm="1">RETIRED_AddressTrial</tag>
     <tag key="0040,a354" vr="LO" vm="1">RETIRED_TelephoneNumberTrial</tag>
     <tag key="0040,a360" vr="SQ" vm="1">PredecessorDocumentsSequence</tag>
@@ -1675,6 +1804,7 @@
     <tag key="0040,db0b" vr="CS" vm="1">RETIRED_TemplateExtensionFlag</tag>
     <tag key="0040,db0c" vr="UI" vm="1">RETIRED_TemplateExtensionOrganizationUID</tag>
     <tag key="0040,db0d" vr="UI" vm="1">RETIRED_TemplateExtensionCreatorUID</tag>
+    <tag key="0040,db73" vr="UL" vm="1-n">ReferencedContentItemIdentifier</tag>
     <tag key="0040,e001" vr="ST" vm="1">HL7InstanceIdentifier</tag>
     <tag key="0040,e004" vr="DT" vm="1">HL7DocumentEffectiveTime</tag>
     <tag key="0040,e006" vr="SQ" vm="1">HL7DocumentTypeCodeSequence</tag>
@@ -1684,11 +1814,13 @@
     <tag key="0042,0011" vr="OB" vm="1">EncapsulatedDocument</tag>
     <tag key="0042,0012" vr="LO" vm="1">MIMETypeOfEncapsulatedDocument</tag>
     <tag key="0042,0013" vr="SQ" vm="1">SourceInstanceSequence</tag>
+    <tag key="0042,0014" vr="LO" vm="1-n">ListOfMIMETypes</tag>
     <tag key="0044,0001" vr="ST" vm="1">ProductPackageIdentifier</tag>
     <tag key="0044,0002" vr="CS" vm="1">SubstanceAdministrationApproval</tag>
     <tag key="0044,0003" vr="LT" vm="1">ApprovalStatusFurtherDescription</tag>
     <tag key="0044,0004" vr="DT" vm="1">ApprovalStatusDateTime</tag>
     <tag key="0044,0007" vr="SQ" vm="1">ProductTypeCodeSequence</tag>
+    <tag key="0044,0008" vr="LO" vm="1-n">ProductName</tag>
     <tag key="0044,0009" vr="LT" vm="1">ProductDescription</tag>
     <tag key="0044,000a" vr="LO" vm="1">ProductLotIdentifier</tag>
     <tag key="0044,000b" vr="DT" vm="1">ProductExpirationDateTime</tag>
@@ -1793,6 +1925,7 @@
     <tag key="0050,001d" vr="FD" vm="1">ContainerComponentDiameter</tag>
     <tag key="0050,001e" vr="LO" vm="1">ContainerComponentDescription</tag>
     <tag key="0050,0020" vr="LO" vm="1">DeviceDescription</tag>
+    <tag key="0054,0010" vr="US" vm="1-n">EnergyWindowVector</tag>
     <tag key="0054,0011" vr="US" vm="1">NumberOfEnergyWindows</tag>
     <tag key="0054,0012" vr="SQ" vm="1">EnergyWindowInformationSequence</tag>
     <tag key="0054,0013" vr="SQ" vm="1">EnergyWindowRangeSequence</tag>
@@ -1801,27 +1934,36 @@
     <tag key="0054,0016" vr="SQ" vm="1">RadiopharmaceuticalInformationSequence</tag>
     <tag key="0054,0017" vr="IS" vm="1">ResidualSyringeCounts</tag>
     <tag key="0054,0018" vr="SH" vm="1">EnergyWindowName</tag>
+    <tag key="0054,0020" vr="US" vm="1-n">DetectorVector</tag>
     <tag key="0054,0021" vr="US" vm="1">NumberOfDetectors</tag>
     <tag key="0054,0022" vr="SQ" vm="1">DetectorInformationSequence</tag>
+    <tag key="0054,0030" vr="US" vm="1-n">PhaseVector</tag>
     <tag key="0054,0031" vr="US" vm="1">NumberOfPhases</tag>
     <tag key="0054,0032" vr="SQ" vm="1">PhaseInformationSequence</tag>
     <tag key="0054,0033" vr="US" vm="1">NumberOfFramesInPhase</tag>
     <tag key="0054,0036" vr="IS" vm="1">PhaseDelay</tag>
     <tag key="0054,0038" vr="IS" vm="1">PauseBetweenFrames</tag>
     <tag key="0054,0039" vr="CS" vm="1">PhaseDescription</tag>
+    <tag key="0054,0050" vr="US" vm="1-n">RotationVector</tag>
     <tag key="0054,0051" vr="US" vm="1">NumberOfRotations</tag>
     <tag key="0054,0052" vr="SQ" vm="1">RotationInformationSequence</tag>
     <tag key="0054,0053" vr="US" vm="1">NumberOfFramesInRotation</tag>
+    <tag key="0054,0060" vr="US" vm="1-n">RRIntervalVector</tag>
     <tag key="0054,0061" vr="US" vm="1">NumberOfRRIntervals</tag>
     <tag key="0054,0062" vr="SQ" vm="1">GatedInformationSequence</tag>
     <tag key="0054,0063" vr="SQ" vm="1">DataInformationSequence</tag>
+    <tag key="0054,0070" vr="US" vm="1-n">TimeSlotVector</tag>
     <tag key="0054,0071" vr="US" vm="1">NumberOfTimeSlots</tag>
     <tag key="0054,0072" vr="SQ" vm="1">TimeSlotInformationSequence</tag>
     <tag key="0054,0073" vr="DS" vm="1">TimeSlotTime</tag>
+    <tag key="0054,0080" vr="US" vm="1-n">SliceVector</tag>
     <tag key="0054,0081" vr="US" vm="1">NumberOfSlices</tag>
+    <tag key="0054,0090" vr="US" vm="1-n">AngularViewVector</tag>
+    <tag key="0054,0100" vr="US" vm="1-n">TimeSliceVector</tag>
     <tag key="0054,0101" vr="US" vm="1">NumberOfTimeSlices</tag>
     <tag key="0054,0200" vr="DS" vm="1">StartAngle</tag>
     <tag key="0054,0202" vr="CS" vm="1">TypeOfDetectorMotion</tag>
+    <tag key="0054,0210" vr="IS" vm="1-n">TriggerVector</tag>
     <tag key="0054,0211" vr="US" vm="1">NumberOfTriggersInPhase</tag>
     <tag key="0054,0220" vr="SQ" vm="1">ViewCodeSequence</tag>
     <tag key="0054,0222" vr="SQ" vm="1">ViewModifierCodeSequence</tag>
@@ -1850,19 +1992,23 @@
     <tag key="0054,1202" vr="IS" vm="1">TransverseMash</tag>
     <tag key="0054,1203" vr="DS" vm="2">DetectorElementSize</tag>
     <tag key="0054,1210" vr="DS" vm="1">CoincidenceWindowWidth</tag>
+    <tag key="0054,1220" vr="CS" vm="1-n">SecondaryCountsType</tag>
     <tag key="0054,1300" vr="DS" vm="1">FrameReferenceTime</tag>
     <tag key="0054,1310" vr="IS" vm="1">PrimaryPromptsCountsAccumulated</tag>
+    <tag key="0054,1311" vr="IS" vm="1-n">SecondaryCountsAccumulated</tag>
     <tag key="0054,1320" vr="DS" vm="1">SliceSensitivityFactor</tag>
     <tag key="0054,1321" vr="DS" vm="1">DecayFactor</tag>
     <tag key="0054,1322" vr="DS" vm="1">DoseCalibrationFactor</tag>
     <tag key="0054,1323" vr="DS" vm="1">ScatterFractionFactor</tag>
     <tag key="0054,1324" vr="DS" vm="1">DeadTimeFactor</tag>
     <tag key="0054,1330" vr="US" vm="1">ImageIndex</tag>
+    <tag key="0054,1400" vr="CS" vm="1-n">RETIRED_CountsIncluded</tag>
     <tag key="0054,1401" vr="CS" vm="1">RETIRED_DeadTimeCorrectionFlag</tag>
     <tag key="0060,3000" vr="SQ" vm="1">HistogramSequence</tag>
     <tag key="0060,3002" vr="US" vm="1">HistogramNumberOfBins</tag>
     <tag key="0060,3008" vr="US" vm="1">HistogramBinWidth</tag>
     <tag key="0060,3010" vr="LO" vm="1">HistogramExplanation</tag>
+    <tag key="0060,3020" vr="UL" vm="1-n">HistogramData</tag>
     <tag key="0062,0001" vr="CS" vm="1">SegmentationType</tag>
     <tag key="0062,0002" vr="SQ" vm="1">SegmentSequence</tag>
     <tag key="0062,0003" vr="SQ" vm="1">SegmentedPropertyCategoryCodeSequence</tag>
@@ -1872,6 +2018,7 @@
     <tag key="0062,0008" vr="CS" vm="1">SegmentAlgorithmType</tag>
     <tag key="0062,0009" vr="LO" vm="1">SegmentAlgorithmName</tag>
     <tag key="0062,000a" vr="SQ" vm="1">SegmentIdentificationSequence</tag>
+    <tag key="0062,000b" vr="US" vm="1-n">ReferencedSegmentNumber</tag>
     <tag key="0062,000c" vr="US" vm="1">RecommendedDisplayGrayscaleValue</tag>
     <tag key="0062,000d" vr="US" vm="3">RecommendedDisplayCIELabValue</tag>
     <tag key="0062,000e" vr="US" vm="1">MaximumFractionalValue</tag>
@@ -1909,6 +2056,7 @@
     <tag key="0066,001c" vr="FL" vm="3">CenterOfRotation</tag>
     <tag key="0066,001e" vr="UL" vm="1">NumberOfVectors</tag>
     <tag key="0066,001f" vr="US" vm="1">VectorDimensionality</tag>
+    <tag key="0066,0020" vr="FL" vm="1-n">VectorAccuracy</tag>
     <tag key="0066,0021" vr="OF" vm="1">VectorCoordinateData</tag>
     <tag key="0066,0023" vr="OW" vm="1">TrianglePointIndexList</tag>
     <tag key="0066,0024" vr="OW" vm="1">EdgePointIndexList</tag>
@@ -1957,6 +2105,7 @@
     <tag key="0068,6345" vr="ST" vm="1">HPGLPenDescription</tag>
     <tag key="0068,6346" vr="FD" vm="2">RecommendedRotationPoint</tag>
     <tag key="0068,6347" vr="FD" vm="4">BoundingRectangle</tag>
+    <tag key="0068,6350" vr="US" vm="1-n">ImplantTemplate3DModelSurfaceNumber</tag>
     <tag key="0068,6360" vr="SQ" vm="1">SurfaceModelDescriptionSequence</tag>
     <tag key="0068,6380" vr="LO" vm="1">SurfaceModelLabel</tag>
     <tag key="0068,6390" vr="FD" vm="1">SurfaceModelScalingFactor</tag>
@@ -2013,6 +2162,7 @@
     <tag key="0070,0015" vr="CS" vm="1">AnchorPointVisibility</tag>
     <tag key="0070,0020" vr="US" vm="1">GraphicDimensions</tag>
     <tag key="0070,0021" vr="US" vm="1">NumberOfGraphicPoints</tag>
+    <tag key="0070,0022" vr="FL" vm="2-n">GraphicData</tag>
     <tag key="0070,0023" vr="CS" vm="1">GraphicType</tag>
     <tag key="0070,0024" vr="CS" vm="1">GraphicFilled</tag>
     <tag key="0070,0040" vr="IS" vm="1">RETIRED_ImageRotationRetired</tag>
@@ -2130,9 +2280,22 @@
     <tag key="0072,0052" vr="AT" vm="1">SelectorSequencePointer</tag>
     <tag key="0072,0054" vr="LO" vm="1">SelectorSequencePointerPrivateCreator</tag>
     <tag key="0072,0056" vr="LO" vm="1">SelectorAttributePrivateCreator</tag>
+    <tag key="0072,0060" vr="AT" vm="1-n">SelectorATValue</tag>
+    <tag key="0072,0062" vr="CS" vm="1-n">SelectorCSValue</tag>
+    <tag key="0072,0064" vr="IS" vm="1-n">SelectorISValue</tag>
+    <tag key="0072,0066" vr="LO" vm="1-n">SelectorLOValue</tag>
     <tag key="0072,0068" vr="LT" vm="1">SelectorLTValue</tag>
+    <tag key="0072,006a" vr="PN" vm="1-n">SelectorPNValue</tag>
+    <tag key="0072,006c" vr="SH" vm="1-n">SelectorSHValue</tag>
     <tag key="0072,006e" vr="ST" vm="1">SelectorSTValue</tag>
     <tag key="0072,0070" vr="UT" vm="1">SelectorUTValue</tag>
+    <tag key="0072,0072" vr="DS" vm="1-n">SelectorDSValue</tag>
+    <tag key="0072,0074" vr="FD" vm="1-n">SelectorFDValue</tag>
+    <tag key="0072,0076" vr="FL" vm="1-n">SelectorFLValue</tag>
+    <tag key="0072,0078" vr="UL" vm="1-n">SelectorULValue</tag>
+    <tag key="0072,007a" vr="US" vm="1-n">SelectorUSValue</tag>
+    <tag key="0072,007c" vr="SL" vm="1-n">SelectorSLValue</tag>
+    <tag key="0072,007e" vr="SS" vm="1-n">SelectorSSValue</tag>
     <tag key="0072,0080" vr="SQ" vm="1">SelectorCodeSequenceValue</tag>
     <tag key="0072,0100" vr="US" vm="1">NumberOfScreens</tag>
     <tag key="0072,0102" vr="SQ" vm="1">NominalScreenDefinitionSequence</tag>
@@ -2149,8 +2312,10 @@
     <tag key="0072,0206" vr="LO" vm="1">DisplaySetPresentationGroupDescription</tag>
     <tag key="0072,0208" vr="CS" vm="1">PartialDataDisplayHandling</tag>
     <tag key="0072,0210" vr="SQ" vm="1">SynchronizedScrollingSequence</tag>
+    <tag key="0072,0212" vr="US" vm="2-n">DisplaySetScrollingGroup</tag>
     <tag key="0072,0214" vr="SQ" vm="1">NavigationIndicatorSequence</tag>
     <tag key="0072,0216" vr="US" vm="1">NavigationDisplaySet</tag>
+    <tag key="0072,0218" vr="US" vm="1-n">ReferenceDisplaySets</tag>
     <tag key="0072,0300" vr="SQ" vm="1">ImageBoxesSequence</tag>
     <tag key="0072,0302" vr="US" vm="1">ImageBoxNumber</tag>
     <tag key="0072,0304" vr="CS" vm="1">ImageBoxLayoutType</tag>
@@ -2173,12 +2338,14 @@
     <tag key="0072,0424" vr="SQ" vm="1">StructuredDisplayTextBoxSequence</tag>
     <tag key="0072,0427" vr="SQ" vm="1">ReferencedFirstFrameSequence</tag>
     <tag key="0072,0430" vr="SQ" vm="1">ImageBoxSynchronizationSequence</tag>
+    <tag key="0072,0432" vr="US" vm="2-n">SynchronizedImageBoxList</tag>
     <tag key="0072,0434" vr="CS" vm="1">TypeOfSynchronization</tag>
     <tag key="0072,0500" vr="CS" vm="1">BlendingOperationType</tag>
     <tag key="0072,0510" vr="CS" vm="1">ReformattingOperationType</tag>
     <tag key="0072,0512" vr="FD" vm="1">ReformattingThickness</tag>
     <tag key="0072,0514" vr="FD" vm="1">ReformattingInterval</tag>
     <tag key="0072,0516" vr="CS" vm="1">ReformattingOperationInitialViewDirection</tag>
+    <tag key="0072,0520" vr="CS" vm="1-n">ThreeDRenderingType</tag>
     <tag key="0072,0600" vr="SQ" vm="1">SortingOperationsSequence</tag>
     <tag key="0072,0602" vr="CS" vm="1">SortByCategory</tag>
     <tag key="0072,0604" vr="CS" vm="1">SortingDirection</tag>
@@ -2291,6 +2458,7 @@
     <tag key="0400,0005" vr="US" vm="1">MACIDNumber</tag>
     <tag key="0400,0010" vr="UI" vm="1">MACCalculationTransferSyntaxUID</tag>
     <tag key="0400,0015" vr="CS" vm="1">MACAlgorithm</tag>
+    <tag key="0400,0020" vr="AT" vm="1-n">DataElementsSigned</tag>
     <tag key="0400,0100" vr="UI" vm="1">DigitalSignatureUID</tag>
     <tag key="0400,0105" vr="DT" vm="1">DigitalSignatureDateTime</tag>
     <tag key="0400,0110" vr="CS" vm="1">CertificateType</tag>
@@ -2319,6 +2487,7 @@
     <tag key="1000,0014" vr="US" vm="1">ACR_NEMA_2C_ShiftTableSize</tag>
     <tag key="1000,0015" vr="US" vm="3">ACR_NEMA_2C_ShiftTableTriplet</tag>
     <tag key="1010,0000" vr="UL" vm="1">ACR_NEMA_2C_ZonalMapGroupLength</tag>
+    <tag key="1010,0004" vr="US" vm="1-n">ACR_NEMA_2C_ZonalMap</tag>
     <tag key="2000,0010" vr="IS" vm="1">NumberOfCopies</tag>
     <tag key="2000,001e" vr="SQ" vm="1">PrinterConfigurationSequence</tag>
     <tag key="2000,0020" vr="CS" vm="1">PrintPriority</tag>
@@ -2349,7 +2518,9 @@
     <tag key="2010,0060" vr="CS" vm="1">MagnificationType</tag>
     <tag key="2010,0080" vr="CS" vm="1">SmoothingType</tag>
     <tag key="2010,00a6" vr="CS" vm="1">DefaultMagnificationType</tag>
+    <tag key="2010,00a7" vr="CS" vm="1-n">OtherMagnificationTypesAvailable</tag>
     <tag key="2010,00a8" vr="CS" vm="1">DefaultSmoothingType</tag>
+    <tag key="2010,00a9" vr="CS" vm="1-n">OtherSmoothingTypesAvailable</tag>
     <tag key="2010,0100" vr="CS" vm="1">BorderDensity</tag>
     <tag key="2010,0110" vr="CS" vm="1">EmptyImageDensity</tag>
     <tag key="2010,0120" vr="US" vm="1">MinDensity</tag>
@@ -2431,6 +2602,7 @@
     <tag key="2200,000b" vr="US" vm="1">TotalNumberOfPiecesOfMediaCreated</tag>
     <tag key="2200,000c" vr="LO" vm="1">RequestedMediaApplicationProfile</tag>
     <tag key="2200,000d" vr="SQ" vm="1">ReferencedStorageMediaSequence</tag>
+    <tag key="2200,000e" vr="AT" vm="1-n">FailureAttributes</tag>
     <tag key="2200,000f" vr="CS" vm="1">AllowLossyCompression</tag>
     <tag key="2200,0020" vr="CS" vm="1">RequestPriority</tag>
     <tag key="3002,0002" vr="SH" vm="1">RTImageLabel</tag>
@@ -2464,6 +2636,7 @@
     <tag key="3004,0006" vr="LO" vm="1">DoseComment</tag>
     <tag key="3004,0008" vr="DS" vm="3">NormalizationPoint</tag>
     <tag key="3004,000a" vr="CS" vm="1">DoseSummationType</tag>
+    <tag key="3004,000c" vr="DS" vm="2-n">GridFrameOffsetVector</tag>
     <tag key="3004,000e" vr="DS" vm="1">DoseGridScaling</tag>
     <tag key="3004,0010" vr="SQ" vm="1">RTDoseROISequence</tag>
     <tag key="3004,0012" vr="DS" vm="1">DoseValue</tag>
@@ -2507,6 +2680,7 @@
     <tag key="3006,0045" vr="DS" vm="3">ContourOffsetVector</tag>
     <tag key="3006,0046" vr="IS" vm="1">NumberOfContourPoints</tag>
     <tag key="3006,0048" vr="IS" vm="1">ContourNumber</tag>
+    <tag key="3006,0049" vr="IS" vm="1-n">AttachedContours</tag>
     <tag key="3006,0050" vr="DS" vm="3-3n">ContourData</tag>
     <tag key="3006,0080" vr="SQ" vm="1">RTROIObservationsSequence</tag>
     <tag key="3006,0082" vr="IS" vm="1">ObservationNumber</tag>
@@ -2553,6 +2727,7 @@
     <tag key="3008,0044" vr="DS" vm="1">DeliveredMeterset</tag>
     <tag key="3008,0045" vr="FL" vm="1">MetersetRateSet</tag>
     <tag key="3008,0046" vr="FL" vm="1">MetersetRateDelivered</tag>
+    <tag key="3008,0047" vr="FL" vm="1-n">ScanSpotMetersetsDelivered</tag>
     <tag key="3008,0048" vr="DS" vm="1">DoseRateDelivered</tag>
     <tag key="3008,0050" vr="SQ" vm="1">TreatmentSummaryCalculatedDoseReferenceSequence</tag>
     <tag key="3008,0052" vr="DS" vm="1">CumulativeDoseToDoseReference</tag>
@@ -2623,7 +2798,9 @@
     <tag key="300a,0004" vr="ST" vm="1">RTPlanDescription</tag>
     <tag key="300a,0006" vr="DA" vm="1">RTPlanDate</tag>
     <tag key="300a,0007" vr="TM" vm="1">RTPlanTime</tag>
+    <tag key="300a,0009" vr="LO" vm="1-n">TreatmentProtocols</tag>
     <tag key="300a,000a" vr="CS" vm="1">PlanIntent</tag>
+    <tag key="300a,000b" vr="LO" vm="1-n">TreatmentSites</tag>
     <tag key="300a,000c" vr="CS" vm="1">RTPlanGeometry</tag>
     <tag key="300a,000e" vr="ST" vm="1">PrescriptionDescription</tag>
     <tag key="300a,0010" vr="SQ" vm="1">DoseReferenceSequence</tag>
@@ -2688,6 +2865,7 @@
     <tag key="300a,00ba" vr="DS" vm="1">SourceToBeamLimitingDeviceDistance</tag>
     <tag key="300a,00bb" vr="FL" vm="1">IsocenterToBeamLimitingDeviceDistance</tag>
     <tag key="300a,00bc" vr="IS" vm="1">NumberOfLeafJawPairs</tag>
+    <tag key="300a,00be" vr="DS" vm="3-n">LeafPositionBoundaries</tag>
     <tag key="300a,00c0" vr="IS" vm="1">BeamNumber</tag>
     <tag key="300a,00c2" vr="LO" vm="1">BeamName</tag>
     <tag key="300a,00c3" vr="ST" vm="1">BeamDescription</tag>
@@ -2696,6 +2874,7 @@
     <tag key="300a,00c7" vr="CS" vm="1">HighDoseTechniqueType</tag>
     <tag key="300a,00c8" vr="IS" vm="1">ReferenceImageNumber</tag>
     <tag key="300a,00ca" vr="SQ" vm="1">PlannedVerificationImageSequence</tag>
+    <tag key="300a,00cc" vr="LO" vm="1-n">ImagingDeviceSpecificAcquisitionParameters</tag>
     <tag key="300a,00ce" vr="CS" vm="1">TreatmentDeliveryType</tag>
     <tag key="300a,00d0" vr="IS" vm="1">NumberOfWedges</tag>
     <tag key="300a,00d1" vr="SQ" vm="1">WedgeSequence</tag>
@@ -2722,6 +2901,8 @@
     <tag key="300a,00e8" vr="IS" vm="1">CompensatorColumns</tag>
     <tag key="300a,00e9" vr="DS" vm="2">CompensatorPixelSpacing</tag>
     <tag key="300a,00ea" vr="DS" vm="2">CompensatorPosition</tag>
+    <tag key="300a,00eb" vr="DS" vm="1-n">CompensatorTransmissionData</tag>
+    <tag key="300a,00ec" vr="DS" vm="1-n">CompensatorThicknessData</tag>
     <tag key="300a,00ed" vr="IS" vm="1">NumberOfBoli</tag>
     <tag key="300a,00ee" vr="CS" vm="1">CompensatorType</tag>
     <tag key="300a,00f0" vr="IS" vm="1">NumberOfBlocks</tag>
@@ -2872,9 +3053,11 @@
     <tag key="300a,02d6" vr="DS" vm="1">CumulativeTimeWeight</tag>
     <tag key="300a,02e0" vr="CS" vm="1">CompensatorDivergence</tag>
     <tag key="300a,02e1" vr="CS" vm="1">CompensatorMountingPosition</tag>
+    <tag key="300a,02e2" vr="DS" vm="1-n">SourceToCompensatorDistance</tag>
     <tag key="300a,02e3" vr="FL" vm="1">TotalCompensatorTrayWaterEquivalentThickness</tag>
     <tag key="300a,02e4" vr="FL" vm="1">IsocenterToCompensatorTrayDistance</tag>
     <tag key="300a,02e5" vr="FL" vm="1">CompensatorColumnOffset</tag>
+    <tag key="300a,02e6" vr="FL" vm="1-n">IsocenterToCompensatorDistances</tag>
     <tag key="300a,02e7" vr="FL" vm="1">CompensatorRelativeStoppingPowerRatio</tag>
     <tag key="300a,02e8" vr="FL" vm="1">CompensatorMillingToolDiameter</tag>
     <tag key="300a,02ea" vr="SQ" vm="1">IonRangeCompensatorSequence</tag>
@@ -2928,6 +3111,8 @@
     <tag key="300a,038a" vr="FL" vm="1">IsocenterToRangeModulatorDistance</tag>
     <tag key="300a,0390" vr="SH" vm="1">ScanSpotTuneID</tag>
     <tag key="300a,0392" vr="IS" vm="1">NumberOfScanSpotPositions</tag>
+    <tag key="300a,0394" vr="FL" vm="1-n">ScanSpotPositionMap</tag>
+    <tag key="300a,0396" vr="FL" vm="1-n">ScanSpotMetersetWeights</tag>
     <tag key="300a,0398" vr="FL" vm="2">ScanningSpotSize</tag>
     <tag key="300a,039a" vr="IS" vm="1">NumberOfPaintings</tag>
     <tag key="300a,03a0" vr="SQ" vm="1">IonToleranceTableSequence</tag>
@@ -2988,8 +3173,8 @@
     <tag key="300e,0005" vr="TM" vm="1">ReviewTime</tag>
     <tag key="300e,0008" vr="PN" vm="1">ReviewerName</tag>
     <tag key="4000,0000" vr="UL" vm="1">ACR_NEMA_TextGroupLength</tag>
-    <tag key="4000,0010" vr="LT" vm="1">RETIRED_Arbitrary</tag>
-    <tag key="4000,4000" vr="LT" vm="1">RETIRED_TextComments</tag>
+    <tag key="4000,0010" vr="LT" vm="1-n">ACR_NEMA_TextArbitrary</tag>
+    <tag key="4000,4000" vr="LT" vm="1-n">ACR_NEMA_TextComments</tag>
     <tag key="4008,0040" vr="SH" vm="1">RETIRED_ResultsID</tag>
     <tag key="4008,0042" vr="LO" vm="1">RETIRED_ResultsIDIssuer</tag>
     <tag key="4008,0050" vr="SQ" vm="1">RETIRED_ReferencedInterpretationSequence</tag>
@@ -3027,10 +3212,10 @@
     <tag key="5600,0010" vr="OF" vm="1">FirstOrderPhaseCorrectionAngle</tag>
     <tag key="5600,0020" vr="OF" vm="1">SpectroscopyData</tag>
     <tag key="6000,60ff" vr="US" vm="1">ACR_NEMA_2C_OverlayBitsForCodeWord</tag>
-    <tag key="7f00,7fff" vr="AT" vm="1">ACR_NEMA_2C_VariableNextDataGroup</tag>
-    <tag key="7fe0,0020" vr="OW" vm="1">RETIRED_CoefficientsSDVN</tag>
-    <tag key="7fe0,0030" vr="OW" vm="1">RETIRED_CoefficientsSDHN</tag>
-    <tag key="7fe0,0040" vr="OW" vm="1">RETIRED_CoefficientsSDDN</tag>
+    <tag key="7f00,7fff" vr="OW" vm="1-n">ACR_NEMA_2C_VariableCoefficientsSDDN</tag>
+    <tag key="7fe0,0020" vr="OW" vm="1-n">ACR_NEMA_2C_CoefficientsSDVN</tag>
+    <tag key="7fe0,0030" vr="OW" vm="1-n">ACR_NEMA_2C_CoefficientsSDHN</tag>
+    <tag key="7fe0,0040" vr="OW" vm="1-n">ACR_NEMA_2C_CoefficientsSDDN</tag>
     <tag key="fffa,fffa" vr="SQ" vm="1">DigitalSignaturesSequence</tag>
     <tag key="fffc,fffc" vr="OB" vm="1">DataSetTrailingPadding</tag>
 </dictionary>

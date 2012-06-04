@@ -13,19 +13,24 @@ private slots:
     void initTestCase()
     {}
 
-    /*
+
     void testDCMTK2XML()
     {
         // That is how we import DCMTK dictionary and save it in XML format
-        QString pathDCMTK = "C:\\bin\\dcmtk-vs\\share\\dcmtk\\dicom.dic";
+        QString pathDCMTK =
+#ifdef WIN32
+        "C:\\bin\\dcmtk-vs\\share\\dcmtk\\dicom.dic";
+#else
+        "/usr/local/share/dcmtk/dicom.dic";
+#endif
 
-        QString pathXML = "D:\\xxx\\dicom.xml";
+        QString pathXML = "dicom.xml";
 
         DcmDictionary dictionary;
         dictionary.populateFromDCMTK(pathDCMTK);
         dictionary.dumpToXML(pathXML);
     }
-    */
+
 
     void testResourcesDictionary()
     {

@@ -316,10 +316,14 @@ bool DcmDictionary::parseMultiplicity(const QString &str, int &vmMin, int &vmMax
         if (mult.at(1).right(1).toLower() == "n") {
             max = DcmMultiplicity_Unknown;
             QString strNum = mult.at(1).left(mult.at(1).length() - 1);
-            mod = strNum.toInt(&ok);
-            if (!ok) {
-                // Module value is invalid
-                return false;
+            if (strNum.isEmpty()) {
+                mod = 1;
+            } else {
+                mod = strNum.toInt(&ok);
+                if (!ok) {
+                    // Module value is invalid
+                    return false;
+                }
             }
         } else {
             max = mult.at(1).toInt(&ok);
