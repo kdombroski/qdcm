@@ -14,6 +14,7 @@ private slots:
     {}
 
 
+#if 0
     void testDCMTK2XML()
     {
         // That is how we import DCMTK dictionary and save it in XML format
@@ -30,7 +31,7 @@ private slots:
         dictionary.populateFromDCMTK(pathDCMTK);
         dictionary.dumpToXML(pathXML);
     }
-
+#endif
 
     void testResourcesDictionary()
     {
