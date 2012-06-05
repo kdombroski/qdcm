@@ -2,7 +2,7 @@
 #include "DcmTagPixelData.h"
 #include "DcmImage.h"
 
-DcmImage::DcmImage(int width, int height, int frames, int bitsAllocated, int bitsStored, const DcmPhotometricInterpretation &pi)
+DcmImage::DcmImage(int width, int height, int frames, int bitsAllocated, int bitsStored, int highBit, const DcmPhotometricInterpretation &pi)
 {
     Q_ASSERT(width > 0);
     Q_ASSERT(height > 0);
@@ -12,6 +12,8 @@ DcmImage::DcmImage(int width, int height, int frames, int bitsAllocated, int bit
              || (bitsAllocated == 32));
     Q_ASSERT((bitsStored > 0)
              &&(bitsStored <= bitsAllocated));
+    Q_ASSERT(highBit < bitsAllocated);
+    Q_ASSERT(bitsStored <= highBit + 1);
 
     m_datasetPtr = new DcmDataset();
     m_datasetPtr->setTagValue("Columns", width);
@@ -19,6 +21,7 @@ DcmImage::DcmImage(int width, int height, int frames, int bitsAllocated, int bit
     m_datasetPtr->setTagValue("Frames", frames);
     m_datasetPtr->setTagValue("BitsAllocated", bitsAllocated);
     m_datasetPtr->setTagValue("BitsStored", bitsStored);
+    m_datasetPtr->setTagValue("HighBit", highBit);
     m_datasetPtr->setTagValue("PhotometricInterpretation", pi.toString());
 
     allocatePixelData();
@@ -79,6 +82,11 @@ int DcmImage::bitsAllocated() const
 int DcmImage::bitsStored() const
 {
     return m_datasetPtr->tagValue("BitsStored").toInt();
+}
+
+int DcmImage::highBit() const
+{
+    return m_datasetPtr->tagValue("HighBit").toInt();
 }
 
 DcmPhotometricInterpretation DcmImage::photometricInterpretation() const

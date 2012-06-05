@@ -21,9 +21,10 @@ public:
      * \param frames Number of frames.
      * \param bitsAllocated Number of bits per pixel (8, 16, or 32).
      * \param bitsStored Number of effective bits used to encode pixel value (<= bitsAllocated).
+     * \param highBit Highest bit number.
      * \param pi Photometric interpretation.
      */
-    DcmImage(int width, int height, int frames, int bitsAllocated, int bitsStored, const DcmPhotometricInterpretation &pi);
+    DcmImage(int width, int height, int frames, int bitsAllocated, int bitsStored, int highBit, const DcmPhotometricInterpretation &pi);
 
     /**
      * Construct image from DICOM dataset
@@ -78,6 +79,12 @@ public:
      * \return Number of effective bits.
      */
     int bitsStored() const;
+
+    /**
+     * Returns the highest bit number.
+     * \return Highest bit number.
+     */
+    int highBit() const;
 
     /**
      * Returns image photometric interpretation.
