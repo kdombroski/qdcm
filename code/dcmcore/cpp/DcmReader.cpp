@@ -115,12 +115,15 @@ DcmTag* DcmReader::readTag()
     }
 
     // Dictionary look-up
+    m_dictMinVm = 1;
+    m_dictMaxVm = 1;
+    m_dictModVm = 1;
     if (m_tagKey.isGroupSize()) {
         // Group tags are not in the dictionary
         m_dictVr = DcmVr::UL;
-        m_dictMinVm = 1;
-        m_dictMaxVm = 1;
-        m_dictModVm = 1;
+    } else if (m_tagKey.isPrivate() && m_tagKey.element() == 0x0010) {
+        // This tag is PrivateCreator
+        m_dictVr = DcmVr::LO;
     } else {
         DcmTagDescription tagDescription = m_dictPtr->findByTagKey(m_tagKey);
         if (tagDescription.isValid()) {
@@ -433,7 +436,7 @@ DcmTag* DcmReader::readTagAsBinary()
         }
     }
 
-    QByteArray byteArray = QByteArray::fromRawData(buffer, m_size);
+    QByteArray byteArray(buffer, m_size);
     delete[] buffer;
 
     DcmTagBinary *tagBinary = new DcmTagBinary(m_tagKey, m_vr);

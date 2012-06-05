@@ -62,8 +62,9 @@ private slots:
 
         delete ds;
     }
-/*
-    void testReadFile()
+
+#if 0
+    void testReadWriteFile()
     {
         QString path = "E:/DICOM/BAD_DICOM/badrs.dcm";
         DcmFile dcmFile(path);
@@ -81,7 +82,8 @@ private slots:
 
         delete dataset;
     }
-*/
+#endif
+
 #if 0
     void testReadFile()
     {

@@ -105,13 +105,13 @@ public:
      * Returns instance creator software version (0008, 1020).
      * \return Software version.
      */
-    QString softwareVersion() const;
+    QString softwareVersions() const;
 
     /**
      * Assign instance ceator software version (0008, 1020).
      * \param v Version to be set.
      */
-    void setSoftwareVersion(const QString &v);
+    void setSoftwareVersions(const QString &v);
 
 private:
 
