@@ -66,7 +66,7 @@ private slots:
 #if 0
     void testReadWriteFile()
     {
-        QString path = "E:/DICOM/BAD_DICOM/badrs.dcm";
+        QString path = "E:/DICOM/BAD_DICOM/rtplan.dcm";
         DcmFile dcmFile(path);
         QVERIFY(dcmFile.exists());
 
@@ -78,7 +78,7 @@ private slots:
         qDebug() << "CharSet:" << dataset->tagValue(DcmTagKey::SpecificCharacterSet).toString();
 
         DcmFile dcmOutputFile("output.dcm");
-        dcmOutputFile.write(dataset, DcmTransferSyntax::ImplicitLittleEndian);
+        dcmOutputFile.write(dataset, DcmTransferSyntax::ExplicitLittleEndian);
 
         delete dataset;
     }

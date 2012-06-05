@@ -179,8 +179,9 @@ DcmTag* DcmReader::readTag()
         }
 
         *m_streamPtr >> m_vrSize;
-        if (m_vr.isBinary() || m_vr == DcmVr::SQ) {
-            // For binary and sequences the VR size must be zero
+
+        if (m_vr.isBinary() || m_vr == DcmVr::SQ || m_vr == DcmVr::UT) {
+            // For binary, sequences, and unlimited text the VR size must be zero
             if (m_vrSize != 0) {
                 setError(QObject::tr("Tag %1 must have zero VR size").arg(m_tagKey.toString()));
                 return 0;

@@ -404,9 +404,15 @@ void DcmWriter::writeTagPrefix(DcmTag *tagPtr)
     *m_streamPtr << tagPtr->tagKey();
     DcmSize length = tagPtr->contentSize(m_streamPtr->transferSyntax());
     if (m_streamPtr->transferSyntax().encoding() == DcmEncoding_Explicit) {
-        DcmUnsignedShort usLength = (DcmUnsignedShort)length;
         *m_streamPtr << tagPtr->vr();
-        *m_streamPtr << usLength;
+        if (tagPtr->vr().isBinary() || tagPtr->vr() == DcmVr::SQ || tagPtr->vr() == DcmVr::UT) {
+            DcmUnsignedShort usZeros = 0;
+            *m_streamPtr << usZeros;
+            *m_streamPtr << length;
+        } else {
+            DcmUnsignedShort usLength = (DcmUnsignedShort)length;
+            *m_streamPtr << usLength;
+        }
     } else {
         *m_streamPtr << length;
     }
