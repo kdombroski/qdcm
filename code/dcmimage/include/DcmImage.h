@@ -22,9 +22,10 @@ public:
      * \param bitsAllocated Number of bits per pixel (8, 16, or 32).
      * \param bitsStored Number of effective bits used to encode pixel value (<= bitsAllocated).
      * \param highBit Highest bit number.
+     * \param samplesPerPixel Number of samples per pixel. Each sample takes <bitsAllocated> bits.
      * \param pi Photometric interpretation.
      */
-    DcmImage(int width, int height, int frames, int bitsAllocated, int bitsStored, int highBit, const DcmPhotometricInterpretation &pi);
+    DcmImage(int width, int height, int frames, int bitsAllocated, int bitsStored, int highBit, int samplesPerPixel, const DcmPhotometricInterpretation &pi);
 
     /**
      * Construct image from DICOM dataset
@@ -85,6 +86,14 @@ public:
      * \return Highest bit number.
      */
     int highBit() const;
+
+    /**
+     * Returns number of samples per pixel.
+     * This value correlates with photometric interpretation.
+     * For instance for RGB interpretation there are 3 samples per pixel.
+     * \return Number of samples per pixel.
+     */
+    int samplesPerPixel() const;
 
     /**
      * Returns image photometric interpretation.

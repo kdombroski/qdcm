@@ -26,6 +26,7 @@ private slots:
         dataset.setTagValue("BitsAllocated", 16);
         dataset.setTagValue("BitsStored", 12);
         dataset.setTagValue("HighBit", 11);
+        dataset.setTagValue("SamplesPerPixel", 1);
         dataset.setTagValue("PhotometricInterpretation", "MONOCHROME2");
 
         DcmTagPixelData tagPixelData(DcmTagPixelData::Format_Native, DcmVr::OW);
@@ -42,6 +43,7 @@ private slots:
         QCOMPARE(image.bitsAllocated(), 16);
         QCOMPARE(image.bitsStored(), 12);
         QCOMPARE(image.highBit(), 11);
+        QCOMPARE(image.samplesPerPixel(), 1);
         QCOMPARE(image.photometricInterpretation(), DcmPhotometricInterpretation::Monochrome2);
         DcmTagPixelData *tag =
                 dynamic_cast<DcmTagPixelData*>(image.dataset()->findTag(DcmTagKey::PixelData));

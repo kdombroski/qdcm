@@ -2,7 +2,7 @@
 #include "DcmTagPixelData.h"
 #include "DcmImage.h"
 
-DcmImage::DcmImage(int width, int height, int frames, int bitsAllocated, int bitsStored, int highBit, const DcmPhotometricInterpretation &pi)
+DcmImage::DcmImage(int width, int height, int frames, int bitsAllocated, int bitsStored, int highBit, int samplesPerPixel, const DcmPhotometricInterpretation &pi)
 {
     Q_ASSERT(width > 0);
     Q_ASSERT(height > 0);
@@ -14,6 +14,7 @@ DcmImage::DcmImage(int width, int height, int frames, int bitsAllocated, int bit
              &&(bitsStored <= bitsAllocated));
     Q_ASSERT(highBit < bitsAllocated);
     Q_ASSERT(bitsStored <= highBit + 1);
+    Q_ASSERT(samplesPerPixel > 0);
 
     m_datasetPtr = new DcmDataset();
     m_datasetPtr->setTagValue("Columns", width);
@@ -22,6 +23,7 @@ DcmImage::DcmImage(int width, int height, int frames, int bitsAllocated, int bit
     m_datasetPtr->setTagValue("BitsAllocated", bitsAllocated);
     m_datasetPtr->setTagValue("BitsStored", bitsStored);
     m_datasetPtr->setTagValue("HighBit", highBit);
+    m_datasetPtr->setTagValue("SamplesPerPixel", samplesPerPixel);
     m_datasetPtr->setTagValue("PhotometricInterpretation", pi.toString());
 
     allocatePixelData();
@@ -89,6 +91,11 @@ int DcmImage::highBit() const
     return m_datasetPtr->tagValue("HighBit").toInt();
 }
 
+int DcmImage::samplesPerPixel() const
+{
+    return m_datasetPtr->tagValue("SamplesPerPixel").toInt();
+}
+
 DcmPhotometricInterpretation DcmImage::photometricInterpretation() const
 {
     return DcmPhotometricInterpretation::bySignature(m_datasetPtr->tagValue("PhotometricInterpretation").toString());
@@ -101,7 +108,7 @@ DcmDataset* DcmImage::dataset()
 
 void DcmImage::allocatePixelData()
 {
-    int bytesToAllocate = width() * height() * frames() * bitsAllocated() / 8;
+    int bytesToAllocate = width() * height() * frames() * bitsAllocated() * samplesPerPixel() / 8;
     QByteArray ba = QByteArray(bytesToAllocate, 0);
     // We always allocate pixel data as OW value representation.
     DcmTagPixelData tagPixelData(DcmTagPixelData::Format_Native, DcmVr::OW);
