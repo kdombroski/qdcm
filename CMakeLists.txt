@@ -48,3 +48,4 @@ add_custom_target(doc)
 enable_testing()
 
 add_subdirectory(code)
+add_subdirectory(tools)

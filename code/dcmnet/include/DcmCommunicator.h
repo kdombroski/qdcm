@@ -56,7 +56,7 @@ public:
     DcmPDUItem* receivePDUItem();
     void sendPDUItem(const DcmPDUItem &pdu);
     void sendPData(const QByteArray &data, int contextId, bool command = false);
-    void sendDataset(DcmDataset *datasetPtr,
+    void sendDataset(DcmDataset &dataset,
                      int contextId,
                      bool command,
                      const DcmTransferSyntax &syntax = DcmTransferSyntax::ImplicitLittleEndian);
@@ -76,7 +76,6 @@ private:
     int m_timeout;                      ///< I/O operations timeout.
     DcmCommunicator::Status m_status;   ///< Communication operation status.
     DcmSize m_pduMaxLength;             ///< Allowed PDU maximal size in bytes.
-
 };
 
 #endif // DCMCOMMUNICATOR_H

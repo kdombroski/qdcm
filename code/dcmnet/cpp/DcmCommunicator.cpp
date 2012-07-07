@@ -234,7 +234,7 @@ void DcmCommunicator::sendPData(const QByteArray &data, int contextId, bool comm
     }
 }
 
-void DcmCommunicator::sendDataset(DcmDataset *datasetPtr,
+void DcmCommunicator::sendDataset(DcmDataset &dataset,
                                   int contextId,
                                   bool command,
                                   const DcmTransferSyntax &syntax)
@@ -244,7 +244,7 @@ void DcmCommunicator::sendDataset(DcmDataset *datasetPtr,
     DcmWriter writer(&stream);
     // Ignore meta-info data
     writer.setIgnoreMetaInfoHeader(true);
-    writer.writeDataset(datasetPtr);
+    writer.writeDataset(&dataset);
 
     sendPData(data, contextId, command);
 }
@@ -252,7 +252,7 @@ void DcmCommunicator::sendDataset(DcmDataset *datasetPtr,
 void DcmCommunicator::sendDimseMessage(const DcmDimseMessage &message, int contextId)
 {
     DcmDataset dataset = message.constCommandDataset();
-    sendDataset(&dataset,
+    sendDataset(dataset,
                 contextId,
                 true,   // This is a command, so we enable command flag
                 DcmTransferSyntax::ImplicitLittleEndian);

@@ -179,6 +179,8 @@ private:
     DcmSize m_itemRealSize;     ///< Real size of item tag read.
     DcmSize m_sequenceRealSize; ///< Real size of sequence tag read.
     DcmCharSet m_charSet;       ///< Character set to decode textual data.
+    DcmSize m_metaHeaderSize;   ///< Size of the meta-hader (in bytes).
+    DcmSize m_metaHeaderRead;   ///< Meta-hader read bytes so far.
 };
 
 #endif // DCMREADER_H

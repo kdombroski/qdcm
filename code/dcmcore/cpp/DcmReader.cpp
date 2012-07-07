@@ -105,12 +105,6 @@ DcmTag* DcmReader::readTag()
 
     if (m_group != m_tagKey.group() && m_sequenceLevel == 0) {
         // Switching current group
-
-        if (0x0002 == m_group && !m_ignoreMetaInfoTransferSyntax) {
-            // We are leaving meta info group, have to adjust the transfer syntax
-            m_streamPtr->setTransferSyntax(m_transferSyntax);
-        }
-
         m_group = m_tagKey.group();
     }
 
@@ -265,6 +259,31 @@ DcmTag* DcmReader::readTag()
     } else {
         // Whatever else is terated as binary
         tagPtr = readTagAsBinary();
+    }
+
+    if (tagPtr) {
+        // Check for the meta-header is over
+        if (m_tagKey.group() == 0x0002) {
+            if (m_tagKey.element() == 0x0000) {
+                // Meta-header is just started
+                m_metaHeaderSize = tagPtr->value().toUInt();
+                m_metaHeaderRead = 0;
+            } else {
+                // Any other tag in the meta-hader
+                m_metaHeaderRead += tagPtr->size(m_streamPtr->transferSyntax());
+                if (m_metaHeaderRead > m_metaHeaderSize) {
+                    delete tagPtr;
+                    setError(QString("Meta-header group size is invalid. Encoded %1, but read %2")
+                             .arg(m_metaHeaderSize).arg(m_metaHeaderRead));
+                    return 0;
+                }
+
+                if (!m_ignoreMetaInfoTransferSyntax && m_metaHeaderRead == m_metaHeaderSize) {
+                    // Meta-header is over, switching transfer syntax
+                    m_streamPtr->setTransferSyntax(m_transferSyntax);
+                }
+            }
+        }
     }
 
     return tagPtr;
