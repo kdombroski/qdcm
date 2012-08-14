@@ -521,7 +521,7 @@ DcmTagSQ* DcmReader::readTagAsSequence()
     DcmSize sequenceExpectedSize = m_size;
     DcmSize sequenceSize = 0;
 
-    bool inSequence = true;
+    bool inSequence = m_size > 0;   // Parse sequence only if it's no zero-size
     while (inSequence) {
         // Read item tag, but not its content
         DcmTag *itemHeadTag = readTag();

@@ -64,6 +64,26 @@ private slots:
     }
 
 #if 0
+    void testBigEndian()
+    {
+        QString path = "E:/DICOM/BAD_DICOM/big_endian.dcm";
+        DcmFile dcmFile(path);
+        QVERIFY(dcmFile.exists());
+
+        DcmDataset *dataset = dcmFile.read();
+        if (dcmFile.isError()) {
+            qDebug() << "ERROR:" << dcmFile.errorText();
+        }
+
+        qDebug() << "ImageType" << dataset->findTag("ImageType")->value().toString();
+        qDebug() << "Rows" << dataset->findTag("Rows")->value().toInt();
+        qDebug() << "Columns" << dataset->findTag("Columns")->value().toInt();
+
+        delete dataset;
+    }
+#endif
+
+#if 0
     void testReadWriteFile()
     {
         QString path = "E:/DICOM/BAD_DICOM/rtplan.dcm";
