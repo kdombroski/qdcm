@@ -37,6 +37,8 @@ private slots:
 
         DcmImage image(&dataset);
 
+        QVERIFY(image.isValid());
+
         QCOMPARE(image.width(), 320);
         QCOMPARE(image.height(), 512);
         QCOMPARE(image.frames(), 1);
@@ -48,8 +50,14 @@ private slots:
         DcmTagPixelData *tag =
                 dynamic_cast<DcmTagPixelData*>(image.dataset()->findTag(DcmTagKey::PixelData));
         QVERIFY(tag);
+        QCOMPARE(tag, image.tagPixelData());
         QCOMPARE(tag->asByteArray().size(), 512*320*2);
 
+        // Test pixel data index calculation
+        int x = 12;
+        int y = 36;
+        quint32 idx = (x + y * 320) * 2;
+        QCOMPARE(idx, image.pixelByteArrayIndex(x, y));
     }
 
 #if 0

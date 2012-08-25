@@ -5,6 +5,7 @@
 #include <QImage>
 #include "DcmImageApi.h"
 #include "DcmPhotometricInterpretation.h"
+#include "DcmTagPixelData.h"
 #include "DcmDataset.h"
 
 /*! DICOM image base class.
@@ -28,7 +29,9 @@ public:
     DcmImage(int width, int height, int frames, int bitsAllocated, int bitsStored, int highBit, int samplesPerPixel, const DcmPhotometricInterpretation &pi);
 
     /**
-     * Construct image from DICOM dataset
+     * Construct image from DICOM dataset.
+     * The dataset will be copied, and the original pointer will not
+     * be retained by the image constructed.
      * \param datasetPtr DICOM dataset pointer.
      */
     DcmImage(const DcmDataset *datasetPtr);
@@ -105,7 +108,33 @@ public:
      * Returns pointer to DICOM dataset.
      * \return Pointer to dataset.
      */
-    DcmDataset* dataset();
+    DcmDataset* dataset() const;
+
+    /**
+     * Returns pointer to pixel data tag.
+     * @return Pointer to pixel data tag.
+     */
+    DcmTagPixelData* tagPixelData() const;
+
+    /**
+     * Tell whether this image is valid.
+     * The validity check may be useful if the image object is constructed
+     * from a dataset. If some tags are missing or no pixel data present, or
+     * sizes are not respedted, the image may be considered as invalid.
+     * \return true if the image is valid.
+     */
+    virtual bool isValid() const;
+
+    /**
+     * Returns pixel raw data index in pixel buffer byte array.
+     * The method does not check whether provided coordinates are
+     * valid ones.
+     * @param x Pixel x coordinate.
+     * @param y Pixel y coordinate.
+     * @param frame Pixel frame number.
+     * @return Pixel byte array index.
+     */
+    quint32 pixelByteArrayIndex(int x, int y, int frame = 0) const;
 
 private:
 
@@ -116,6 +145,7 @@ private:
     void allocatePixelData();
 
     DcmDataset *m_datasetPtr;   ///< DICOM dataset associated with this image.
+    DcmTagPixelData *m_tagPixelDataPtr; ///< Pointer to pixel data tag within the image dataset (for easy access).
 };
 
 #endif // DCMIMAGE_H

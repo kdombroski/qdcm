@@ -27,6 +27,8 @@ DcmImage::DcmImage(int width, int height, int frames, int bitsAllocated, int bit
     m_datasetPtr->setTagValue("PhotometricInterpretation", pi.toString());
 
     allocatePixelData();
+
+    m_tagPixelDataPtr = dynamic_cast<DcmTagPixelData*>(m_datasetPtr->findTag(DcmTagKey::PixelData));
 }
 
 DcmImage::DcmImage(const DcmDataset *datasetPtr)
@@ -37,6 +39,13 @@ DcmImage::DcmImage(const DcmDataset *datasetPtr)
     }
 
     m_datasetPtr = new DcmDataset(*datasetPtr);
+    DcmTag *tagPtr = m_datasetPtr->findTag(DcmTagKey::PixelData);
+    if (tagPtr) {
+        m_tagPixelDataPtr = dynamic_cast<DcmTagPixelData*>(tagPtr);
+    } else {
+        // The dataset does not contain pixel data
+        m_tagPixelDataPtr = 0;
+    }
 }
 
 DcmImage::DcmImage(const DcmImage &image)
@@ -101,9 +110,47 @@ DcmPhotometricInterpretation DcmImage::photometricInterpretation() const
     return DcmPhotometricInterpretation::bySignature(m_datasetPtr->tagValue("PhotometricInterpretation").toString());
 }
 
-DcmDataset* DcmImage::dataset()
+DcmDataset* DcmImage::dataset() const
 {
     return m_datasetPtr;
+}
+
+DcmTagPixelData* DcmImage::tagPixelData() const
+{
+    return m_tagPixelDataPtr;
+}
+
+bool DcmImage::isValid() const
+{
+    // Check we have a pixel data present
+    if (!m_tagPixelDataPtr) {
+        return false;
+    }
+
+    // Check raw pixel data size is correct
+    DcmSize size = width() * height() * frames() * bitsAllocated() * samplesPerPixel() / 8;
+    if (size & 1) {
+        size += 1;  // Correct for even size
+    }
+
+    // Check pixel data size for native (not compressed) image
+    if (m_tagPixelDataPtr->isNative()) {
+        // Transfer syntax does not affect pixel data tag content size (as it is a binary tag).
+        if (size != m_tagPixelDataPtr->contentSize(DcmTransferSyntax::ImplicitLittleEndian)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+quint32 DcmImage::pixelByteArrayIndex(int x, int y, int frame) const
+{
+    quint32 adj = bitsAllocated() * samplesPerPixel() / 8;
+    quint32 idx = (x + y * width()) * adj;
+
+    idx += frame * width() * height() * adj;
+    return idx;
 }
 
 void DcmImage::allocatePixelData()
