@@ -44,7 +44,7 @@ qt4_add_translation(TRANSLATIONS ${TSS})
 include(add_opengl)
 
 set(GCOV "")
-if(UNIX)
+if(UNIX AND QDCM_TESTS_COVERAGE)
     set(GCOV "gcov")
 endif()
 

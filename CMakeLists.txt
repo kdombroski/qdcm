@@ -15,6 +15,7 @@ add_definitions(-DVERSION="${${PROJECT_NAME}_VERSION}")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
 set(QDCM_BUILD_TESTS ON CACHE BOOL "Build unit tests")
+set(QDCM_TESTS_COVERAGE OFF CACHE BOOL "Enable tests coverage via gcov")
 
 set(INSTALL_BIN "bin")
 set(INSTALL_LIB "lib")
