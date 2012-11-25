@@ -2,7 +2,14 @@
 #include "DcmTagPixelData.h"
 #include "DcmImage.h"
 
-DcmImage::DcmImage(int width, int height, int frames, int bitsAllocated, int bitsStored, int highBit, int samplesPerPixel, const DcmPhotometricInterpretation &pi)
+DcmImage::DcmImage(int width,
+                   int height,
+                   int frames,
+                   int bitsAllocated,
+                   int bitsStored,
+                   int highBit,
+                   int samplesPerPixel,
+                   const DcmPhotometricInterpretation &pi)
 {
     Q_ASSERT(width > 0);
     Q_ASSERT(height > 0);
@@ -108,6 +115,54 @@ int DcmImage::samplesPerPixel() const
 DcmPhotometricInterpretation DcmImage::photometricInterpretation() const
 {
     return DcmPhotometricInterpretation::bySignature(m_datasetPtr->tagValue("PhotometricInterpretation").toString());
+}
+
+double DcmImage::rescaleIntercept() const
+{
+    QVariant v = m_datasetPtr->tagValue("RescaleIntercept");
+    if (v.isValid()) {
+        bool ok = true;
+        double d = v.toDouble(&ok);
+        if (ok) {
+            return d;
+        }
+    }
+
+    return 0.0;
+}
+
+void DcmImage::setRescaleIntercept(double ri)
+{
+    m_datasetPtr->setTagValue("RescaleIntercept", QVariant(ri));
+}
+
+double DcmImage::rescaleSlope() const
+{
+    QVariant v = m_datasetPtr->tagValue("RescaleSlope");
+    if (v.isValid()) {
+        bool ok = true;
+        double d = v.toDouble(&ok);
+        if (ok) {
+            return d;
+        }
+    }
+
+    return 1.0;
+}
+
+void DcmImage::setRescaleSlope(double rs)
+{
+    m_datasetPtr->setTagValue("RescaleSlope", QVariant(rs));
+}
+
+QString DcmImage::rescaleTypeString() const
+{
+    return m_datasetPtr->tagValue("RescaleType").toString().trimmed();
+}
+
+void DcmImage::setRescaleTypeString(const QString &rt)
+{
+    m_datasetPtr->setTagValue("RescaleType", QVariant(rt.trimmed()));
 }
 
 DcmDataset* DcmImage::dataset() const

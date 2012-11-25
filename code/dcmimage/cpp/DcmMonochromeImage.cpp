@@ -1,9 +1,33 @@
 #include "DcmTagPixelData.h"
 #include "DcmMonochromeImage.h"
 
-DcmMonochromeImage::DcmMonochromeImage(int width, int height, int frames, int bitsAllocated, int bitsStored, int highBit, const DcmPhotometricInterpretation &pi)
-    : DcmImage(width, height, frames, bitsAllocated, bitsStored, highBit, 1, pi)
+DcmMonochromeImage::DcmMonochromeImage(int width,
+                                       int height,
+                                       int frames,
+                                       int bitsAllocated,
+                                       int bitsStored,
+                                       int highBit,
+                                       const DcmPhotometricInterpretation &pi)
+    : DcmImage(width, height, frames, bitsAllocated, bitsStored, highBit, 1 /* samples per pixel */, pi)
 {
+}
+
+DcmMonochromeImage::DcmMonochromeImage(const DcmDataset *datasetPtr)
+    : DcmImage(datasetPtr)
+{
+}
+
+DcmMonochromeImage::DcmMonochromeImage(const DcmMonochromeImage &monoImage)
+    : DcmImage(monoImage)
+{
+}
+
+DcmMonochromeImage& DcmMonochromeImage::operator =(const DcmMonochromeImage &monoImage)
+{
+    if (this != &monoImage) {
+        DcmImage::operator =(monoImage);
+    }
+    return *this;
 }
 
 DcmMonochromeImage::~DcmMonochromeImage()
@@ -72,4 +96,20 @@ void DcmMonochromeImage::setRawPixel(DcmUnsignedShort p, int x, int y, int frame
             *ubPtr = p & 0x00FF;
         }
     }
+}
+
+DcmMonochromeImage* DcmMonochromeImage::fromDcmImage(const DcmImage *imagePtr)
+{
+    Q_ASSERT(imagePtr);
+    if (!imagePtr) {
+        return 0;
+    }
+
+    DcmPhotometricInterpretation phi = imagePtr->photometricInterpretation();
+    if (!phi.isGrayscale()) {
+        return 0;   // Not a monochrome image
+    }
+
+    DcmMonochromeImage *monoImage = new DcmMonochromeImage(imagePtr->dataset());
+    return monoImage;
 }

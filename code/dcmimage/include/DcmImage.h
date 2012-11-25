@@ -26,7 +26,14 @@ public:
      * \param samplesPerPixel Number of samples per pixel. Each sample takes <bitsAllocated> bits.
      * \param pi Photometric interpretation.
      */
-    DcmImage(int width, int height, int frames, int bitsAllocated, int bitsStored, int highBit, int samplesPerPixel, const DcmPhotometricInterpretation &pi);
+    DcmImage(int width,
+             int height,
+             int frames,
+             int bitsAllocated,
+             int bitsStored,
+             int highBit,
+             int samplesPerPixel,
+             const DcmPhotometricInterpretation &pi);
 
     /**
      * Construct image from DICOM dataset.
@@ -103,6 +110,45 @@ public:
      * \return Photometric interpretation.
      */
     DcmPhotometricInterpretation photometricInterpretation() const;
+
+    /**
+     * Returns image pixels rescale intercept tag (0028, 1052) value.
+     * If tag is absent, 0.0 value is returned.
+     * @return  Image pixel value rescale intercept.
+     */
+    double rescaleIntercept() const;
+
+    /**
+     * Assign rescale intercept value.
+     * @param ri Rescale intercept value to be set.
+     */
+    void setRescaleIntercept(double ri);
+
+    /**
+     * Returns image pixels rescale slope tag (0028, 1053) value.
+     * If tag is absent, 1.0 value is returned.
+     * @return Image pixel value rescale slope.
+     */
+    double rescaleSlope() const;
+
+    /**
+     * Assign rescale slope value.
+     * @param rs Rescale slope value to be set.
+     */
+    void setRescaleSlope(double rs);
+
+    /**
+     * Returns image pixels rescale type tag (0028, 1054) value.
+     * If tag is absent, an empty string is returned.
+     * @return Rescale type as defined in DICOM dataset.
+     */
+    QString rescaleTypeString() const;
+
+    /**
+     * Assign rescale type string.
+     * @param rt Rescale type string to be assigned.
+     */
+    void setRescaleTypeString(const QString &rt);
 
     /**
      * Returns pointer to DICOM dataset.

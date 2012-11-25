@@ -33,6 +33,25 @@ public:
                        const DcmPhotometricInterpretation &pi = DcmPhotometricInterpretation::Monochrome2);
 
     /**
+     * Construct monochromatic image from DICOM dataset.
+     * @param datasetPtr Pointer to a vaid DICOM dataset.
+     */
+    DcmMonochromeImage(const DcmDataset *datasetPtr);
+
+    /**
+     * Copy ocnstructor.
+     * @param monoImage Image to be copied.
+     */
+    DcmMonochromeImage(const DcmMonochromeImage &monoImage);
+
+    /**
+     * Assignment operator.
+     * @param monoImage Image to be assigned.
+     * @return Reference to this image object.
+     */
+    DcmMonochromeImage& operator =(const DcmMonochromeImage &monoImage);
+
+    /**
      * Destructor.
      */
     ~DcmMonochromeImage();
@@ -64,6 +83,19 @@ public:
      * @param frame Frame number.
      */
     void setRawPixel(DcmUnsignedShort p, int x, int y, int frame = 0);
+
+    /**
+     * Convert generic DICOM image to monochromatic image.
+     * This method does not perform pixels convertion. It just reinterprets
+     * the image as being monochromatic. The photometric interpretation of the
+     * input image must be Grayscale. In other case a null pointer is returned
+     * by this method.
+     * This method makes a deep copy on an image. The original image can be
+     * safely deleted afterwards.
+     * @param imagePtr Pointer to an image to be converted.
+     * @return Pointer to a newly allocated monochromatic image or null if unable to convert.
+     */
+    static DcmMonochromeImage *fromDcmImage(const DcmImage *imagePtr);
 
 };
 
