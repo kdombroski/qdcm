@@ -96,9 +96,6 @@ private:
     static QColor intermediateColor(const QColor &colorA, const QColor &colorB, double fraction);
 
     QList<ReferencePoint> m_referencePoints;    ///< List of reference points.
-    double m_minPixelValue;     ///< Minimal pixel value handled by this transfer function.
-    double m_maxPixelValue;     ///< Maximal pixel value handled by this transfer function.
-
 };
 
 #endif // DCMIMAGETRANSFERFUNCTION_H

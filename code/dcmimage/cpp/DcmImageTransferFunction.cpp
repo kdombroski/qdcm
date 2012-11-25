@@ -1,16 +1,12 @@
 #include "DcmImageTransferFunction.h"
 
 DcmImageTransferFunction::DcmImageTransferFunction()
-    : m_referencePoints(),
-      m_minPixelValue(0.0),
-      m_maxPixelValue(0.0)
+    : m_referencePoints()
 {
 }
 
 DcmImageTransferFunction::DcmImageTransferFunction(const DcmImageTransferFunction &tf)
-    : m_referencePoints(tf.m_referencePoints),
-      m_minPixelValue(tf.m_minPixelValue),
-      m_maxPixelValue(tf.m_maxPixelValue)
+    : m_referencePoints(tf.m_referencePoints)
 {
 }
 
@@ -18,8 +14,6 @@ DcmImageTransferFunction& DcmImageTransferFunction::operator =(const DcmImageTra
 {
     if (this != &tf) {
         m_referencePoints = tf.m_referencePoints;
-        m_minPixelValue = tf.m_minPixelValue;
-        m_maxPixelValue = tf.m_maxPixelValue;
     }
     return *this;
 }
@@ -36,20 +30,14 @@ void DcmImageTransferFunction::addReferencePoint(const ReferencePoint &refPoint)
 {
     if (m_referencePoints.count() == 0) {
         m_referencePoints.append(refPoint);
-        m_minPixelValue = refPoint.pixelValue;
-        m_maxPixelValue = m_minPixelValue;
     } else {
         for (int i = 0; i < m_referencePoints.count(); i++) {
             if (m_referencePoints.at(i).pixelValue > refPoint.pixelValue) {
                 m_referencePoints.insert(i, refPoint);
-                if (i == 0) {
-                    m_minPixelValue = refPoint.pixelValue;
-                }
                 return;
             }
         }
         m_referencePoints.append(refPoint);
-        m_maxPixelValue = refPoint.pixelValue;
     }
 }
 
@@ -74,8 +62,16 @@ void DcmImageTransferFunction::setReferencePoint(int index, const QColor &color)
 QColor DcmImageTransferFunction::colorForPixelValue(double value) const
 {
     QColor color(0, 0, 0);
-    if (value < m_minPixelValue || value > m_maxPixelValue || m_referencePoints.count() < 2) {
+    if (m_referencePoints.count() < 2) {
         return color;
+    }
+
+    if (value <= m_referencePoints.first().pixelValue) {
+        return m_referencePoints.first().color;
+    }
+
+    if (value >= m_referencePoints.last().pixelValue) {
+        return m_referencePoints.last().color;
     }
 
     int i = 0;
@@ -83,10 +79,8 @@ QColor DcmImageTransferFunction::colorForPixelValue(double value) const
         i++;
     }
 
-    Q_ASSERT(i > 0);
-
     if (i == 0) {
-        return color;
+        return m_referencePoints.at(0).color;
     }
 
     ReferencePoint rpA = m_referencePoints.at(i - 1);

@@ -56,7 +56,7 @@ private slots:
         QCOMPARE(tag, image.tagPixelData());
         QCOMPARE(tag->asByteArray().size(), 512*320*2);
         QCOMPARE(image.rescaleTypeString(), QString("HU"));
-        QCOMPARE(image.rescaleIntercept(), -120.0);
+        QCOMPARE(image.rescaleIntercept(), -1200.0);
         QCOMPARE(image.rescaleSlope(), 1.25);
 
         // Test pixel data index calculation
