@@ -34,20 +34,20 @@ public:
 
     /**
      * Construct monochromatic image from DICOM dataset.
-     * @param datasetPtr Pointer to a vaid DICOM dataset.
+     * \param datasetPtr Pointer to a vaid DICOM dataset.
      */
     DcmMonochromeImage(const DcmDataset *datasetPtr);
 
     /**
      * Copy ocnstructor.
-     * @param monoImage Image to be copied.
+     * \param monoImage Image to be copied.
      */
     DcmMonochromeImage(const DcmMonochromeImage &monoImage);
 
     /**
      * Assignment operator.
-     * @param monoImage Image to be assigned.
-     * @return Reference to this image object.
+     * \param monoImage Image to be assigned.
+     * \return Reference to this image object.
      */
     DcmMonochromeImage& operator =(const DcmMonochromeImage &monoImage);
 
@@ -60,7 +60,7 @@ public:
      * Tell whether this image is valid.
      * Additional to the checks performed by image base class, this method
      * also checks image phototetric representation to be Monochrome1 or Monochrome2.
-     * @return true if image is valid.
+     * \return true if image is valid.
      */
     bool isValid() const;
 
@@ -68,21 +68,42 @@ public:
      * Returns raw pixel value at given position.
      * This method does not perform any correcting of the pixel value according
      * to clase/offset not to the photometric interpretation.
-     * @param x Pixel x coordinate.
-     * @param y Pixel y coordinate.
-     * @param frame Frame number.
-     * @return Pixel raw value.
+     * \param x Pixel x coordinate.
+     * \param y Pixel y coordinate.
+     * \param frame Frame number.
+     * \return Pixel raw value.
      */
     DcmUnsignedShort rawPixel(int x, int y, int frame = 0) const;
 
     /**
+     * Returns rescaled pixel value as defined by rescale DICOM tags.
+     * \param x Pixel x coordinate.
+     * \param y Pixel y coordinate.
+     * \param frame Frame number.
+     * \return Rescaled pixel value.
+     */
+    double rescaledPixel(int x, int y, int frame = 0) const;
+
+    /**
      * Assign raw pixel value at given position.
-     * @param p Pixel value to be assigned.
-     * @param x Pixel x coordinate.
-     * @param y Pixel y coordinate.
-     * @param frame Frame number.
+     * \param p Pixel value to be assigned.
+     * \param x Pixel x coordinate.
+     * \param y Pixel y coordinate.
+     * \param frame Frame number.
      */
     void setRawPixel(DcmUnsignedShort p, int x, int y, int frame = 0);
+
+    /**
+     * Assign rescaled pixel value. The pixel value must be provided
+     * using rescale type units as specified by corresponding DICOM tag.
+     * The given value will be rescaled back to pixel raw value.
+     * Resulted pixel value will be clipped respecting the raw data type.
+     * \param p Rescaled pixel value to be set.
+     * \param x Pixel x coordinate.
+     * \param y Pixel y coordinate.
+     * \param frame Frame number.
+     */
+    void setRescaledPixel(double p, int x, int y, int frame = 0);
 
     /**
      * Convert generic DICOM image to monochromatic image.
@@ -92,8 +113,8 @@ public:
      * by this method.
      * This method makes a deep copy on an image. The original image can be
      * safely deleted afterwards.
-     * @param imagePtr Pointer to an image to be converted.
-     * @return Pointer to a newly allocated monochromatic image or null if unable to convert.
+     * \param imagePtr Pointer to an image to be converted.
+     * \return Pointer to a newly allocated monochromatic image or null if unable to convert.
      */
     static DcmMonochromeImage *fromDcmImage(const DcmImage *imagePtr);
 

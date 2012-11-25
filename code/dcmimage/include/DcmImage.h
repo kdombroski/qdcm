@@ -114,39 +114,39 @@ public:
     /**
      * Returns image pixels rescale intercept tag (0028, 1052) value.
      * If tag is absent, 0.0 value is returned.
-     * @return  Image pixel value rescale intercept.
+     * \return  Image pixel value rescale intercept.
      */
     double rescaleIntercept() const;
 
     /**
      * Assign rescale intercept value.
-     * @param ri Rescale intercept value to be set.
+     * \param ri Rescale intercept value to be set.
      */
     void setRescaleIntercept(double ri);
 
     /**
      * Returns image pixels rescale slope tag (0028, 1053) value.
      * If tag is absent, 1.0 value is returned.
-     * @return Image pixel value rescale slope.
+     * \return Image pixel value rescale slope.
      */
     double rescaleSlope() const;
 
     /**
      * Assign rescale slope value.
-     * @param rs Rescale slope value to be set.
+     * \param rs Rescale slope value to be set.
      */
     void setRescaleSlope(double rs);
 
     /**
      * Returns image pixels rescale type tag (0028, 1054) value.
      * If tag is absent, an empty string is returned.
-     * @return Rescale type as defined in DICOM dataset.
+     * \return Rescale type as defined in DICOM dataset.
      */
     QString rescaleTypeString() const;
 
     /**
      * Assign rescale type string.
-     * @param rt Rescale type string to be assigned.
+     * \param rt Rescale type string to be assigned.
      */
     void setRescaleTypeString(const QString &rt);
 
@@ -158,7 +158,7 @@ public:
 
     /**
      * Returns pointer to pixel data tag.
-     * @return Pointer to pixel data tag.
+     * \return Pointer to pixel data tag.
      */
     DcmTagPixelData* tagPixelData() const;
 
@@ -175,10 +175,10 @@ public:
      * Returns pixel raw data index in pixel buffer byte array.
      * The method does not check whether provided coordinates are
      * valid ones.
-     * @param x Pixel x coordinate.
-     * @param y Pixel y coordinate.
-     * @param frame Pixel frame number.
-     * @return Pixel byte array index.
+     * \param x Pixel x coordinate.
+     * \param y Pixel y coordinate.
+     * \param frame Pixel frame number.
+     * \return Pixel byte array index.
      */
     quint32 pixelByteArrayIndex(int x, int y, int frame = 0) const;
 

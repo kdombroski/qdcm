@@ -71,6 +71,15 @@ DcmUnsignedShort DcmMonochromeImage::rawPixel(int x, int y, int frame) const
     return pixel;
 }
 
+double DcmMonochromeImage::rescaledPixel(int x, int y, int frame) const
+{
+    DcmUnsignedShort rawValue = rawPixel(x, y, frame);
+    double slope = rescaleSlope();
+    double offset = rescaleIntercept();
+
+    return ((double)rawValue) * slope + offset;
+}
+
 void DcmMonochromeImage::setRawPixel(DcmUnsignedShort p, int x, int y, int frame)
 {
     Q_ASSERT(x >= 0 && x < width());
@@ -96,6 +105,14 @@ void DcmMonochromeImage::setRawPixel(DcmUnsignedShort p, int x, int y, int frame
             *ubPtr = p & 0x00FF;
         }
     }
+}
+
+void DcmMonochromeImage::setRescaledPixel(double p, int x, int y, int frame)
+{
+    double slope = rescaleSlope();
+    double offset = rescaleIntercept();
+    DcmUnsignedShort rawValue = (DcmUnsignedShort)((p - offset) / slope);
+    setRawPixel(rawValue, x, y, frame);
 }
 
 DcmMonochromeImage* DcmMonochromeImage::fromDcmImage(const DcmImage *imagePtr)
