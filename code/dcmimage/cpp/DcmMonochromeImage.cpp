@@ -115,6 +115,20 @@ void DcmMonochromeImage::setRescaledPixel(double p, int x, int y, int frame)
     setRawPixel(rawValue, x, y, frame);
 }
 
+QImage DcmMonochromeImage::toQImage(const DcmImageTransferFunction &tf, int frame) const
+{
+    QImage qImage(width(), height(), QImage::Format_ARGB32);
+
+    for (int y = 0; y < height(); y++) {
+        for (int x = 0; x < width(); x++) {
+            QColor color = tf.colorForPixelValue(rescaledPixel(x, y, frame));
+            qImage.setPixel(x, y, color.rgba());
+        }
+    }
+
+    return qImage;
+}
+
 DcmMonochromeImage* DcmMonochromeImage::fromDcmImage(const DcmImage *imagePtr)
 {
     Q_ASSERT(imagePtr);

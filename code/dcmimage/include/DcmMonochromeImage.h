@@ -1,7 +1,9 @@
 #ifndef DCMMONOCHROMEIMAGE_H
 #define DCMMONOCHROMEIMAGE_H
 
+#include <QImage>
 #include "DcmImage.h"
+#include "DcmImageTransferFunction.h"
 
 /*! DICOM monochrome image.
  * Monochrome image contains only one color channel
@@ -104,6 +106,13 @@ public:
      * \param frame Frame number.
      */
     void setRescaledPixel(double p, int x, int y, int frame = 0);
+
+    /**
+     * Convert this image to a QImage using specified transfer function.
+     * @param tf Transfer function to be used in convertion.
+     * @return Cobverted QImage.
+     */
+    QImage toQImage(const DcmImageTransferFunction &tf, int frame = 0) const;
 
     /**
      * Convert generic DICOM image to monochromatic image.
