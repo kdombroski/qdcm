@@ -109,8 +109,8 @@ public:
 
     /**
      * Convert this image to a QImage using specified transfer function.
-     * @param tf Transfer function to be used in convertion.
-     * @return Cobverted QImage.
+     * \param tf Transfer function to be used in convertion.
+     * \return Cobverted QImage.
      */
     QImage toQImage(const DcmImageTransferFunction &tf, int frame = 0) const;
 
