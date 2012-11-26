@@ -119,10 +119,36 @@ QImage DcmMonochromeImage::toQImage(const DcmImageTransferFunction &tf, int fram
 {
     QImage qImage(width(), height(), QImage::Format_ARGB32);
 
-    for (int y = 0; y < height(); y++) {
-        for (int x = 0; x < width(); x++) {
-            QColor color = tf.colorForPixelValue(rescaledPixel(x, y, frame));
-            qImage.setPixel(x, y, color.rgba());
+    double slope = rescaleSlope();
+    double offset = rescaleIntercept();
+
+    DcmTagPixelData *tagPixelDataPtr = tagPixelData();
+    Q_ASSERT(tagPixelDataPtr);
+
+    const DcmUnsignedByte *rawBytePtr = (const DcmUnsignedByte*) tagPixelDataPtr->constData();
+    const DcmUnsignedShort *rawShortPtr = (DcmUnsignedShort*)rawBytePtr;
+
+    int idx = frame * width() * height();
+
+    // Somehow optimized, but still rather slow
+
+    if (bitsAllocated() > 8) {
+        for (int y = 0; y < height(); y++) {
+            QRgb *scanLine = (QRgb*)qImage.scanLine(y);
+            for (int x = 0; x < width(); x++) {
+                DcmUnsignedShort raw = rawShortPtr[idx++];
+                QColor color = tf.colorForPixelValue(((double)raw) * slope + offset);
+                scanLine[x] = color.rgba();
+            }
+        }
+    } else {
+        for (int y = 0; y < height(); y++) {
+            QRgb *scanLine = (QRgb*)qImage.scanLine(y);
+            for (int x = 0; x < width(); x++) {
+                DcmUnsignedShort raw = rawBytePtr[idx++];
+                QColor color = tf.colorForPixelValue(((double)raw) * slope + offset);
+                scanLine[x] = color.rgba();
+            }
         }
     }
 

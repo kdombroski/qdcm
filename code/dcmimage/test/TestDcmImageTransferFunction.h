@@ -3,6 +3,9 @@
 
 #include <QDebug>
 #include <QtTest/QtTest>
+#include "DcmFile.h"
+#include "DcmImage.h"
+#include "DcmMonochromeImage.h"
 #include "DcmImageTransferFunction.h"
 
 class TestDcmImageTransferFunction : public QObject
@@ -51,6 +54,41 @@ private slots:
         QCOMPARE(c.green(), 255);
         QCOMPARE(c. blue(), 127);
     }
+
+#if 0
+    // Example of converting monochrome DICOM image to a PNG.
+    void testImageToQImage()
+    {
+        QString path = "/dicom/test.dcm";
+        DcmFile dcmFile(path);
+        QVERIFY(dcmFile.exists());
+
+        DcmDataset *dataset = dcmFile.read();
+        if (dcmFile.isError()) {
+            qDebug() << "ERROR:" << dcmFile.errorText();
+        }
+
+        QVERIFY(dataset);
+        QVERIFY(!dcmFile.isError());
+
+        DcmImage image(dataset);
+
+        delete dataset;
+
+        if (image.photometricInterpretation().isGrayscale()) {
+            DcmMonochromeImage monoImage(image.dataset());
+
+            DcmImageTransferFunction tf;
+            // Full-scale CT modality, assume HU units.
+            tf.addReferencePoint(-1000.0, QColor(0, 0, 0));
+            tf.addReferencePoint(3000.0, QColor(255, 255, 255));
+            QImage qImage = monoImage.toQImage(tf);
+            qImage.save("test.png");
+        } else {
+            qDebug() << "Unable to convert: not a grayscale image";
+        }
+    }
+#endif
 
     void cleanupTestCase()
     {
