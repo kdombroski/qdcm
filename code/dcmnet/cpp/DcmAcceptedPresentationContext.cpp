@@ -77,6 +77,11 @@ bool DcmAcceptedPresentationContext::isValid() const
     return m_transferSyntax.isValid();
 }
 
+bool DcmAcceptedPresentationContext::isAccepted() const
+{
+    return m_reason == DcmAcceptedPresentationContext::Reason_Acceptance;
+}
+
 DcmStream& operator <<(DcmStream &stream, const DcmAcceptedPresentationContext &pdu)
 {
     char c[2] = {DcmPDUType_AcceptedPresentationContext, 0};

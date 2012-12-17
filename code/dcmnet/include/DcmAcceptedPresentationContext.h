@@ -100,6 +100,13 @@ public:
      */
     bool isValid() const;
 
+    /**
+     * Tells whether this presentation context has been actually accepted.
+     * This method check the 'reason' fiels of the accepted context.
+     * \return true if presentation context has been accepted.
+     */
+    bool isAccepted() const;
+
     // I/O operations
     DCM_NET_API friend DcmStream& operator <<(DcmStream &stream, const DcmAcceptedPresentationContext &pdu);
     DCM_NET_API friend DcmStream& operator >>(DcmStream &stream, DcmAcceptedPresentationContext &pdu);
