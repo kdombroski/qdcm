@@ -52,8 +52,6 @@ if(${PROJECT_NAME}_DISABLE_CONSOLE)
     if(WIN32)
         set(${PROJECT_NAME}_GUI WIN32)
         set(${PROJECT_NAME}_QT_MAIN ${QT_QTMAIN_LIBRARY})
-    elseif(APPLE)
-        set(${PROJECT_NAME}_GUI APPLE)
     endif()
 endif()
 
