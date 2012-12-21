@@ -1,4 +1,3 @@
-#include <QDebug>
 #include <QHeaderView>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -42,8 +41,8 @@ DicomWindow::DicomWindow(DcmDataset *dataset, QWidget *parent)
 
     if (m_imageView) {
         m_tabWidget = new QTabWidget();
-        m_tabWidget->addTab(m_treeView, tr("DICOM tags"));
         m_tabWidget->addTab(m_imageView, tr("Image"));
+        m_tabWidget->addTab(m_treeView, tr("DICOM tags"));
         rootLayout->addWidget(m_tabWidget);
     } else {
         rootLayout->addWidget(m_treeView);

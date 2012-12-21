@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QList>
 #include <QMenuBar>
 #include <QCloseEvent>
@@ -16,21 +17,31 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-        m_mdiArea = new QMdiArea(this);
-        m_mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        m_mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        this->setCentralWidget(m_mdiArea);
+    setWindowTitle(tr("QDCM simple DICOM viewer"));
 
-        m_windowsMapper = new QSignalMapper(this);
-        connect(m_windowsMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
+    m_mdiArea = new QMdiArea(this);
+    m_mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    m_mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    this->setCentralWidget(m_mdiArea);
 
-        createActions();
-        createMenus();
-        createToolBars();
+    m_windowsMapper = new QSignalMapper(this);
+    connect(m_windowsMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
+
+    createActions();
+    createMenus();
+    createToolBars();
 }
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::moveToDesktopCenter()
+{
+    QRect r = frameGeometry();
+    QRect d = QApplication::desktop()->availableGeometry();
+    r.moveCenter(QPoint(d.width()/2, d.height()/2));
+    move(r.topLeft());
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -69,7 +80,7 @@ void MainWindow::onOpenAction()
             DicomWindow *dicomWindow = new DicomWindow(dataset);
             dicomWindow->setWindowTitle(fileName);
             dicomWindow->setWindowFilePath(fileName);
-            dicomWindow->resize(640, 480);
+            dicomWindow->resize(dicomWindow->sizeHint());
             m_mdiArea->addSubWindow(dicomWindow);
             dicomWindow->show();
         }

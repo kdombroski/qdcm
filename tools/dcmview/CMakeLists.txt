@@ -11,4 +11,5 @@ set(LIBS
         dcmimage
    )
 
+set(dcmview_DISABLE_CONSOLE TRUE)
 include(build_qt_executable)

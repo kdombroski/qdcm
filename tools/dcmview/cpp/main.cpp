@@ -8,7 +8,10 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     MainWindow mainWindow;
+
+    // Show main window and move it to center
     mainWindow.show();
+    mainWindow.moveToDesktopCenter();
 
     return app.exec();
 }

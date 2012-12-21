@@ -19,6 +19,8 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void moveToDesktopCenter();
+
 protected:
 
     void closeEvent(QCloseEvent *event);

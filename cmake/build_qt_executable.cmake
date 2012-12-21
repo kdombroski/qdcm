@@ -48,8 +48,17 @@ if(UNIX AND QDCM_TESTS_COVERAGE)
     set(GCOV "gcov")
 endif()
 
-add_executable(${PROJECT_NAME} ${SRCS} ${MOC_SRCS} ${UI_SRCS} ${RES_SRCS} ${HDRS} ${TRANSLATIONS})
-target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES} ${LIBS} ${GCOV})
+if(${PROJECT_NAME}_DISABLE_CONSOLE)
+    if(WIN32)
+        set(${PROJECT_NAME}_GUI WIN32)
+        set(${PROJECT_NAME}_QT_MAIN ${QT_QTMAIN_LIBRARY})
+    elseif(APPLE)
+        set(${PROJECT_NAME}_GUI APPLE)
+    endif()
+endif()
+
+add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_GUI} ${SRCS} ${MOC_SRCS} ${UI_SRCS} ${RES_SRCS} ${HDRS} ${TRANSLATIONS})
+target_link_libraries(${PROJECT_NAME} ${${PROJECT_NAME}_QT_MAIN} ${QT_LIBRARIES} ${LIBS} ${GCOV})
 
 # Link OPENGL libraries
 include(link_opengl)
