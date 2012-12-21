@@ -130,6 +130,13 @@ QImage DcmMonochromeImage::toQImage(const DcmImageTransferFunction &tf, int fram
 
     int idx = frame * width() * height();
 
+    int colorTableSize = bitsAllocated() > 8 ? 65536 : 256;
+
+    QColor *colorTable = new QColor[colorTableSize];
+    for (int v = 0; v < colorTableSize; v++) {
+        colorTable[v] = tf.colorForPixelValue(((double)v) * slope + offset);
+    }
+
     // Somehow optimized, but still rather slow
 
     if (bitsAllocated() > 8) {
@@ -137,8 +144,7 @@ QImage DcmMonochromeImage::toQImage(const DcmImageTransferFunction &tf, int fram
             QRgb *scanLine = (QRgb*)qImage.scanLine(y);
             for (int x = 0; x < width(); x++) {
                 DcmUnsignedShort raw = rawShortPtr[idx++];
-                QColor color = tf.colorForPixelValue(((double)raw) * slope + offset);
-                scanLine[x] = color.rgba();
+                scanLine[x] = colorTable[raw].rgba();
             }
         }
     } else {
@@ -146,11 +152,12 @@ QImage DcmMonochromeImage::toQImage(const DcmImageTransferFunction &tf, int fram
             QRgb *scanLine = (QRgb*)qImage.scanLine(y);
             for (int x = 0; x < width(); x++) {
                 DcmUnsignedShort raw = rawBytePtr[idx++];
-                QColor color = tf.colorForPixelValue(((double)raw) * slope + offset);
-                scanLine[x] = color.rgba();
+                scanLine[x] = colorTable[raw].rgba();
             }
         }
     }
+
+    delete[] colorTable;
 
     return qImage;
 }
