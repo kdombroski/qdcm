@@ -70,6 +70,18 @@ public:
     DcmVr vr() const;
 
     /**
+     * Tells whether this tag is a group of tags.
+     * \return true If this tag represents a tags group.
+     */
+    virtual bool isGroup() const;
+
+    /**
+     * Tells whether this tag is binary.
+     * \return true if tag is binary.
+     */
+    virtual bool isBinary() const;
+
+    /**
      * Tells whether this tag is valid.
      * A valid tag has a valid VR.
      * \return true if tag is valid (it's VR is valid).

@@ -55,6 +55,12 @@ public:
     ~DcmTagBinary();
 
     /**
+     * Always returns true.
+     * \return true.
+     */
+    bool isBinary() const;
+
+    /**
      * Returns value of this tag.
      * \return Binary byte array encoded into variant.
      */

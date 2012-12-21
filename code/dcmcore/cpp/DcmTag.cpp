@@ -61,6 +61,16 @@ DcmVr DcmTag::vr() const
     return m_vr;
 }
 
+bool DcmTag::isGroup() const
+{
+    return m_tagKey.isGroupSize();
+}
+
+bool DcmTag::isBinary() const
+{
+    return m_vr.isBinary();
+}
+
 bool DcmTag::isValid() const
 {
     // Tags with None VR are allowed

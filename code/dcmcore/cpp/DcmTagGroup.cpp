@@ -30,6 +30,11 @@ DcmTagGroup::~DcmTagGroup()
 {
 }
 
+bool DcmTagGroup::isGroup() const
+{
+    return true;
+}
+
 DcmSize DcmTagGroup::contentSize(const DcmTransferSyntax &transferSyntax) const
 {
     return m_tags.size(transferSyntax);

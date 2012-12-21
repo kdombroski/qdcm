@@ -211,7 +211,7 @@ bool DcmVr::isPadded() const
 QString DcmVr::toString() const
 {
     if (m_vrKey == DcmVrKey_None) {
-        return QString("None");
+        return QString("");
     } else if (m_vrKey == DcmVrKey_Invalid) {
         return QString("Invalid");
     }

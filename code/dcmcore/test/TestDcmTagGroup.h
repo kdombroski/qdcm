@@ -19,6 +19,7 @@ private slots:
     {
         DcmTagGroup group0002(0x0002);
 
+        QVERIFY(group0002.isGroup());
         QVERIFY(group0002.tagKey().group() == 0x0002);
         QVERIFY(group0002.tagKey().element() == 0x0000);
         QVERIFY(group0002.tags().count() == 0);
@@ -34,6 +35,7 @@ private slots:
         QVERIFY(tag == 0);
         tag = group0002.findTag(DcmTagKey(0x0002, 0x0001));
         QVERIFY(tag);
+        QVERIFY(!tag->isGroup());
         QVERIFY(tag->tagKey() == DcmTagKey(0x0002, 0x0001));
         QVERIFY(tag->vr() == DcmVr::CS);
         QVERIFY(tag->value().toString() == "tag1");

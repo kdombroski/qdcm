@@ -42,6 +42,11 @@ DcmTagBinary::~DcmTagBinary()
 {
 }
 
+bool DcmTagBinary::isBinary() const
+{
+    return true;
+}
+
 QVariant DcmTagBinary::value() const
 {
     return QVariant(m_byteArray);

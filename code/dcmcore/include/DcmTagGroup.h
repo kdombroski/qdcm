@@ -48,6 +48,12 @@ public:
     ~DcmTagGroup();
 
     /**
+     * Always returns true.
+     * \return true.
+     */
+    bool isGroup() const;
+
+    /**
      * Returns total size of all tags of the group.
      * \param transferSyntax Transfer syntax to encode the tags.
      * \return Group tags total size in bytes.
