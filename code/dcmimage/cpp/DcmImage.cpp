@@ -1,5 +1,6 @@
 #include <QDebug>
 #include "DcmTagPixelData.h"
+#include "DcmTagDS.h"
 #include "DcmImage.h"
 
 DcmImage::DcmImage(int width,
@@ -153,6 +154,37 @@ double DcmImage::rescaleSlope() const
 void DcmImage::setRescaleSlope(double rs)
 {
     m_datasetPtr->setTagValue("RescaleSlope", QVariant(rs));
+}
+
+double DcmImage::windowCenter() const
+{
+    DcmTag *tag = m_datasetPtr->findTag("WindowCenter");
+    if (tag) {
+        DcmTagDS *tagDS = dynamic_cast<DcmTagDS *>(tag);
+        if (tagDS) {
+            return tagDS->asDouble();
+        }
+    }
+
+    return ((double)(1 << bitsStored())) / 2;
+}
+
+void DcmImage::setWindowCenter(double c)
+{
+    m_datasetPtr->setTagValue("WindowCenter", QVariant(c));
+}
+
+double DcmImage::windowWidth() const
+{
+    DcmTag *tag = m_datasetPtr->findTag("WindowWidth");
+    if (tag) {
+        DcmTagDS *tagDS = dynamic_cast<DcmTagDS *>(tag);
+        if (tagDS) {
+            return tagDS->asDouble();
+        }
+    }
+
+    return (double)(1 << bitsStored());
 }
 
 QString DcmImage::rescaleTypeString() const

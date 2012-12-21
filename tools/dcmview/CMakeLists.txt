@@ -8,6 +8,7 @@ set(MOCS
 
 set(LIBS
         dcmcore
+        dcmimage
    )
 
 include(build_qt_executable)

@@ -2,7 +2,9 @@
 #define DICOMWINDOW_H
 
 #include <QMdiSubWindow>
+#include <QTabWidget>
 #include <QTreeView>
+#include <QWidget>
 #include "DcmDataset.h"
 #include "DicomTreeModel.h"
 
@@ -19,9 +21,13 @@ private:
 
     Q_DISABLE_COPY(DicomWindow)
 
+    QWidget *createDicomImageWidget();
+
     DcmDataset *m_dataset;
     DicomTreeModel *m_treeModel;
     QTreeView *m_treeView;
+    QWidget *m_imageView;
+    QTabWidget *m_tabWidget;
 };
 
 #endif // DICOMWINDOW_H

@@ -138,6 +138,35 @@ public:
     void setRescaleSlope(double rs);
 
     /**
+     * Returns transfer function window center value.
+     * The value is obtained from tag (0028, 1050).
+     * If the tag is abcent the middle value of bits space is returned.
+     * If there are multiple values defined, this method returns the very first one.
+     * \return Transfer function window center.
+     */
+    double windowCenter() const;
+
+    /**
+     * Assign transfer function window center.
+     * \param c Window center to be set.
+     */
+    void setWindowCenter(double c);
+
+    /**
+     * Returns transfer function window width.
+     * The value is obtained from tag (0028, 1051).
+     * If there are multiple values defined, this method returns the very first one.
+     * \return Window width.
+     */
+    double windowWidth() const;
+
+    /**
+     * Assign transfer function window width.
+     * \param w Window width to be set.
+     */
+    void setWindowWidth(double w);
+
+    /**
      * Returns image pixels rescale type tag (0028, 1054) value.
      * If tag is absent, an empty string is returned.
      * \return Rescale type as defined in DICOM dataset.

@@ -2,6 +2,7 @@
 #define DCMMONOCHROMEIMAGE_H
 
 #include <QImage>
+#include "DcmImageApi.h"
 #include "DcmImage.h"
 #include "DcmImageTransferFunction.h"
 
@@ -10,7 +11,7 @@
  * and is encoded using photometric representation MONOCHROME1 or
  * MONOCHROME2
  */
-class DcmMonochromeImage : public DcmImage
+class DCM_IMAGE_API DcmMonochromeImage : public DcmImage
 {
 public:
 
