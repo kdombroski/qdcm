@@ -1,0 +1,78 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css" media="screen">
+    <link href="prettify/prettify.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="prettify/prettify.js"></script>
+    <title>QDCM: DICOM for Qt</title>
+</head>
+<body onload="prettyPrint()">
+    <p class="banner">QDCM</p>
+    <p class="text">
+        QDCM is a set of packages for reading, writing and modifying
+        <a href="http://dicom.nema.org/">DICOM</a> data.
+        QDCM is based entirely and solely on <a href="http://qt.digia.com/product/">Qt</a>
+        and uses Qt data types and structures.
+    </p>
+    
+    <p class="image">
+        <a href="images/dcmview_screenshot.png"><img src="images/dcmview_screenshot.png" width="800"></a>
+        <br>
+        Above presented DICOM image comes from
+        <a href="http://www.barre.nom.fr/medical/samples/">http://www.barre.nom.fr/medical/samples/</a>.
+    </p>
+    
+    <p class="text">
+        The following code snippet gives you an brief idea of QDCM usage:
+        <pre class="prettyprint lang-cpp linenums">
+// Read DICOM file and fetch some tags.
+DcmFile file("chest.dcm");
+dataset = file.read();
+if (dataset) {
+    qDebug() << "Patient name:" << dataset->tagValue("PatientName").toString();
+    qDebug() << "Birth date:" << dataset->tagValue("PatientBirthDate").toDate();
+}        
+delete dataset;</pre>
+    </p>
+    
+    <p class="text">
+        QDCM currently does not support compressed DICOM images, however compressed
+        data as it is can be read and written by QDCM.
+    </p>
+    
+    <h2>Download</h2>
+    <p class="text">
+        Since QDCM is still in development, you are invited to check out the fresh
+        source code from the git repository:
+        <p class="code">
+            git clone git://git.code.sf.net/p/qdcm/code qdcm-code
+        </p>
+    </p>
+    
+    <h2>Tutorial</h2>
+    <p class="text">
+        <ol>
+            <li>Compiling QDCM
+            <li>Reading DICOM files
+            <li>Inspecting DICOM data set
+            <li>Extending DICOM tags dictionary
+            <li>Constructing DICOM data set
+            <li>Writing DICOM files
+            <li>DICOM images
+        </ol>
+    </p>
+    
+    <hr>
+    <address>
+        ©2012 by
+        <a href="mailto:arthur.benilov@gmail.com">Arthur Benilov</a>
+        <p class="hostedby">
+            <a href="http://sourceforge.net/">
+                Project Web Hosted by
+                <br>
+                <img src="http://sflogo.sourceforge.net/sflogo.php?group_id=265589&type=13" alt="SourceForge.net">
+            </a>
+        </p>
+    </address>
+</body>
+</html>
