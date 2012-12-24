@@ -73,12 +73,11 @@ private slots:
         DcmFile dcmFile(path);
         QVERIFY(dcmFile.exists());
 
-        DcmDataset *dataset = dcmFile.read();
+        DcmDataset dataset = dcmFile.read();
         if (dcmFile.isError()) {
             qDebug() << "ERROR:" << dcmFile.errorText();
         }
 
-        QVERIFY(dataset);
         QVERIFY(!dcmFile.isError());
 
         DcmImage image(dataset);

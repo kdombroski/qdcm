@@ -46,7 +46,7 @@ public:
      * \param dataset Dataset to be written.
      * \param transferSyntax Transfer syntax to use.
      */
-    void write(DcmDataset &dataset, const DcmTransferSyntax &transferSyntax = DcmTransferSyntax::ExplicitLittleEndian);
+    void write(DcmDataset &dataset, const DcmTransferSyntax &transferSyntax = DcmTransferSyntax::ImplicitLittleEndian);
 
     /**
      * Tells whether there is an error detected while
