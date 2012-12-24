@@ -17,9 +17,15 @@ img {
     border: 0;
 }
     
-.code {
-    font-family: consolas, courier, mono
-    font-size: 11pt;
+code {
+    font-family: consolas, courier, mono;
+    font-size: 9pt
+    color: navy;
+}    
+    
+.code {    
+    font-family: consolas, courier, mono;
+    font-size: 9pt;
     color: navy;
 }
     
@@ -37,6 +43,11 @@ img {
 h2 {
     font-family: verdana, sans-serif;
     font-size: 16pt;
+    color: #0099CC;
+}
+
+h3 {
+    font-size: 12pt;
     color: #0099CC;
 }
     

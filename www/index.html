@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" type="text/css" href="style.css" media="screen">
+    <link href="style.css" type="text/css" rel="stylesheet" />
     <link href="prettify/prettify.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript" src="prettify/prettify.js"></script>
     <title>QDCM: DICOM for Qt</title>
@@ -27,12 +27,13 @@
         <pre class="prettyprint lang-cpp linenums">
 // Read DICOM file and fetch some tags.
 DcmFile file("chest.dcm");
-dataset = file.read();
-if (dataset) {
-    qDebug() << "Patient name:" << dataset->tagValue("PatientName").toString();
-    qDebug() << "Birth date:" << dataset->tagValue("PatientBirthDate").toDate();
-}        
-delete dataset;</pre>
+DcmDataset dataset = file.read();
+if (file.isError()) {
+    qDebug() << "Error reading DICOM file:" << file.errorText();
+} else {
+    qDebug() << "Patient name:" << dataset["PatientName"].toString();
+    qDebug() << "Birth date:" << dataset["PatientBirthDate"].toDate();
+}</pre>
     </p>
     
     <p class="text">
@@ -49,16 +50,16 @@ delete dataset;</pre>
         </p>
     </p>
     
-    <h2>Tutorial</h2>
+    <h2>Brief tutorial</h2>
     <p class="text">
         <ol>
-            <li>Compiling QDCM
-            <li>Reading DICOM files
-            <li>Inspecting DICOM data set
-            <li>Extending DICOM tags dictionary
-            <li>Constructing DICOM data set
-            <li>Writing DICOM files
-            <li>DICOM images
+            <li><a href="tutorial/01_compiling.html">Compiling QDCM</a>
+            <li><a href="tutorial/02_readfile.html">Reading DICOM files</a>
+            <li><a href="tutorial/03_indataset.html">Inspecting DICOM data set</a>
+            <li><a href="tutorial/04_dcmdict.html">Extending DICOM tags dictionary</a>
+            <li><a href="tutorial/05_makedataset.html">Constructing DICOM data set</a>
+            <li><a href="tutorial/06_writefile.html">Writing DICOM files</a>
+            <li><a href="tutorial/07_images.html">DICOM images</a>
         </ol>
     </p>
     
