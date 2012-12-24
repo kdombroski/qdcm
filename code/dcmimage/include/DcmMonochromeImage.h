@@ -37,9 +37,9 @@ public:
 
     /**
      * Construct monochromatic image from DICOM dataset.
-     * \param datasetPtr Pointer to a vaid DICOM dataset.
+     * \param dataset A vaid DICOM dataset.
      */
-    DcmMonochromeImage(const DcmDataset *datasetPtr);
+    DcmMonochromeImage(DcmDataset &dataset);
 
     /**
      * Copy ocnstructor.
@@ -126,7 +126,7 @@ public:
      * \param imagePtr Pointer to an image to be converted.
      * \return Pointer to a newly allocated monochromatic image or null if unable to convert.
      */
-    static DcmMonochromeImage *fromDcmImage(const DcmImage *imagePtr);
+    static DcmMonochromeImage *fromDcmImage(DcmImage *imagePtr);
 
 };
 

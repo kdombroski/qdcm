@@ -39,9 +39,9 @@ public:
      * Construct image from DICOM dataset.
      * The dataset will be copied, and the original pointer will not
      * be retained by the image constructed.
-     * \param datasetPtr DICOM dataset pointer.
+     * \param dataset DICOM dataset.
      */
-    DcmImage(const DcmDataset *datasetPtr);
+    DcmImage(DcmDataset &dataset);
 
     /**
      * Copy constructor.
@@ -180,10 +180,10 @@ public:
     void setRescaleTypeString(const QString &rt);
 
     /**
-     * Returns pointer to DICOM dataset.
-     * \return Pointer to dataset.
+     * Returns reference to DICOM dataset.
+     * \return Reference to dataset.
      */
-    DcmDataset* dataset() const;
+    DcmDataset& dataset();
 
     /**
      * Returns pointer to pixel data tag.
@@ -219,7 +219,7 @@ private:
      */
     void allocatePixelData();
 
-    DcmDataset *m_datasetPtr;   ///< DICOM dataset associated with this image.
+    DcmDataset m_dataset;   ///< DICOM dataset associated with this image.
     DcmTagPixelData *m_tagPixelDataPtr; ///< Pointer to pixel data tag within the image dataset (for easy access).
 };
 

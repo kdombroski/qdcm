@@ -37,30 +37,27 @@ private slots:
 
         DcmStream wStream(&rawData, QIODevice::WriteOnly, DcmTransferSyntax::ExplicitLittleEndian);
         DcmWriter writer(&wStream);
-        writer.writeDataset(&dataset);
+        writer.writeDataset(dataset);
 
         QVERIFY(rawData.size() > 0);
 
         DcmStream rStream(&rawData, QIODevice::ReadOnly, DcmTransferSyntax::ExplicitLittleEndian);
         DcmReader reader(&rStream);
 
-        DcmDataset *ds = reader.readDataset();
+        DcmDataset ds = reader.readDataset();
 
-        QVERIFY(ds);
         QVERIFY(!reader.isError());
 
-        QCOMPARE(ds->tagValue("MediaStorageSOPClassUID").toString(), QString("1.2.840.10008.5.1.4.1.1.1"));
-        QCOMPARE(ds->tagValue("MediaStorageSOPInstanceUID").toString(), QString("1.2.3.4.5.6.7"));
-        QCOMPARE(ds->tagValue("StudyInstanceUID").toString(), QString("1.2.3.4.5.6.7.1"));
-        QCOMPARE(ds->tagValue("SeriesInstanceUID").toString(), QString("1.2.3.4.5.6.7.1.1"));
-        QCOMPARE(ds->tagValue("SOPClassUID").toString(), QString("1.2.840.10008.5.1.4.1.1.1"));
-        QCOMPARE(ds->tagValue("SOPInstanceUID").toString(), QString("1.2.3.4.5.6.7"));
-        QCOMPARE(ds->tagValue("PatientId").toString(), QString("DF47K5"));
-        QCOMPARE(ds->tagValue("PatientName").toString(), QString("Brown^John"));
-        QCOMPARE(ds->tagValue("PatientSex").toString(), QString("M"));
-        QCOMPARE(ds->tagValue("PatientBirthDate").toString(), QString("19750315"));
-
-        delete ds;
+        QCOMPARE(ds["MediaStorageSOPClassUID"].toString(), QString("1.2.840.10008.5.1.4.1.1.1"));
+        QCOMPARE(ds["MediaStorageSOPInstanceUID"].toString(), QString("1.2.3.4.5.6.7"));
+        QCOMPARE(ds["StudyInstanceUID"].toString(), QString("1.2.3.4.5.6.7.1"));
+        QCOMPARE(ds["SeriesInstanceUID"].toString(), QString("1.2.3.4.5.6.7.1.1"));
+        QCOMPARE(ds["SOPClassUID"].toString(), QString("1.2.840.10008.5.1.4.1.1.1"));
+        QCOMPARE(ds["SOPInstanceUID"].toString(), QString("1.2.3.4.5.6.7"));
+        QCOMPARE(ds["PatientId"].toString(), QString("DF47K5"));
+        QCOMPARE(ds["PatientName"].toString(), QString("Brown^John"));
+        QCOMPARE(ds["PatientSex"].toString(), QString("M"));
+        QCOMPARE(ds["PatientBirthDate"].toString(), QString("19750315"));
     }
 
 #if 0
@@ -70,16 +67,14 @@ private slots:
         DcmFile dcmFile(path);
         QVERIFY(dcmFile.exists());
 
-        DcmDataset *dataset = dcmFile.read();
+        DcmDataset dataset = dcmFile.read();
         if (dcmFile.isError()) {
             qDebug() << "ERROR:" << dcmFile.errorText();
+        } else {
+            qDebug() << "ImageType" << dataset.findTag("ImageType")->value().toString();
+            qDebug() << "Rows" << dataset.findTag("Rows")->value().toInt();
+            qDebug() << "Columns" << dataset.findTag("Columns")->value().toInt();
         }
-
-        qDebug() << "ImageType" << dataset->findTag("ImageType")->value().toString();
-        qDebug() << "Rows" << dataset->findTag("Rows")->value().toInt();
-        qDebug() << "Columns" << dataset->findTag("Columns")->value().toInt();
-
-        delete dataset;
     }
 #endif
 
@@ -90,17 +85,15 @@ private slots:
         DcmFile dcmFile(path);
         QVERIFY(dcmFile.exists());
 
-        DcmDataset *dataset = dcmFile.read();
+        DcmDataset dataset = dcmFile.read();
         if (dcmFile.isError()) {
             qDebug() << "ERROR:" << dcmFile.errorText();
+        } else {
+            qDebug() << "CharSet:" << dataset.tagValue(DcmTagKey::SpecificCharacterSet).toString();
+
+            DcmFile dcmOutputFile("output.dcm");
+            dcmOutputFile.write(dataset, DcmTransferSyntax::ExplicitLittleEndian);
         }
-
-        qDebug() << "CharSet:" << dataset->tagValue(DcmTagKey::SpecificCharacterSet).toString();
-
-        DcmFile dcmOutputFile("output.dcm");
-        dcmOutputFile.write(dataset, DcmTransferSyntax::ExplicitLittleEndian);
-
-        delete dataset;
     }
 #endif
 
@@ -112,61 +105,56 @@ private slots:
         DcmFile dcmFile(filePath);
         QVERIFY(dcmFile.exists());
 
-        DcmDataset *dataset = dcmFile.read();
+        DcmDataset dataset = dcmFile.read();
         if (dcmFile.isError()) {
             qDebug() << "ERROR: " << dcmFile.errorText();
+            return;
         }
 
-        QVERIFY(dataset);
         QVERIFY(!dcmFile.isError());
 
         // Fetch some tag
-        if (dataset) {
-            qDebug() << "Patient name:" << dataset->tagValue("patientName");
-            DcmTag *tagPatientName = dataset->findTag(DcmTagKey(0x0010, 0x0010));
-            if (tagPatientName) {
-                qDebug() << "PatientName: " << tagPatientName->value().toString();
-            } else {
-                qDebug() << "ERROR: Unable to fetch patient name tag";
-            }
+        qDebug() << "Patient name:" << dataset->tagValue("patientName");
+        DcmTag *tagPatientName = dataset->findTag(DcmTagKey(0x0010, 0x0010));
+        if (tagPatientName) {
+            qDebug() << "PatientName: " << tagPatientName->value().toString();
+        } else {
+            qDebug() << "ERROR: Unable to fetch patient name tag";
+        }
 
-
-            DcmTag *tag = dataset->findTag(DcmTagKey::PixelData);
-            if (tag) {
-                DcmTagPixelData *tagPixelData = dynamic_cast<DcmTagPixelData*>(tag);
-                if (tagPixelData) {
-                    if (tagPixelData->format() == DcmTagPixelData::Format_Native) {
-                        QByteArray rawData = tagPixelData->asByteArray();
-                        QFile file("pixeldata.raw");
+        DcmTag *tag = dataset->findTag(DcmTagKey::PixelData);
+        if (tag) {
+            DcmTagPixelData *tagPixelData = dynamic_cast<DcmTagPixelData*>(tag);
+            if (tagPixelData) {
+                if (tagPixelData->format() == DcmTagPixelData::Format_Native) {
+                    QByteArray rawData = tagPixelData->asByteArray();
+                    QFile file("pixeldata.raw");
+                    if (file.open(QFile::WriteOnly)) {
+                        file.write(rawData);
+                        file.close();
+                    }
+                } else {
+                    // Compressed stuff
+                    int i = 0;
+                    foreach(DcmTag *tag, tagPixelData->items().list()) {
+                        DcmTagPixelDataItem *item = dynamic_cast<DcmTagPixelDataItem*>(tag);
+                        QString filename = QString("enc_%1.raw").arg(i);
+                        i++;
+                        QByteArray ba = item->asByteArray();
+                        QFile file(filename);
                         if (file.open(QFile::WriteOnly)) {
-                            file.write(rawData);
+                            file.write(ba);
                             file.close();
-                        }
-                    } else {
-                        // Compressed stuff
-                        int i = 0;
-                        foreach(DcmTag *tag, tagPixelData->items().list()) {
-                            DcmTagPixelDataItem *item = dynamic_cast<DcmTagPixelDataItem*>(tag);
-                            QString filename = QString("enc_%1.raw").arg(i);
-                            i++;
-                            QByteArray ba = item->asByteArray();
-                            QFile file(filename);
-                            if (file.open(QFile::WriteOnly)) {
-                                file.write(ba);
-                                file.close();
-                            }
                         }
                     }
                 }
             }
-
 
             /*
             DcmFile dcmFile("output.dcm");
             dcmFile.write(dataset, DcmTransferSyntax::ImplicitLittleEndian);
             */
 
-            delete dataset;
         }
     }
 #endif

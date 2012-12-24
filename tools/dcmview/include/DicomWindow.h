@@ -14,7 +14,7 @@ class DicomWindow : public QMdiSubWindow
 
 public:
 
-    DicomWindow(DcmDataset *dataset, QWidget *parent = 0);
+    DicomWindow(DcmDataset &dataset, QWidget *parent = 0);
     ~DicomWindow();
 
 private:
@@ -23,7 +23,7 @@ private:
 
     QWidget *createDicomImageWidget();
 
-    DcmDataset *m_dataset;
+    DcmDataset m_dataset;
     DicomTreeModel *m_treeModel;
     QTreeView *m_treeView;
     QWidget *m_imageView;

@@ -86,6 +86,11 @@ QVariant DcmDataset::tagValue(const QString &tagName) const
     return QVariant();
 }
 
+QVariant DcmDataset::operator [](const QString &tagName) const
+{
+    return tagValue(tagName);
+}
+
 QVariantList DcmDataset::tagValues(const DcmTagKey &tagKey) const
 {
     DcmTag *tag = findTag(tagKey);

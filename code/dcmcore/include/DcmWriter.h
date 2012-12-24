@@ -61,9 +61,9 @@ public:
 
     /**
      * Write dataset to the I/O stream.
-     * \param datasetPtr Pointer to the dataset to be written.
+     * \param dataset Dataset to be written.
      */
-    void writeDataset(DcmDataset *datasetPtr);
+    void writeDataset(DcmDataset &dataset);
 
     /**
      * Write tag group.

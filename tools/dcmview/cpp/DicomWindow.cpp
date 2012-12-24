@@ -7,10 +7,9 @@
 #include "DcmMonochromeImage.h"
 #include "DicomWindow.h"
 
-DicomWindow::DicomWindow(DcmDataset *dataset, QWidget *parent)
+DicomWindow::DicomWindow(DcmDataset &dataset, QWidget *parent)
     : QMdiSubWindow(parent)
 {
-    Q_ASSERT(dataset);
     m_dataset = dataset;
     m_treeModel = new DicomTreeModel(m_dataset, this);
     m_treeView = new QTreeView();
@@ -24,7 +23,7 @@ DicomWindow::DicomWindow(DcmDataset *dataset, QWidget *parent)
     m_tabWidget = 0;
     m_imageView = 0;
 
-    DcmTag *tag = m_dataset->findTag(DcmTagKey::PixelData);
+    DcmTag *tag = m_dataset.findTag(DcmTagKey::PixelData);
     if (tag) {
         // This is an image
         DcmTagPixelData *tagPixelData = dynamic_cast<DcmTagPixelData *>(tag);
@@ -55,13 +54,10 @@ DicomWindow::DicomWindow(DcmDataset *dataset, QWidget *parent)
 
 DicomWindow::~DicomWindow()
 {
-    delete m_dataset;
 }
 
 QWidget* DicomWindow::createDicomImageWidget()
 {
-    Q_ASSERT(m_dataset);
-
     DcmImage image(m_dataset);
     if (image.photometricInterpretation().isGrayscale()) {
         DcmMonochromeImage monoImage(image.dataset());

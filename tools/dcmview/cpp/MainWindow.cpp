@@ -69,13 +69,12 @@ void MainWindow::onOpenAction()
                                                     "*.*");
     if (!fileName.isEmpty()) {
         DcmFile dcmFile(fileName);
-        DcmDataset *dataset = dcmFile.read();
+        DcmDataset dataset = dcmFile.read();
         if (dcmFile.isError()) {
             QMessageBox::warning(this,
                                  tr("Error"),
                                  tr("Unable to read file %1. %2").arg(fileName, dcmFile.errorText()),
                                  QMessageBox::Ok);
-            delete dataset;
         } else {
             DicomWindow *dicomWindow = new DicomWindow(dataset);
             dicomWindow->setWindowTitle(fileName);

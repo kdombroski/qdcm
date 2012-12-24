@@ -11,6 +11,7 @@ DcmImage::DcmImage(int width,
                    int highBit,
                    int samplesPerPixel,
                    const DcmPhotometricInterpretation &pi)
+    : m_dataset()
 {
     Q_ASSERT(width > 0);
     Q_ASSERT(height > 0);
@@ -24,30 +25,24 @@ DcmImage::DcmImage(int width,
     Q_ASSERT(bitsStored <= highBit + 1);
     Q_ASSERT(samplesPerPixel > 0);
 
-    m_datasetPtr = new DcmDataset();
-    m_datasetPtr->setTagValue("Columns", width);
-    m_datasetPtr->setTagValue("Rows", height);
-    m_datasetPtr->setTagValue("Frames", frames);
-    m_datasetPtr->setTagValue("BitsAllocated", bitsAllocated);
-    m_datasetPtr->setTagValue("BitsStored", bitsStored);
-    m_datasetPtr->setTagValue("HighBit", highBit);
-    m_datasetPtr->setTagValue("SamplesPerPixel", samplesPerPixel);
-    m_datasetPtr->setTagValue("PhotometricInterpretation", pi.toString());
+    m_dataset.setTagValue("Columns", width);
+    m_dataset.setTagValue("Rows", height);
+    m_dataset.setTagValue("Frames", frames);
+    m_dataset.setTagValue("BitsAllocated", bitsAllocated);
+    m_dataset.setTagValue("BitsStored", bitsStored);
+    m_dataset.setTagValue("HighBit", highBit);
+    m_dataset.setTagValue("SamplesPerPixel", samplesPerPixel);
+    m_dataset.setTagValue("PhotometricInterpretation", pi.toString());
 
     allocatePixelData();
 
-    m_tagPixelDataPtr = dynamic_cast<DcmTagPixelData*>(m_datasetPtr->findTag(DcmTagKey::PixelData));
+    m_tagPixelDataPtr = dynamic_cast<DcmTagPixelData*>(m_dataset.findTag(DcmTagKey::PixelData));
 }
 
-DcmImage::DcmImage(const DcmDataset *datasetPtr)
+DcmImage::DcmImage(DcmDataset &dataset)
 {
-    Q_ASSERT(datasetPtr);
-    if (!datasetPtr) {
-        return;
-    }
-
-    m_datasetPtr = new DcmDataset(*datasetPtr);
-    DcmTag *tagPtr = m_datasetPtr->findTag(DcmTagKey::PixelData);
+    m_dataset = dataset;
+    DcmTag *tagPtr = m_dataset.findTag(DcmTagKey::PixelData);
     if (tagPtr) {
         m_tagPixelDataPtr = dynamic_cast<DcmTagPixelData*>(tagPtr);
     } else {
@@ -58,35 +53,34 @@ DcmImage::DcmImage(const DcmDataset *datasetPtr)
 
 DcmImage::DcmImage(const DcmImage &image)
 {
-    m_datasetPtr = new DcmDataset(*image.m_datasetPtr);
+    m_dataset = image.m_dataset;
 }
 
 DcmImage& DcmImage::operator =(const DcmImage &image)
 {
     if (this != &image) {
-        delete m_datasetPtr;
+        m_dataset = image.m_dataset;
     }
     return *this;
 }
 
 DcmImage::~DcmImage()
 {
-    delete m_datasetPtr;
 }
 
 int DcmImage::width() const
 {
-    return m_datasetPtr->tagValue("Columns").toInt();
+    return m_dataset.tagValue("Columns").toInt();
 }
 
 int DcmImage::height() const
 {
-    return m_datasetPtr->tagValue("Rows").toInt();
+    return m_dataset.tagValue("Rows").toInt();
 }
 
 int DcmImage::frames() const
 {
-    QVariant v = m_datasetPtr->tagValue("Frames");
+    QVariant v = m_dataset.tagValue("Frames");
     if (v.isValid()) {
         return v.toInt();
     }
@@ -95,32 +89,32 @@ int DcmImage::frames() const
 
 int DcmImage::bitsAllocated() const
 {
-    return m_datasetPtr->tagValue("BitsAllocated").toInt();
+    return m_dataset.tagValue("BitsAllocated").toInt();
 }
 
 int DcmImage::bitsStored() const
 {
-    return m_datasetPtr->tagValue("BitsStored").toInt();
+    return m_dataset.tagValue("BitsStored").toInt();
 }
 
 int DcmImage::highBit() const
 {
-    return m_datasetPtr->tagValue("HighBit").toInt();
+    return m_dataset.tagValue("HighBit").toInt();
 }
 
 int DcmImage::samplesPerPixel() const
 {
-    return m_datasetPtr->tagValue("SamplesPerPixel").toInt();
+    return m_dataset.tagValue("SamplesPerPixel").toInt();
 }
 
 DcmPhotometricInterpretation DcmImage::photometricInterpretation() const
 {
-    return DcmPhotometricInterpretation::bySignature(m_datasetPtr->tagValue("PhotometricInterpretation").toString());
+    return DcmPhotometricInterpretation::bySignature(m_dataset.tagValue("PhotometricInterpretation").toString());
 }
 
 double DcmImage::rescaleIntercept() const
 {
-    QVariant v = m_datasetPtr->tagValue("RescaleIntercept");
+    QVariant v = m_dataset.tagValue("RescaleIntercept");
     if (v.isValid()) {
         bool ok = true;
         double d = v.toDouble(&ok);
@@ -134,12 +128,12 @@ double DcmImage::rescaleIntercept() const
 
 void DcmImage::setRescaleIntercept(double ri)
 {
-    m_datasetPtr->setTagValue("RescaleIntercept", QVariant(ri));
+    m_dataset.setTagValue("RescaleIntercept", QVariant(ri));
 }
 
 double DcmImage::rescaleSlope() const
 {
-    QVariant v = m_datasetPtr->tagValue("RescaleSlope");
+    QVariant v = m_dataset.tagValue("RescaleSlope");
     if (v.isValid()) {
         bool ok = true;
         double d = v.toDouble(&ok);
@@ -153,12 +147,12 @@ double DcmImage::rescaleSlope() const
 
 void DcmImage::setRescaleSlope(double rs)
 {
-    m_datasetPtr->setTagValue("RescaleSlope", QVariant(rs));
+    m_dataset.setTagValue("RescaleSlope", QVariant(rs));
 }
 
 double DcmImage::windowCenter() const
 {
-    DcmTag *tag = m_datasetPtr->findTag("WindowCenter");
+    DcmTag *tag = m_dataset.findTag("WindowCenter");
     if (tag) {
         DcmTagDS *tagDS = dynamic_cast<DcmTagDS *>(tag);
         if (tagDS) {
@@ -171,12 +165,12 @@ double DcmImage::windowCenter() const
 
 void DcmImage::setWindowCenter(double c)
 {
-    m_datasetPtr->setTagValue("WindowCenter", QVariant(c));
+    m_dataset.setTagValue("WindowCenter", QVariant(c));
 }
 
 double DcmImage::windowWidth() const
 {
-    DcmTag *tag = m_datasetPtr->findTag("WindowWidth");
+    DcmTag *tag = m_dataset.findTag("WindowWidth");
     if (tag) {
         DcmTagDS *tagDS = dynamic_cast<DcmTagDS *>(tag);
         if (tagDS) {
@@ -189,17 +183,17 @@ double DcmImage::windowWidth() const
 
 QString DcmImage::rescaleTypeString() const
 {
-    return m_datasetPtr->tagValue("RescaleType").toString().trimmed();
+    return m_dataset.tagValue("RescaleType").toString().trimmed();
 }
 
 void DcmImage::setRescaleTypeString(const QString &rt)
 {
-    m_datasetPtr->setTagValue("RescaleType", QVariant(rt.trimmed()));
+    m_dataset.setTagValue("RescaleType", QVariant(rt.trimmed()));
 }
 
-DcmDataset* DcmImage::dataset() const
+DcmDataset& DcmImage::dataset()
 {
-    return m_datasetPtr;
+    return m_dataset;
 }
 
 DcmTagPixelData* DcmImage::tagPixelData() const
@@ -247,5 +241,5 @@ void DcmImage::allocatePixelData()
     // We always allocate pixel data as OW value representation.
     DcmTagPixelData tagPixelData(DcmTagPixelData::Format_Native, DcmVr::OW);
     tagPixelData.setByteArray(ba);
-    m_datasetPtr->insert(tagPixelData);
+    m_dataset.insert(tagPixelData);
 }

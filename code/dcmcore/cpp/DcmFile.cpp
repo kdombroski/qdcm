@@ -22,7 +22,7 @@ bool DcmFile::exists() const
     return QFile(m_path).exists();
 }
 
-DcmDataset* DcmFile::read(DcmDictionary *dictionaryPtr)
+DcmDataset DcmFile::read(DcmDictionary *dictionaryPtr)
 {
     setError();
     DcmDictionary *dict = (dictionaryPtr) ? dictionaryPtr : DcmDictionary::getInstancePtr();
@@ -31,13 +31,13 @@ DcmDataset* DcmFile::read(DcmDictionary *dictionaryPtr)
     DcmTransferSyntax transferSyntax = guessTransferSyntax(m_path, isHeader, dict);
     if (!transferSyntax.isValid()) {
         setError(QObject::tr("Unable to guess transfer syntax to decode the file."));
-        return 0;
+        return DcmDataset();
     }
 
     QFile file(m_path);
     if (!file.open(QFile::ReadOnly)) {
         setError(QObject::tr("Unable to open the file for reading."));
-        return 0;
+        return DcmDataset();
     }
 
     DcmStream stream(&file, transferSyntax);
@@ -46,25 +46,21 @@ DcmDataset* DcmFile::read(DcmDictionary *dictionaryPtr)
     }
 
     DcmReader reader(&stream, dict);
-    DcmDataset *dataset = reader.readDataset();
+    DcmDataset dataset = reader.readDataset();
 
     file.close();
 
     if (reader.isError()) {
         setError(reader.errorText());
-        delete dataset;
-        return 0;
+        return DcmDataset();
     }
 
     return dataset;
 }
 
-void DcmFile::write(DcmDataset *datasetPtr, const DcmTransferSyntax &transferSyntax)
+void DcmFile::write(DcmDataset &dataset, const DcmTransferSyntax &transferSyntax)
 {
     setError();
-    if (!datasetPtr) {
-        return;
-    }
 
     QFile file(m_path);
     if (!file.open(QFile::WriteOnly)) {
@@ -75,7 +71,7 @@ void DcmFile::write(DcmDataset *datasetPtr, const DcmTransferSyntax &transferSyn
     // Injecting transfer syntax to meta information header
     DcmTagUI tag(DcmTagKey::TransferSyntaxUID);
     tag.setString(transferSyntax.uid());
-    datasetPtr->insert(tag);
+    dataset.insert(tag);
 
     DcmStream ds(&file, transferSyntax);
     char *header = new char[132];
@@ -90,7 +86,7 @@ void DcmFile::write(DcmDataset *datasetPtr, const DcmTransferSyntax &transferSyn
     delete[] header;
 
     DcmWriter writer(&ds);
-    writer.writeDataset(datasetPtr);
+    writer.writeDataset(dataset);
 
     file.close();
 }

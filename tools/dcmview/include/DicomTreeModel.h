@@ -14,7 +14,7 @@ class DicomTreeModel : public QStandardItemModel
 
 public:
 
-    DicomTreeModel(DcmDataset *dataset, QObject *parent = 0);
+    DicomTreeModel(DcmDataset &dataset, QObject *parent = 0);
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 

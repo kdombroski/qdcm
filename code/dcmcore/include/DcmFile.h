@@ -36,17 +36,17 @@ public:
      * Read DICOM dataset from the file.
      * \param dictionaryPtr Pointer to DICOM dictionary to be used to
      *  decode the file. If not specified, default one is used.
-     * \return Pointer to the dataset or null if error.
+     * \return Read dataset.
      */
-    DcmDataset* read(DcmDictionary *dictionaryPtr = 0);
+    DcmDataset read(DcmDictionary *dictionaryPtr = 0);
 
     /**
      * Write DICOM dataset to file.
      * One should check error flag after using this method.
-     * \param datasetPtr Pointer to dataset to be written.
+     * \param dataset Dataset to be written.
      * \param transferSyntax Transfer syntax to use.
      */
-    void write(DcmDataset *datasetPtr, const DcmTransferSyntax &transferSyntax = DcmTransferSyntax::ExplicitLittleEndian);
+    void write(DcmDataset &dataset, const DcmTransferSyntax &transferSyntax = DcmTransferSyntax::ExplicitLittleEndian);
 
     /**
      * Tells whether there is an error detected while

@@ -8,12 +8,10 @@
 
 #include "DicomTreeModel.h"
 
-DicomTreeModel::DicomTreeModel(DcmDataset *dataset, QObject *parent)
+DicomTreeModel::DicomTreeModel(DcmDataset &dataset, QObject *parent)
     : QStandardItemModel(parent)
 {
-    Q_ASSERT(dataset);
-
-    attachTagList(invisibleRootItem(), dataset->tagGroups());
+    attachTagList(invisibleRootItem(), dataset.tagGroups());
 }
 
 QVariant DicomTreeModel::headerData(int section, Qt::Orientation orientation, int role) const

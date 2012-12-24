@@ -31,9 +31,9 @@ public:
      * If failed to read for some reason, null pointer it returned.
      * However one must always check error flag after calling this method
      * since returned dataset may be inconsistent because of an error.
-     * \return Pointer to a read dataset or null if failed.
+     * \return Read dataset.
      */
-    DcmDataset* readDataset();
+    DcmDataset readDataset();
 
     /**
      * Reads a single DICOM tag from a stream.

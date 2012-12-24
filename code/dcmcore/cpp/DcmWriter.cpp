@@ -31,14 +31,10 @@ void DcmWriter::setIgnoreMetaInfoHeader(bool v)
     m_ignoreMetaInfoTransferSyntax = v;
 }
 
-void DcmWriter::writeDataset(DcmDataset *datasetPtr)
+void DcmWriter::writeDataset(DcmDataset &dataset)
 {
-    if (!datasetPtr) {
-        return;
-    }
-
     // Check whether there is a character set in the dataset
-    DcmTag *tagPtr = datasetPtr->findTag(DcmTagKey::SpecificCharacterSet);
+    DcmTag *tagPtr = dataset.findTag(DcmTagKey::SpecificCharacterSet);
     if (tagPtr) {
         DcmCharSet cs = DcmCharSet::forName(tagPtr->value().toString());
         if (cs.isValid()) {
@@ -49,7 +45,7 @@ void DcmWriter::writeDataset(DcmDataset *datasetPtr)
     DcmTransferSyntax streamTransferSyntax = m_streamPtr->transferSyntax();
     DcmTransferSyntax metaTransferSyntax = streamTransferSyntax;
 
-    DcmTag *tagTransferSyntax = datasetPtr->findTag(DcmTagKey::TransferSyntaxUID);
+    DcmTag *tagTransferSyntax = dataset.findTag(DcmTagKey::TransferSyntaxUID);
     if (tagTransferSyntax && !isIgnoreMetaInfoHeader()) {
         // Meta info header exists, it must be written using explicit little endian syntax
         metaTransferSyntax = DcmTransferSyntax::fromUid(tagTransferSyntax->value().toString());
@@ -63,7 +59,7 @@ void DcmWriter::writeDataset(DcmDataset *datasetPtr)
 
     DcmUnsignedShort prevGroup = 0x0000;
 
-    QLinkedList<DcmTag*> groupsList = datasetPtr->tagGroups().list();
+    QLinkedList<DcmTag*> groupsList = dataset.tagGroups().list();
     foreach (DcmTag *tag, groupsList) {
         DcmTagGroup *tagGroup = dynamic_cast<DcmTagGroup*>(tag);
         Q_ASSERT(tagGroup);

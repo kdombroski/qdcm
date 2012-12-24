@@ -244,7 +244,7 @@ void DcmCommunicator::sendDataset(DcmDataset &dataset,
     DcmWriter writer(&stream);
     // Ignore meta-info data
     writer.setIgnoreMetaInfoHeader(true);
-    writer.writeDataset(&dataset);
+    writer.writeDataset(dataset);
 
     sendPData(data, contextId, command);
 }

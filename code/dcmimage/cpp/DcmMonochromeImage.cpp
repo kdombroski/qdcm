@@ -12,8 +12,8 @@ DcmMonochromeImage::DcmMonochromeImage(int width,
 {
 }
 
-DcmMonochromeImage::DcmMonochromeImage(const DcmDataset *datasetPtr)
-    : DcmImage(datasetPtr)
+DcmMonochromeImage::DcmMonochromeImage(DcmDataset &dataset)
+    : DcmImage(dataset)
 {
 }
 
@@ -162,7 +162,7 @@ QImage DcmMonochromeImage::toQImage(const DcmImageTransferFunction &tf, int fram
     return qImage;
 }
 
-DcmMonochromeImage* DcmMonochromeImage::fromDcmImage(const DcmImage *imagePtr)
+DcmMonochromeImage* DcmMonochromeImage::fromDcmImage(DcmImage *imagePtr)
 {
     Q_ASSERT(imagePtr);
     if (!imagePtr) {

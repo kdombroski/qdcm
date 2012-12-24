@@ -38,7 +38,7 @@ private slots:
 
         dataset.insert(tagPixelData);
 
-        DcmImage image(&dataset);
+        DcmImage image(dataset);
 
         QVERIFY(image.isValid());
 
@@ -51,7 +51,7 @@ private slots:
         QCOMPARE(image.samplesPerPixel(), 1);
         QCOMPARE(image.photometricInterpretation(), DcmPhotometricInterpretation::Monochrome2);
         DcmTagPixelData *tag =
-                dynamic_cast<DcmTagPixelData*>(image.dataset()->findTag(DcmTagKey::PixelData));
+                dynamic_cast<DcmTagPixelData*>(image.dataset().findTag(DcmTagKey::PixelData));
         QVERIFY(tag);
         QCOMPARE(tag, image.tagPixelData());
         QCOMPARE(tag->asByteArray().size(), 512*320*2);

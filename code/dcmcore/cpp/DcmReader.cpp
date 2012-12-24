@@ -41,9 +41,9 @@ DcmReader::DcmReader(DcmStream *streamPtr, DcmDictionary *dictionaryPtr)
     }
 }
 
-DcmDataset* DcmReader::readDataset()
+DcmDataset DcmReader::readDataset()
 {
-    DcmDataset *datasetPtr = new DcmDataset();
+    DcmDataset dataset;
 
     // Take transfer syntax form currently set in streamer
     m_transferSyntax = m_streamPtr->transferSyntax();
@@ -55,8 +55,7 @@ DcmDataset* DcmReader::readDataset()
         if (isError()) {
             // Error detected when reading a tag
             delete tagPtr;
-            delete datasetPtr;
-            return 0;
+            return DcmDataset();
         }
 
         // Check for invalid tag keys
@@ -67,15 +66,14 @@ DcmDataset* DcmReader::readDataset()
             // These tags are a part of sequence, cannot have them here
             setError(QObject::tr("Invalid tag found while reading."));
             delete tagPtr;
-            delete datasetPtr;
-            return 0;
+            return DcmDataset();
         }
 
         if (tagKey.isGroupSize()) {
             // Ignore group size tags
             delete tagPtr;
         } else {
-            datasetPtr->insertAndRetain(tagPtr);
+            dataset.insertAndRetain(tagPtr);
         }
     }
 
@@ -84,11 +82,10 @@ DcmDataset* DcmReader::readDataset()
         setError(QObject::tr("Unbalanced %1 sequnce tag detected. %2")
                  .arg(m_sequenceLevel)
                  .arg(prevError));
-        delete datasetPtr;
-        return 0;
+        return DcmDataset();
     }
 
-    return datasetPtr;
+    return dataset;
 }
 
 DcmTag* DcmReader::readTag()

@@ -82,6 +82,13 @@ public:
     QVariant tagValue(const QString &tagName) const;
 
     /**
+     * Returns tag value by its name.
+     * @param tagName Tag name.
+     * @return Tag value or empty if tag not found.
+     */
+    QVariant operator [](const QString &tagName) const;
+
+    /**
      * Returns a list of tag values or empty list
      * if tag is not found.
      * \param tagKey Tag key to look for.
