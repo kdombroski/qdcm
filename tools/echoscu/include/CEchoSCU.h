@@ -23,6 +23,10 @@ public slots:
     /// Perform C-Echo transaction
     void perform();
 
+signals:
+
+    void over();
+
 private slots:
 
     void onScuStateChange();
@@ -30,6 +34,7 @@ private slots:
     void onAssociationRejected();
     void onAssociationTimeout();
     void onDimseResponse();
+    void onSocketError();
     void onConnectionTimeout();
     void onDimseResposeTimeout();
     void onDimseError();

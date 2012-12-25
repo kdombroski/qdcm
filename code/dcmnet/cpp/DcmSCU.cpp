@@ -59,6 +59,16 @@ void DcmSCU::close()
     setState(DcmSCU::State_NotConnected);
 }
 
+int DcmSCU::timeout() const
+{
+    return m_communicatorPtr->timeout();
+}
+
+void DcmSCU::setTimeout(int t)
+{
+    m_communicatorPtr->setTimeout(t);
+}
+
 void DcmSCU::sendAssociationRequest(const DcmAAssociateRequest &request)
 {
     if (state() != DcmSCU::State_Connected) {

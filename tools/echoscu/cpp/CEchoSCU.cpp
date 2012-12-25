@@ -1,4 +1,7 @@
 #include <QDebug>
+#include "DcmPDUMaxLength.h"
+#include "DcmPDUImplementationClassUID.h"
+#include "DcmPDUImplementationVersionName.h"
 #include "CEchoSCU.h"
 
 CEchoSCU::CEchoSCU(QObject *parent)
@@ -15,6 +18,7 @@ CEchoSCU::CEchoSCU(QObject *parent)
     connect(m_scuPtr, SIGNAL(associationTimeout()), this, SLOT(onAssociationTimeout()));
     connect(m_scuPtr, SIGNAL(stateChanged()), this, SLOT(onScuStateChange()));
     connect(m_scuPtr, SIGNAL(dimseCommandResponse()), this, SLOT(onDimseResponse()));
+    connect(m_scuPtr, SIGNAL(socketError()), this, SLOT(onSocketError()));
     connect(m_scuPtr, SIGNAL(connectionTimeout()), this, SLOT(onConnectionTimeout()));
     connect(m_scuPtr, SIGNAL(dimseTimeout()), this, SLOT(onDimseResposeTimeout()));
     connect(m_scuPtr, SIGNAL(dimseError()), this, SLOT(onDimseError()));
@@ -47,6 +51,8 @@ void CEchoSCU::setCalledAE(const QString &ae)
 
 void CEchoSCU::perform()
 {
+    qDebug() << "Connecting to" << m_host << ":" << m_port;
+    m_scuPtr->setTimeout(1000);
     m_scuPtr->connectToSCP(m_host, m_port);
 }
 
@@ -62,8 +68,28 @@ void CEchoSCU::onScuStateChange()
 void CEchoSCU::onAssociationAccepted()
 {
     qDebug() << __FUNCTION__;
-    if (m_scuPtr->associationAccept().numberOfAcceptedPresentationContexts() < 1) {
+    DcmAAssociateAccept accept = m_scuPtr->associationAccept();
+    if (accept.numberOfAcceptedPresentationContexts() < 1) {
         qDebug() << "Presentation context has not been accepted by SCU.";
+        releaseAssociation();
+        return;
+    }
+
+    int verificationContextId = -1;
+
+    for (int i = 0; i < accept.numberOfAcceptedPresentationContexts(); i++) {
+        DcmAcceptedPresentationContext *accContextPtr = accept.acceptedPresentationContextAt(i);
+        if (accContextPtr->isAccepted()) {
+            if (accContextPtr->id() == 1) {
+                verificationContextId = accContextPtr->id();
+            }
+        } else {
+            qDebug() << "Presentation context" << accContextPtr->id()
+                     << "has not been accepted. Reason:" << accContextPtr->reason();
+        }
+    }
+
+    if (verificationContextId < 0) {
         releaseAssociation();
         return;
     }
@@ -102,10 +128,18 @@ void CEchoSCU::onDimseResponse()
     releaseAssociation();
 }
 
-void CEchoSCU::onConnectionTimeout()
+void CEchoSCU::onSocketError()
 {
     qDebug() << __FUNCTION__;
     m_scuPtr->close();
+    emit over();
+}
+
+void CEchoSCU::onConnectionTimeout()
+{
+    qDebug() << "Timeout connecting to" << m_host << ":" << m_port;
+    m_scuPtr->close();
+    emit over();
 }
 
 void CEchoSCU::onDimseResposeTimeout()
@@ -122,10 +156,30 @@ void CEchoSCU::onDimseError()
 
 void CEchoSCU::requestAssociation()
 {
+    DcmAAssociateRequest request;
+    request.setApplicationContext(DcmApplicationContext::Default);
+    request.setCallingAE(m_callingAE);
+    request.setCalledAE(m_calledAE);
 
+    DcmPresentationContext presentationContext(DcmAbstractSyntax::Verification);
+    presentationContext.setId(1);   // 1st presentation context to negociate
+    presentationContext.addTransferSyntax(DcmTransferSyntax::ImplicitLittleEndian);
+    presentationContext.addTransferSyntax(DcmTransferSyntax::ExplicitLittleEndian);
+
+    DcmPDUUserInfo userInfo;
+    DcmPDUMaxLength maxLength(16384);
+    DcmPDUImplementationClassUID implementationClassUid("1.2.3.4.5.6.7.8");
+    DcmPDUImplementationVersionName implementationVersion("QDCM-0.1");
+    userInfo.append(maxLength);
+    userInfo.append(implementationClassUid);
+    userInfo.append(implementationVersion);
+
+    request.setUserInfoPDU(userInfo);
+
+    m_scuPtr->sendAssociationRequest(request);
 }
 
 void CEchoSCU::releaseAssociation()
 {
-
+    emit over();
 }
