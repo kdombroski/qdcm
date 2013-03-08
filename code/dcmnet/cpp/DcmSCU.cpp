@@ -12,6 +12,10 @@
 #include <QDebug>
 #include <QTimer>
 #include "DcmCEchoRequest.h"
+#include "DcmAAbort.h"
+#include "DcmAReleaseRequest.h"
+#include "DcmPDataTf.h"
+#include "DcmReader.h"
 #include "DcmSCU.h"
 
 DcmSCU::DcmSCU(QObject *parent)
@@ -31,6 +35,8 @@ DcmSCU::DcmSCU(QObject *parent)
 
     m_dimseTimerPtr = new QTimer();
     connect(m_dimseTimerPtr, SIGNAL(timeout()), this, SLOT(onDimseTimeout()));
+
+    m_presentationContextId = -1;
 }
 
 DcmSCU::~DcmSCU()
@@ -97,6 +103,26 @@ void DcmSCU::sendAssociationRequest(const DcmAAssociateRequest &request)
         close();
     }
 
+}
+
+void DcmSCU::abortAssociation()
+{
+    if (m_state != State_NotConnected) {
+        DcmAAbort abort;
+        m_communicatorPtr->sendPDUItem(abort);
+        m_communicatorPtr->waitForBytesWritten();
+        emit associationAbort();
+        close();
+    }
+}
+
+void DcmSCU::releaseAssociation()
+{
+    if (m_state != State_NotConnected) {
+        DcmAReleaseRequest release;
+        m_communicatorPtr->sendPDUItem(release);
+        setState(State_AssociationRelease);
+    }
 }
 
 void DcmSCU::sendDimseCommand(DcmDimseMessage &message, int contextId)
@@ -256,7 +282,126 @@ void DcmSCU::onDimseTimeout()
 
 void DcmSCU::onDataAvailable()
 {
+    Q_ASSERT(m_communicatorPtr);
 
+    bool receivingData = true;
+    while (receivingData) {
+        DcmPDUItem *pduItem = m_communicatorPtr->receivePDUItem();
+        if (m_communicatorPtr->status() != DcmCommunicator::Status_Ok) {
+            // Something wrong happend, close connection
+            emit dimseError();
+            close();
+            delete pduItem;
+            return;
+        }
+
+        /* Depending on current state we tread the received data */
+        switch (state()) {
+        case State_AssociationRequest:
+            // Association request has been sent, we are waiting
+            // for association response (accept or reject).
+            if (pduItem->type() == DcmPDUType_AAssociateAc) {
+                // Association has been accepted
+                DcmAAssociateAccept *accept = dynamic_cast<DcmAAssociateAccept*>(pduItem);
+                Q_ASSERT(accept);
+                handleAssociationAccept(*accept);
+            } else if (pduItem->type() == DcmPDUType_AAssociateRj) {
+                // Association has been rejected
+                DcmAAssociateReject *reject = dynamic_cast<DcmAAssociateReject*>(pduItem);
+                Q_ASSERT(reject);
+                handleAssociationReject(*reject);
+            } else {
+                // Invalid response
+                emit dimseError();
+                close();
+                delete pduItem;
+                return;
+            }
+            break;
+
+        case State_AssociationAccept:
+            // Association has been accepted, he only thing we cna expect in this
+            // state is association abort.
+            if (pduItem->type() == DcmPDUType_AAbort) {
+                DcmAAbort *abort = dynamic_cast<DcmAAbort*>(pduItem);
+                Q_ASSERT(abort);
+                emit associationAbort();
+                close();
+            } else {
+                emit dimseError();
+                close();
+                delete pduItem;
+                return;
+            }
+            break;
+
+        case State_DimseCommand:
+        case State_DimseData:
+            // Handle DIMSE data or command
+            if (pduItem->type() == DcmPDUType_PData) {
+                DcmPDataTf *pdata = dynamic_cast<DcmPDataTf*>(pduItem);
+                Q_ASSERT(pdata);
+                if (pdata->count() < 1) {
+                    qWarning() << "Received P-DATA with no PDVs. Association will be aborted.";
+                    emit dimseError();
+                    abortAssociation();
+                }
+
+                DcmPDVItem *pdv = pdata->at(0);
+                Q_ASSERT(pdv);
+
+                m_pdvData.append(pdv->byteArray());
+
+                if (m_presentationContextId == -1) {
+                    m_presentationContextId = pdv->presentationContextId();
+                }
+
+                if (pdv->isTerminating()) {
+                    handleDimseRawMessage(pdv->isCommand());
+                    m_pdvData.clear();
+                    m_presentationContextId = -1;
+                } else {
+                    if (m_presentationContextId != pdv->presentationContextId()) {
+                        qWarning() << "Received PDV of presentation context" << pdv->presentationContextId()
+                                   << "but" << m_presentationContextId << "is expected.";
+                        emit dimseError();
+                        abortAssociation();
+                    }
+                }
+            } else {
+                qWarning() << "SCU received invalid PDU when P-DATA is expected.";
+                emit dimseError();
+                abortAssociation();
+            }
+
+            break;
+
+        case State_AssociationRelease:
+            if (pduItem->type() != DcmPDUType_AReleaseRp) {
+                qWarning() << "Unexpected PDU item received on association release";
+            }
+            receivingData = false;
+            close();
+            break;
+
+        default:
+            qWarning() << "Received unexpected data for current SCU state";
+            close();
+            break;
+        }
+
+        delete pduItem;
+
+        /* We have to continue handling incoming data, however if there
+         * is no enought, we return from this slot, expecting it will be called
+         * once more data become available.
+         */
+        if (receivingData &&
+                m_communicatorPtr->socket()->bytesAvailable() < 6) {
+            receivingData = false;
+        }
+
+    }
 }
 
 DcmTransferSyntax DcmSCU::transferSyntaxForAcceptedContextId(int contextId)
@@ -291,5 +436,104 @@ void DcmSCU::handleAssociationReject(const DcmAAssociateReject &rj)
 
 void DcmSCU::handleDimseRawMessage(bool command)
 {
+    DcmStream stream(m_pdvData);
+    DcmReader reader(&stream);
 
+    if (command) {
+        if (state() != State_DimseCommand) {
+            qWarning() << "Command DIMSE was expected.";
+            emit dimseError();
+            abortAssociation();
+            return;
+        }
+
+        stream.setTransferSyntax(DcmTransferSyntax::ImplicitLittleEndian);
+        DcmDataset dataset = reader.readDataset();
+        if (reader.isError()) {
+            qWarning() << "Unable to pase DIMSE command dataset.";
+            emit dimseError();
+            abortAssociation();
+            return;
+        }
+
+        DcmTag *tag = dataset.findTag(DcmTagKey::CommandField);
+        if (!tag) {
+            qWarning() << "Command tag expected but not found.";
+            emit dimseError();
+            abortAssociation();
+            return;
+        }
+
+        int cmd = (DcmCommandType)tag->value().toInt();
+        if (!(cmd & 0x8000)) {
+            qWarning() << "Expected DIMSE command response, but request received instead.";
+            emit dimseError();
+            abortAssociation();
+            return;
+        }
+
+        DcmDimseResponse response(dataset);
+        if (response.responseMessageId() != messageId()) {
+            qWarning() << "DIMSE response id" << messageId() << "expected, but"
+                       << response.messageId() << "received instead.";
+            abortAssociation();
+            return;
+        }
+
+        if (response.hasData()) {
+            setState(State_DimseData);
+        } else {
+            m_dimseTimerPtr->stop();
+
+            if (response.status() != DcmDimseResponse::Status_Pending) {
+                // If no more data expected, switch back to association accepted state.
+                setState(State_AssociationAccept);
+            }
+        }
+
+        m_dimseResponse = response;
+        emit dimseCommandResponse();
+    } else {
+        // Data DIMSE received
+
+        m_dimseTimerPtr->stop();
+
+        if (state() != State_DimseData) {
+            qWarning() << "No DIMSE data expected.";
+            emit dimseError();
+            abortAssociation();
+            return;
+        }
+
+        int contextId = (m_presentationContextId - 1)/2;
+
+        if (contextId >= m_associateRequest.numberOfPresentationContexts()) {
+            qWarning() << "Presentation context id is out of range.";
+            emit dimseError();
+            abortAssociation();
+            return;
+        }
+
+        DcmAcceptedPresentationContext *context = m_associateAccept.acceptedPresentationContextAt(contextId);
+        Q_ASSERT(context);
+
+        DcmTransferSyntax xferSyntax = context->transferSyntax();
+        stream.setTransferSyntax(xferSyntax);
+
+        DcmDataset dataset = reader.readDataset();
+        if (reader.isError()) {
+            qWarning() << "Unable to parse received DICOM dataset.";
+            emit dimseError();
+            associationAbort();
+            return;
+        }
+
+        if (dimseResponse().status() == DcmDimseResponse::Status_Pending) {
+            setState(State_DimseCommand);
+        } else {
+            setState(State_AssociationAccept);
+        }
+
+        emit dimseDataset(dataset);
+    }
 }

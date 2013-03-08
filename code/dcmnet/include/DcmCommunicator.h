@@ -73,6 +73,8 @@ public:
                      const DcmTransferSyntax &syntax = DcmTransferSyntax::ImplicitLittleEndian);
     void sendDimseMessage(const DcmDimseMessage &message, int contextId);
 
+    bool waitForBytesWritten();
+
 private:
 
     Q_DISABLE_COPY(DcmCommunicator)
@@ -80,7 +82,6 @@ private:
     void setStatus(DcmCommunicator::Status s);
     quint64 bytesAvailable();
     bool waitForReadyRead();
-    bool waitForBytesWritten();
 
     QTcpSocket *m_socketPtr;            ///< Communication socket.
     QDataStream *m_dataStreamPtr;       ///< Communication data stream.

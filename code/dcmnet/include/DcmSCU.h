@@ -25,6 +25,9 @@
 #include "DcmDimseResponse.h"
 #include "DcmDataset.h"
 
+/*! DcmSCU
+ * DICOM Basic client.
+ */
 class DCM_NET_API DcmSCU: public QObject
 {
     Q_OBJECT
@@ -44,23 +47,58 @@ public:
         State_AssociationRelease    ///< Releasing association.
     } State;
 
+    /**
+     * Construct DICOM client.
+     * \param parent Parent QObject.
+     */
     DcmSCU(QObject *parent = 0);
+
+    /**
+     * Destructor.
+     */
     ~DcmSCU();
 
+    /**
+     * Returns current state of the SCU.
+     * \return SCU state.
+     */
     DcmSCU::State state() const;
 
+    /**
+     * Perform connection to the SCP (server).
+     * \param hostName SCP host name or IP address.
+     * \param port TCP port number.
+     */
     void connectToSCP(const QString &hostName, int port);
+
+
+    /**
+     * Close connection.
+     */
     void close();
 
+    /**
+     * Send association request to SCP.
+     * \param request Association request to be sent.
+     */
     void sendAssociationRequest(const DcmAAssociateRequest &request);
 
     /**
+     * Send DIMSE message to SCP.
      * The message will be updated with an id.
+     * \param message DIMSE message to be sent.
+     * \param contextId Context id.
      */
     void sendDimseCommand(DcmDimseMessage &message, int contextId);
     void sendDimseDataset(DcmDataset &dataset, int contextId);
 
     void sendCEcho();
+
+    /**
+     * Abort association.
+     * This will send association abort message to SCP and
+     * close connection.
+     */
     void abortAssociation();
     void releaseAssociation();
 
@@ -84,6 +122,7 @@ signals:
     void stateChanged();
     void associationAccepted();
     void associationRejected();
+    void associationAbort();
     void dimseCommandResponse();
     void dimseDataset(const DcmDataset &dataset);
 
@@ -115,6 +154,12 @@ private:
 
     void handleAssociationAccept(const DcmAAssociateAccept &ac);
     void handleAssociationReject(const DcmAAssociateReject &rj);
+
+    /**
+     * Process received raw DIMSE message.
+     * This will parse received data into DICOM dataset.
+     * \param command Set to true if a command received.
+     */
     void handleDimseRawMessage(bool command);
 
     DcmSCU::State m_state;  ///< SCU state.
@@ -129,6 +174,9 @@ private:
 
     DcmDimseRequest m_dimseRequest;
     DcmDimseResponse m_dimseResponse;
+
+    int m_presentationContextId;    ///< Data presentation context.
+    QByteArray m_pdvData;   ///< Raw data received.
 
     QTimer *m_dimseTimerPtr;
 };
