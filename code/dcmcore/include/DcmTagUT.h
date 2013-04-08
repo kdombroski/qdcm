@@ -64,6 +64,13 @@ public:
      * \return This tag.
      */
     DcmTagUT& operator =(const QVariant &v);
+
+    /**
+     * Returns tag size.
+     * \param transferSyntax Transfer syntax used to encode the tag.
+     * \return Tag size in bytes.
+     */
+    DcmSize size(const DcmTransferSyntax &transferSyntax) const;
 };
 
 #endif // DCMTAGUT_H

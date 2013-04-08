@@ -48,3 +48,11 @@ DcmTagUT& DcmTagUT::operator =(const QVariant &v)
     setValue(v);
     return *this;
 }
+
+DcmSize DcmTagUT::size(const DcmTransferSyntax &transferSyntax) const
+{
+    if (transferSyntax.encoding() == DcmEncoding_Explicit) {
+        return contentSize(transferSyntax) + 12;
+    }
+    return contentSize(transferSyntax) + 8; // Implicit encoding.
+}

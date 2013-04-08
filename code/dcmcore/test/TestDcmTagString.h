@@ -158,7 +158,12 @@ private slots:
     {
         DcmTagUT t0(DcmTagKey(0x1234, 0x5678));
 
+        t0.setString("1234");
+
         QVERIFY(t0.vr() == DcmVr::UT);
+
+        QVERIFY(t0.size(DcmTransferSyntax::ExplicitLittleEndian) == 16);
+        QVERIFY(t0.size(DcmTransferSyntax::ImplicitLittleEndian) == 12);
     }
 
     void testTagAE()

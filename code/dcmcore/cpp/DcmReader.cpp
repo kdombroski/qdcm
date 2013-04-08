@@ -154,6 +154,7 @@ DcmTag* DcmReader::readTag()
         }
 
         *m_streamPtr >> m_size;
+
         if ((m_tagKey == DcmTagKey::ItemDeliminationItem) || (m_tagKey == DcmTagKey::SequenceDeliminationItem)) {
             // For delimiters size must be zero
             if (m_size != 0) {
@@ -624,6 +625,8 @@ DcmTagItem* DcmReader::readTagAsItem()
                     inItem = false;
                     break;
                 } else if (tag->tagKey() == DcmTagKey::Item) {
+                    qDebug() << "Item tag cannot contain another item";
+                    qDebug() << "Current tag is" << m_tagKey.toString();
                     setError(QObject::tr("Item tag cannot contain another item"));
                     delete tag;
                     delete item;
@@ -640,7 +643,8 @@ DcmTagItem* DcmReader::readTagAsItem()
                 if (itemSize == itemExpectedSize) {
                     inItem = false;
                 } else if (itemSize > itemExpectedSize) {
-                    setError(QObject::tr("Item tag size overflow"));
+                    setError(QObject::tr("Item tag size overflow: expected %1, read %2")
+                             .arg(itemExpectedSize).arg(itemSize));
                     delete item;
                     return 0;
                 }
