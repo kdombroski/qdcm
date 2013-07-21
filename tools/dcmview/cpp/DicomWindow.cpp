@@ -67,6 +67,11 @@ DicomWindow::~DicomWindow()
 {
 }
 
+bool DicomWindow::containsImage() const
+{
+    return m_imageView != 0;
+}
+
 QWidget* DicomWindow::createDicomImageWidget()
 {
     DcmImage image(m_dataset);

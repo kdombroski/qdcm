@@ -28,6 +28,12 @@ public:
     DicomWindow(DcmDataset &dataset, QWidget *parent = 0);
     ~DicomWindow();
 
+    /**
+     * Tells whether this DICOM window displays an image.
+     * @return true if there is an image displayed.
+     */
+    bool containsImage() const;
+
 private:
 
     Q_DISABLE_COPY(DicomWindow)

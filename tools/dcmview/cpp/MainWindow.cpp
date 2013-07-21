@@ -25,6 +25,9 @@
 
 #include "MainWindow.h"
 
+// Default size of DICOM window
+const QSize DefaultDicomWindowSize(800, 600);
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -93,6 +96,9 @@ void MainWindow::onOpenAction()
             dicomWindow->resize(dicomWindow->sizeHint());
             m_mdiArea->addSubWindow(dicomWindow);
             dicomWindow->show();
+            if (!dicomWindow->containsImage()) {
+                dicomWindow->resize(DefaultDicomWindowSize);
+            }
         }
     }
 }

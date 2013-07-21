@@ -19,6 +19,9 @@
 
 #include "DicomTreeModel.h"
 
+// Maximal number of symbols to be used to display large tags data
+const int TagPreviewLength = 128;
+
 DicomTreeModel::DicomTreeModel(DcmDataset &dataset, QObject *parent)
     : QStandardItemModel(parent)
 {
@@ -86,7 +89,19 @@ QList<QStandardItem *> DicomTreeModel::createRowForTag(DcmTag *tag)
     row << new QStandardItem(tagDesc.name());
     row << new QStandardItem(tag->vr().toString());
     row << new QStandardItem(multStr);
-    row << new QStandardItem(tag->value().toString().trimmed());
+
+    QString strValue;
+
+    if (tag->vr().isBinary() || tag->tagKey() == DcmTagKey::Item) {
+        strValue = QString("< Binary data >");
+    } else {
+        strValue = tag->value().toString();
+        if (strValue.length() > TagPreviewLength) {
+            strValue = strValue.left(TagPreviewLength) + QString("...");
+        }
+    }
+
+    row << new QStandardItem(strValue);
 
     return row;
 }
