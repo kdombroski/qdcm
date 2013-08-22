@@ -103,9 +103,26 @@ void DcmModulePatient::setPatientSex(const QString &s)
 
 void DcmModulePatient::initializeTags()
 {
-    addSupportedTag("PatientName", true);
-    addSupportedTag("PatientID", true);
-    addSupportedTag("PatientBirthDate", false);
-    addSupportedTag("PatientBirthTime", false);
-    addSupportedTag("PatientSex", false);
+    addSupportedTag("PatientName", DcmModule::TagType_2);
+    addSupportedTag("PatientID", DcmModule::TagType_2);
+    addSupportedTag("PatientBirthDate", DcmModule::TagType_2);
+    addSupportedTag("PatientSex", DcmModule::TagType_2);
+    addSupportedTag(DcmTagKey(0x0008, 0x1120), DcmModule::TagType_3);   // Referenced Patient Sequence
+    addSupportedTag("PatientBirthTime", DcmModule::TagType_3);
+    addSupportedTag(DcmTagKey(0x0010, 0x1000), DcmModule::TagType_3);   // Other Patient IDs
+    addSupportedTag(DcmTagKey(0x0010, 0x1002), DcmModule::TagType_3);   // Other Patient IDs Sequence
+    addSupportedTag(DcmTagKey(0x0010, 0x1001), DcmModule::TagType_3);   // Other Patient Names
+    addSupportedTag(DcmTagKey(0x0010, 0x2160), DcmModule::TagType_3);   // Ethnic group or race
+    addSupportedTag(DcmTagKey(0x0010, 0x4000), DcmModule::TagType_3);   // Patient comments
+    addSupportedTag(DcmTagKey(0x0010, 0x2201), DcmModule::TagType_1C);  // Patient Species
+    addSupportedTag(DcmTagKey(0x0010, 0x2202), DcmModule::TagType_1C);  // Patient Species Code Sequence
+    addSupportedTag(DcmTagKey(0x0010, 0x2292), DcmModule::TagType_2C);  // Patient Breed Description
+    addSupportedTag(DcmTagKey(0x0010, 0x2293), DcmModule::TagType_2C);  // Patient Breed Code Sequence
+    addSupportedTag(DcmTagKey(0x0010, 0x2294), DcmModule::TagType_2C);  // Breed registration sequence
+    addSupportedTag(DcmTagKey(0x0010, 0x2297), DcmModule::TagType_2C);  // Responsible person
+    addSupportedTag(DcmTagKey(0x0010, 0x2298), DcmModule::TagType_1C);  // Responsible Person Role
+    addSupportedTag(DcmTagKey(0x0010, 0x2299), DcmModule::TagType_2C);  // Responsible Organization
+    addSupportedTag(DcmTagKey(0x0012, 0x0062), DcmModule::TagType_3);   // Patient Identity Removed ('YES' or 'NO')
+    addSupportedTag(DcmTagKey(0x0012, 0x0063), DcmModule::TagType_1C);  // Deidentification Method
+    addSupportedTag(DcmTagKey(0x0012, 0x0064), DcmModule::TagType_1C);  // Deidentification Method Code Sequence
 }

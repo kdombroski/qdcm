@@ -119,11 +119,11 @@ void DcmModuleSOPCommon::setSoftwareVersions(const QString &v)
 
 void DcmModuleSOPCommon::initializeTags()
 {
-    addSupportedTag("SOPClassUID", true);
-    addSupportedTag("SOPInstanceUID", true);
-    addSupportedTag("InstanceCreationDate", true);
-    addSupportedTag("InstanceCreationTime", true);
-    addSupportedTag("InstanceCreatorUID", false);
-    addSupportedTag("SoftwareVersions", false);
+    addSupportedTag("SOPClassUID", DcmModule::TagType_1);
+    addSupportedTag("SOPInstanceUID", DcmModule::TagType_1);
+    addSupportedTag("InstanceCreationDate", DcmModule::TagType_1);
+    addSupportedTag("InstanceCreationTime", DcmModule::TagType_1);
+    addSupportedTag("InstanceCreatorUID", DcmModule::TagType_3);
+    addSupportedTag("SoftwareVersions", DcmModule::TagType_3);
 }
 

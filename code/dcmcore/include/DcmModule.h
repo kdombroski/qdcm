@@ -30,6 +30,19 @@ class DCM_CORE_API DcmModule
 public:
 
     /**
+     * Tag type.
+     * Tag type tells whether the tag presence is mandatory in the
+     * module ro wether is can has a void value.
+     */
+    typedef enum {
+        TagType_1,      ///< Mandatory, not null.
+        TagType_1C,     ///< Mandatory under certain condition.
+        TagType_2,      ///< Tag is required but can has null value.
+        TagType_2C,     ///< Required under condition, can be null.
+        TagType_3       ///< Tag is optional.
+    } TagType;
+
+    /**
      * Construct an empty module.
      */
     DcmModule(const QString &name = QString());
@@ -65,16 +78,12 @@ public:
     QString name() const;
 
     /**
-     * Returns a reference to the list of mandatory tag keys.
-     * \return List of mandatry tag keys.
+     * Returns a list of tag keys for given type.
+     * Empty list is returned if there are no tags of given type.
+     * \param type Tag type.
+     * \return List of tag keys of given type.
      */
-    QList<DcmTagKey> mandatoryTagKeys() const;
-
-    /**
-     * Returns a reference to the list of optional tag keys.
-     * \return List of optional tag keys.
-     */
-    QList<DcmTagKey> optionalTagKeys() const;
+    QList<DcmTagKey> tagKeys(TagType type) const;
 
     /**
      * Fetch tags from the dataset.
@@ -165,6 +174,11 @@ public:
     void setTagValues(const QString &tagName, const QVariantList &values);
 
     /**
+     * Complete module with missing tags that can take void value.
+     */
+    void completeVoidTags();
+
+    /**
      * Reutns tags list of this module.
      * \return List of tags.
      */
@@ -175,16 +189,23 @@ protected:
     /**
      * Add tag key to the list of supported tags.
      * \param tagKey Tag key to be added.
-     * \param mandatory Whether this tag key is mandatory.
+     * \param type Tag type.
      */
-    void addSupportedTag(const DcmTagKey &tagKey, bool mandatory = true);
+    void addSupportedTag(const DcmTagKey &tagKey, TagType type);
 
     /**
      * Add tag key to the list of supported tags.
      * \param tagName Tag name.
-     * \param mandatory Whether this tag is mandatory.
+     * \param type Tag type.
      */
-    void addSupportedTag(const QString &tagName, bool mandatory = true);
+    void addSupportedTag(const QString &tagName, TagType type);
+
+    /**
+     * Tells whether a tag (given by its key) is a part of this module.
+     * \param tagKey Tag key.
+     * \return true if tag is a part of this module.
+     */
+    bool isTagOfThisModule(const DcmTagKey &tagKey) const;
 
 private:
 
@@ -196,8 +217,7 @@ private:
     void fetchTags(const DcmDataset &datasetPtr, const QList<DcmTagKey> &tagKeys);
 
     QString m_name;     ///< Module name.
-    QList<DcmTagKey> m_mandatoryTagKeys;    ///< List of mandatory tag keys.
-    QList<DcmTagKey> m_optionalTagKeys;     ///< List of optional tag keys.
+    QMap<TagType, QList<DcmTagKey> > m_tagKeys; ///< List of tag keys for this module.
 
     DcmTagList m_tagsList;  ///< List of tags set in the module.
 

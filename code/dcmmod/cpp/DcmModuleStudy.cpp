@@ -115,10 +115,10 @@ void DcmModuleStudy::setStudyDescription(const QString &desc)
 
 void DcmModuleStudy::initializeTags()
 {
-    addSupportedTag("StudyInstanceUID", true);
-    addSupportedTag("StudyDate", true);
-    addSupportedTag("StudyTime", true);
-    addSupportedTag("ReferringPhysicianName", false);
-    addSupportedTag("StudyID", false);
-    addSupportedTag("StudyDescription", false);
+    addSupportedTag("StudyInstanceUID", DcmModule::TagType_1);
+    addSupportedTag("StudyDate", DcmModule::TagType_1);
+    addSupportedTag("StudyTime", DcmModule::TagType_1);
+    addSupportedTag("ReferringPhysicianName", DcmModule::TagType_3);
+    addSupportedTag("StudyID", DcmModule::TagType_3);
+    addSupportedTag("StudyDescription", DcmModule::TagType_3);
 }

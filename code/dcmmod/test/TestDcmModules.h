@@ -62,6 +62,9 @@ private slots:
 
         mod.setPatientId("PAT1234");
         mod.setPatientName("Brown^John");
+        // Missing tags: birth date and sex.
+        QVERIFY(!mod.isValid());
+        mod.completeVoidTags();
         QVERIFY(mod.isValid());
 
         mod.setPatientBirthDate(QDate(1976, 12, 4));

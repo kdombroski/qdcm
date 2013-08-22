@@ -16,16 +16,14 @@
 
 DcmModule::DcmModule(const QString &name)
     : m_name(name),
-      m_mandatoryTagKeys(),
-      m_optionalTagKeys(),
+      m_tagKeys(),
       m_tagsList()
 {
 }
 
 DcmModule::DcmModule(const DcmModule &module)
     : m_name(module.m_name),
-      m_mandatoryTagKeys(module.m_mandatoryTagKeys),
-      m_optionalTagKeys(module.m_optionalTagKeys),
+      m_tagKeys(module.m_tagKeys),
       m_tagsList(module.m_tagsList)
 {
 }
@@ -34,8 +32,7 @@ DcmModule& DcmModule::operator =(const DcmModule &module)
 {
     if (this != &module) {
         m_name = module.m_name;
-        m_mandatoryTagKeys = module.m_mandatoryTagKeys;
-        m_optionalTagKeys = module.m_optionalTagKeys;
+        m_tagKeys = module.m_tagKeys;
         m_tagsList = module.m_tagsList;
     }
     return *this;
@@ -55,26 +52,39 @@ QString DcmModule::name() const
     return m_name;
 }
 
-QList<DcmTagKey> DcmModule::mandatoryTagKeys() const
+QList<DcmTagKey> DcmModule::tagKeys(TagType type) const
 {
-    return m_mandatoryTagKeys;
-}
-
-QList<DcmTagKey> DcmModule::optionalTagKeys() const
-{
-    return m_optionalTagKeys;
+    return m_tagKeys.value(type);
 }
 
 void DcmModule::fetchFromDataset(const DcmDataset &dataset)
 {
-    fetchTags(dataset, m_mandatoryTagKeys);
-    fetchTags(dataset, m_optionalTagKeys);
+    fetchTags(dataset, m_tagKeys.value(TagType_1));
+    fetchTags(dataset, m_tagKeys.value(TagType_1C));
+    fetchTags(dataset, m_tagKeys.value(TagType_2));
+    fetchTags(dataset, m_tagKeys.value(TagType_2C));
+    fetchTags(dataset, m_tagKeys.value(TagType_3));
 }
 
 bool DcmModule::isValid() const
 {
     bool valid = true;
-    foreach (DcmTagKey tagKey, m_mandatoryTagKeys) {
+
+    // Check that mandatory tags are present and are not null
+    foreach (DcmTagKey tagKey, m_tagKeys.value(TagType_1)) {
+        DcmTag *tag = m_tagsList.findFirst(tagKey);
+        if (!tag) {
+            valid = false;
+            break;
+        }
+        if (!tag->value().isValid() || tag->value().isNull()) {
+            valid = false;
+            break;
+        }
+    }
+
+    // Check the mandatory tags that can be null
+    foreach (DcmTagKey tagKey, m_tagKeys.value(TagType_2)) {
         DcmTag *tag = m_tagsList.findFirst(tagKey);
         if (!tag) {
             valid = false;
@@ -87,14 +97,7 @@ bool DcmModule::isValid() const
 
 DcmTag* DcmModule::tag(const DcmTagKey &tagKey) const
 {
-    if (m_mandatoryTagKeys.contains(tagKey)
-            || m_optionalTagKeys.contains(tagKey)) {
-
-        return m_tagsList.findFirst(tagKey);
-    }
-
-    // Tag is not handled by this module
-    return 0;
+    return m_tagsList.findFirst(tagKey);
 }
 
 DcmTag* DcmModule::tag(const QString &name) const
@@ -144,7 +147,7 @@ QVariantList DcmModule::tagValues(const QString &tagName) const
 
 void DcmModule::setTagValue(const DcmTagKey &tagKey, const QVariant &value)
 {
-    if ((!m_mandatoryTagKeys.contains(tagKey)) && (!m_optionalTagKeys.contains(tagKey))) {
+    if (!isTagOfThisModule(tagKey)) {
         qWarning() << "Tag " << tagKey.toString() << "is not a part of the module" << name();
         return;
     }
@@ -156,7 +159,7 @@ void DcmModule::setTagValue(const DcmTagKey &tagKey, const QVariant &value)
 
 void DcmModule::setTagValues(const DcmTagKey &tagKey, const QVariantList &values)
 {
-    if ((!m_mandatoryTagKeys.contains(tagKey)) && (!m_optionalTagKeys.contains(tagKey))) {
+    if (!isTagOfThisModule(tagKey)) {
         qWarning() << "Tag " << tagKey.toString() << "is not a part of the module.";
         return;
     }
@@ -192,30 +195,44 @@ void DcmModule::setTagValues(const QString &tagName, const QVariantList &values)
     }
 }
 
+void DcmModule::completeVoidTags()
+{
+    // Complete module with missing tags of type 2.
+    // Void value will be assigned to these tags
+    foreach (DcmTagKey key, m_tagKeys.value(TagType_2)) {
+        if (m_tagsList.findFirst(key) == 0) {
+            setTagValue(key, QVariant());
+        }
+    }
+}
+
 DcmTagList DcmModule::tagList() const
 {
     return m_tagsList;
 }
 
-void DcmModule::addSupportedTag(const DcmTagKey &tagKey, bool mandatory)
+void DcmModule::addSupportedTag(const DcmTagKey &tagKey, TagType type)
 {
-    if (mandatory) {
-        if (!m_mandatoryTagKeys.contains(tagKey)) {
-            m_mandatoryTagKeys.append(tagKey);
-        }
-    } else {
-        if (!m_optionalTagKeys.contains(tagKey)) {
-            m_optionalTagKeys.append(tagKey);
-        }
+    if (!m_tagKeys[type].contains(type)) {
+        m_tagKeys[type].append(tagKey);
     }
 }
 
-void DcmModule::addSupportedTag(const QString &tagName, bool mandatory)
+void DcmModule::addSupportedTag(const QString &tagName, TagType type)
 {
     DcmTagDescription desc = DcmDictionary::getInstancePtr()->findByName(tagName);
     if (desc.isValid()) {
-        addSupportedTag(desc.tagKey(), mandatory);
+        addSupportedTag(desc.tagKey(), type);
     }
+}
+
+bool DcmModule::isTagOfThisModule(const DcmTagKey &tagKey) const
+{
+    return m_tagKeys.value(TagType_1).contains(tagKey)
+            || m_tagKeys.value(TagType_1C).contains(tagKey)
+            || m_tagKeys.value(TagType_2).contains(tagKey)
+            || m_tagKeys.value(TagType_2C).contains(tagKey)
+            || m_tagKeys.value(TagType_3).contains(tagKey);
 }
 
 void DcmModule::fetchTags(const DcmDataset &dataset, const QList<DcmTagKey> &tagKeys)
