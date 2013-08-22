@@ -148,7 +148,7 @@ QVariantList DcmModule::tagValues(const QString &tagName) const
 void DcmModule::setTagValue(const DcmTagKey &tagKey, const QVariant &value)
 {
     if (!isTagOfThisModule(tagKey)) {
-        qWarning() << "Tag " << tagKey.toString() << "is not a part of the module" << name();
+        qWarning() << "Setting value of a tag " << tagKey.toString() << ": not a part of the module" << name();
         return;
     }
 

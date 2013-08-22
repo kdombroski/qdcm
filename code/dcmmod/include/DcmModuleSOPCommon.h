@@ -22,7 +22,6 @@
  * 0008, 0012   Instance creation date      M
  * 0008, 0013   Instance creation time      M
  * 0008, 0014   Instance creator UID        O
- * 0008, 1020   Software version            O
  */
 class DCM_MODULE_API DcmModuleSOPCommon: public DcmModule
 {
@@ -111,18 +110,6 @@ public:
      * \param uid UID to be set.
      */
     void setInstanceCreatorUID(const QString &uid);
-
-    /**
-     * Returns instance creator software version (0008, 1020).
-     * \return Software version.
-     */
-    QString softwareVersions() const;
-
-    /**
-     * Assign instance ceator software version (0008, 1020).
-     * \param v Version to be set.
-     */
-    void setSoftwareVersions(const QString &v);
 
 private:
 

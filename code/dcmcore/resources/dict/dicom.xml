@@ -1357,9 +1357,12 @@
     <tag key="0028,0101" vr="US" vm="1">BitsStored</tag>
     <tag key="0028,0102" vr="US" vm="1">HighBit</tag>
     <tag key="0028,0103" vr="US" vm="1">PixelRepresentation</tag>
+    <tag key="0028,0120" vr="US" vm="1">PixelPaddingValue</tag>
+    <tag key="0028,0121" vr="US" vm="1">PixelPaddingRangeLimit</tag>
     <tag key="0028,0200" vr="US" vm="1">ACR_NEMA_ImageLocation</tag>
     <tag key="0028,0300" vr="CS" vm="1">QualityControlImage</tag>
     <tag key="0028,0301" vr="CS" vm="1">BurnedInAnnotation</tag>
+    <tag key="0028,0303" vr="CS" vm="1">LongitudinalTemporalInformationModified</tag>
     <tag key="0028,0400" vr="CS" vm="1">ACR_NEMA_2C_TransformLabel</tag>
     <tag key="0028,0401" vr="CS" vm="1">ACR_NEMA_2C_TransformVersionNumber</tag>
     <tag key="0028,0402" vr="US" vm="1">ACR_NEMA_2C_NumberOfTransformSteps</tag>

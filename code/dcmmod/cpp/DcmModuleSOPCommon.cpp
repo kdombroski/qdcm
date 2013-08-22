@@ -18,8 +18,6 @@ DcmModuleSOPCommon::DcmModuleSOPCommon()
     : DcmModule("SOPCommon")
 {
     initializeTags();
-    // Injecting QDCM version tag
-    setTagValue("SoftwareVersions", QString("QDCM-%1").arg(VERSION));
 }
 
 DcmModuleSOPCommon::DcmModuleSOPCommon(const DcmModuleSOPCommon &module)
@@ -107,23 +105,26 @@ void DcmModuleSOPCommon::setInstanceCreatorUID(const QString &uid)
     setTagValue("InstanceCreatorUID", uid);
 }
 
-QString DcmModuleSOPCommon::softwareVersions() const
-{
-    return tagValue("softwareVersions").toString();
-}
-
-void DcmModuleSOPCommon::setSoftwareVersions(const QString &v)
-{
-    setTagValue("SoftwareVersions", v);
-}
-
 void DcmModuleSOPCommon::initializeTags()
 {
     addSupportedTag("SOPClassUID", DcmModule::TagType_1);
     addSupportedTag("SOPInstanceUID", DcmModule::TagType_1);
-    addSupportedTag("InstanceCreationDate", DcmModule::TagType_1);
-    addSupportedTag("InstanceCreationTime", DcmModule::TagType_1);
+    addSupportedTag("SpecificCharacterSet", DcmModule::TagType_1C);
+    addSupportedTag("InstanceCreationDate", DcmModule::TagType_3);
+    addSupportedTag("InstanceCreationTime", DcmModule::TagType_3);
     addSupportedTag("InstanceCreatorUID", DcmModule::TagType_3);
-    addSupportedTag("SoftwareVersions", DcmModule::TagType_3);
+    addSupportedTag("RelatedGeneralSOPClassUID", DcmModule::TagType_3);
+    addSupportedTag("OriginalSpecializedSOPClassUID", DcmModule::TagType_3);
+    addSupportedTag("CodingSchemeIdentificationSequence", DcmModule::TagType_3);
+    addSupportedTag("TimezoneOffsetFromUTC", DcmModule::TagType_3);
+    addSupportedTag("ContributingEquipmentSequence", DcmModule::TagType_3);
+    addSupportedTag("InstanceNumber", DcmModule::TagType_3);
+    addSupportedTag("SOPInstanceStatus", DcmModule::TagType_3);
+    addSupportedTag("SOPAuthorizationDateTime", DcmModule::TagType_3);
+    addSupportedTag("SOPAuthorizationComment", DcmModule::TagType_3);
+    addSupportedTag("AuthorizationEquipmentCertificationNumber", DcmModule::TagType_3);
+    addSupportedTag("EncryptedAttributesSequence", DcmModule::TagType_1C);
+    addSupportedTag("OriginalAttributesSequence", DcmModule::TagType_3);
+    addSupportedTag("HL7StructuredDocumentReferenceSequence", DcmModule::TagType_3);
 }
 
