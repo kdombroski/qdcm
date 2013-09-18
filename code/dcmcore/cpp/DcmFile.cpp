@@ -171,12 +171,21 @@ bool DcmFile::probeTransferSyntax(const QString &path,
 
     file.close();
 
-    if (tag && !reader.isError()) {
+    if (tag) {
+        DcmTagKey key = tag->tagKey();
         delete tag;
-        return true;
+        if (reader.isError()) {
+            // Failed to read
+            return false;
+        }
+
+        // Check for meta-info header
+        if (key.group() == 0x0002 && key.element() < 0x00FF) {
+            return true;
+        }
     }
 
-    delete tag;
+    // Tag is null or no meta-info group found.
     return false;
 }
 
