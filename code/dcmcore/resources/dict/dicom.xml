@@ -3140,6 +3140,7 @@
     <tag key="300a,0434" vr="FL" vm="1">ApplicatorOpeningX</tag>
     <tag key="300a,0435" vr="FL" vm="1">ApplicatorOpeningY</tag>
     <tag key="300a,0436" vr="FL" vm="1">SourceToApplicatorMountingPositionDistance</tag>
+    <tag key="300b,1018" vr="DS" vm="1-n">PlannedPatientSupportAngle</tag>
     <tag key="300c,0002" vr="SQ" vm="1">ReferencedRTPlanSequence</tag>
     <tag key="300c,0004" vr="SQ" vm="1">ReferencedBeamSequence</tag>
     <tag key="300c,0006" vr="IS" vm="1">ReferencedBeamNumber</tag>
