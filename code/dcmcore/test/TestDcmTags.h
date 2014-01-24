@@ -4,6 +4,7 @@
 #include <QtTest/QtTest>
 #include "DcmTagSS.h"
 #include "DcmTagUS.h"
+#include "DcmTagDS.h"
 #include "DcmTagSL.h"
 #include "DcmTagUL.h"
 #include "DcmTagAT.h"
@@ -103,6 +104,44 @@ private slots:
 
         QVERIFY(t1.contentSize(DcmTransferSyntax::ExplicitBigEndian) == 4);
         QVERIFY(t1.size(DcmTransferSyntax::ExplicitLittleEndian) == 12);
+    }
+
+    void testTagDS()
+    {
+        DcmTagDS t0;
+
+        QVERIFY(t0.isValid());
+        QVERIFY(t0.vr() == DcmVr::DS);
+
+        DcmTagDS t1(DcmTagKey(0x1234, 0x5678));
+        QVERIFY(t1.tagKey().group() == 0x1234);
+        QVERIFY(t1.tagKey().element() == 0x5678);
+
+        QVERIFY(t1.contentSize(DcmTransferSyntax::ImplicitLittleEndian) == 0);
+        t1.appendDouble(0);
+        QVERIFY(t1.contentSize(DcmTransferSyntax::ImplicitLittleEndian) == 2);
+        QVERIFY(t1.size(DcmTransferSyntax::ImplicitLittleEndian) == 10);
+        t1.appendDouble(1);
+        QVERIFY(t1.contentSize(DcmTransferSyntax::ImplicitLittleEndian) == 4);
+        QVERIFY(t1.size(DcmTransferSyntax::ImplicitLittleEndian) == 12);
+
+        QVariantList values = t1.values();
+        QVERIFY(values.count() == 2);
+        QVERIFY(values.at(0).toDouble() == 0.0);
+        QVERIFY(values.at(1).toDouble() == 1.0);
+
+        DcmTag *pTag = DcmTag::create(DcmTagKey(0x300b, 0x1018));
+        QVERIFY(pTag);
+        QVERIFY(pTag->vr() == DcmVr::DS);
+        pTag->setValue(4.5);
+        DcmTagDS *pTagDs = dynamic_cast<DcmTagDS*>(pTag);
+        QVERIFY(pTagDs);
+        QVERIFY(pTagDs->asDouble() == 4.5);
+
+        QVERIFY(pTag->contentSize(DcmTransferSyntax::ImplicitLittleEndian) == 4);
+        QVERIFY(pTag->size(DcmTransferSyntax::ImplicitLittleEndian) == 12);
+
+        delete pTag;
     }
 
     void testTagSL()

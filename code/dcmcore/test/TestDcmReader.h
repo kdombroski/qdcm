@@ -60,6 +60,22 @@ private slots:
         QCOMPARE(ds["PatientBirthDate"].toString(), QString("19750315"));
     }
 
+    void testTagDS()
+    {
+        QByteArray rawData;
+        DcmStream wStream(&rawData, QIODevice::WriteOnly, DcmTransferSyntax::ImplicitLittleEndian);
+        DcmWriter writer(&wStream);
+
+        DcmTag *pTag = DcmTag::create(DcmTagKey(0x300b, 0x1018));
+        pTag->setValue(3);
+        QVERIFY(pTag);
+        writer.writeTag(pTag);
+
+        QVERIFY(rawData.size() == 10);
+
+        delete pTag;
+    }
+
 #if 0
     void testBigEndian()
     {
