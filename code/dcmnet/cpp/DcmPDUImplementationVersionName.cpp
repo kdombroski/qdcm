@@ -70,7 +70,7 @@ DcmStream& operator <<(DcmStream &stream, const DcmPDUImplementationVersionName 
     stream.dataStream().writeRawData(c, 2);
     stream.writePDUSize16(length);
 
-    stream.dataStream().writeRawData(pdu.m_name.toAscii(), length);
+    stream.dataStream().writeRawData(pdu.m_name.toLatin1(), length);
 
     return stream;
 }
@@ -84,7 +84,7 @@ DcmStream& operator >>(DcmStream &stream, DcmPDUImplementationVersionName &pdu)
 
         char *buffer = new char[length];
         stream.dataStream().readRawData(buffer, length);
-        QString name = QString::fromAscii(buffer, length);
+        QString name = QString::fromLatin1(buffer, length);
         delete[] buffer;
 
         pdu = DcmPDUImplementationVersionName(name);

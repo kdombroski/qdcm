@@ -207,7 +207,7 @@ DcmStream& DcmStream::operator <<(const DcmTransferSyntax &ts)
 
     m_dataStream.writeRawData(c, 2);
     writePDUSize16(length);
-    m_dataStream.writeRawData(ts.uid().toAscii(), length);
+    m_dataStream.writeRawData(ts.uid().toLatin1(), length);
 
     return *this;
 }
@@ -220,7 +220,7 @@ DcmStream& DcmStream::operator >>(DcmTransferSyntax &ts)
         DcmUnsignedShort length = readPDUSize16();
         char *buffer = new char[length];
         m_dataStream.readRawData(buffer, length);
-        QString uid = QString::fromAscii(buffer, length);
+        QString uid = QString::fromLatin1(buffer, length);
         delete[] buffer;
 
         ts = DcmTransferSyntax::fromUid(uid);

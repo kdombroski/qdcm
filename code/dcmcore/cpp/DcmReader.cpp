@@ -505,7 +505,7 @@ DcmTag* DcmReader::readTagAsString()
             QByteArray byteArray(buffer, s);
             sValue = m_charSet.decode(byteArray);
         } else {
-            sValue = QString::fromAscii(buffer, s);
+            sValue = QString::fromLatin1(buffer, s);
         }
         delete[] buffer;
     }

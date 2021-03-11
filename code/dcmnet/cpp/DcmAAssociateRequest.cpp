@@ -170,11 +170,11 @@ DCM_NET_API DcmStream& operator <<(DcmStream &stream, const DcmAAssociateRequest
     stream << pdu.m_protocolVersion;
     stream.dataStream().writeRawData(c2, 2);
 
-    stream.dataStream().writeRawData(pdu.m_calledAE.toAscii(), pdu.m_calledAE.length());
+    stream.dataStream().writeRawData(pdu.m_calledAE.toLatin1(), pdu.m_calledAE.length());
     if (pdu.m_calledAE.length() < 16)
         stream.dataStream().writeRawData(c3, 16 - pdu.m_calledAE.length());
 
-    stream.dataStream().writeRawData(pdu.m_callingAE.toAscii(), pdu.m_callingAE.length());
+    stream.dataStream().writeRawData(pdu.m_callingAE.toLatin1(), pdu.m_callingAE.length());
     if (pdu.m_callingAE.length() < 16)
         stream.dataStream().writeRawData(c3, 16 - pdu.m_callingAE.length());
 
@@ -215,10 +215,10 @@ DCM_NET_API DcmStream& operator >>(DcmStream &stream, DcmAAssociateRequest &pdu)
         char ae[16];
         stream.dataStream().readRawData(ae, 16);
         read += 16;
-        QString calledAE = QString::fromAscii(ae, 16).trimmed();
+        QString calledAE = QString::fromLatin1(ae, 16).trimmed();
         stream.dataStream().readRawData(ae, 16);
         read += 16;
-        QString callingAE = QString::fromAscii(ae, 16).trimmed();
+        QString callingAE = QString::fromLatin1(ae, 16).trimmed();
         acc.setCalledAE(calledAE);
         acc.setCallingAE(callingAE);
 

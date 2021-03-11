@@ -182,7 +182,7 @@ void DcmWriter::writeTagAsString(DcmTagString *tagPtr)
         // Encode textual data using current character set
         byteArray = m_charSet.encode(tagPtr->asString());
     } else {
-        byteArray = tagPtr->asString().toAscii();
+        byteArray = tagPtr->asString().toLatin1();
     }
 
     // Padding according to the length;

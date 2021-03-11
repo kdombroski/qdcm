@@ -114,7 +114,7 @@ DcmStream& operator <<(DcmStream &stream, const DcmAbstractSyntax &pdu)
     stream.dataStream().writeRawData(c, 2);
     DcmUnsignedShort length = pdu.contentSize();
     stream.writePDUSize16(length);
-    stream.dataStream().writeRawData(pdu.uid().toAscii(), length);
+    stream.dataStream().writeRawData(pdu.uid().toLatin1(), length);
     return stream;
 }
 
@@ -126,7 +126,7 @@ DcmStream& operator >>(DcmStream &stream, DcmAbstractSyntax &pdu)
         DcmUnsignedShort length = stream.readPDUSize16();
         char *buffer = new char[length];
         stream.dataStream().readRawData(buffer, length);
-        QString uid = QString::fromAscii(buffer, length);
+        QString uid = QString::fromLatin1(buffer, length);
         pdu = DcmAbstractSyntax(uid);
         delete[] buffer;
     } else {
