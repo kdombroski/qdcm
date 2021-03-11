@@ -3,7 +3,7 @@
 file(GLOB SRCS "${CMAKE_CURRENT_SOURCE_DIR}/cpp/*.cpp")
 file(GLOB ITF_HDRS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 file(GLOB HDRS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
-file(GLOB UIS "${CMAKE_CURRENT_SOURCE_DIR}/ui/*.ui")
+# file(GLOB UIS "${CMAKE_CURRENT_SOURCE_DIR}/ui/*.ui")
 file(GLOB RES "${CMAKE_CURRENT_SOURCE_DIR}/resources/*.qrc")
 file(GLOB TSS "${CMAKE_CURRENT_SOURCE_DIR}/lang/*.ts")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
@@ -17,7 +17,7 @@ if(UNIX)
 endif()
 
 # Look for Qt libraries
-find_package(Qt4 REQUIRED)
+find_package(Qt5 REQUIRED COMPONENTS Core Gui LinguistTools)
 include(${QT_USE_FILE})
 add_definitions(${QT_DEFINITIONS})
 if(NOT ${CMAKE_BUILD_TYPE} MATCHES "Debug")
@@ -35,22 +35,22 @@ set(META_SRCS "")
 foreach (MOC ${MOCS})
     set(META_SRCS ${META_SRCS} include/${MOC})
 endforeach()
-qt4_wrap_cpp(MOC_SRCS ${META_SRCS})
+qt5_wrap_cpp(MOC_SRCS ${META_SRCS})
 
 # Wrap UI
-qt4_wrap_ui(UI_SRCS ${UIS})
+# qt5_wrap_ui(UI_SRCS ${UIS})
 
 # Resources
-qt4_add_resources(RES_SRCS ${RES})
+qt5_add_resources(RES_SRCS ${RES})
 
 # Translations
-qt4_add_translation(TRANSLATIONS ${TSS})
+qt5_add_translation(TRANSLATIONS ${TSS})
 
 # Add OPENGL includes
 include(add_opengl)
 
 add_library(${PROJECT_NAME} SHARED ${SRCS} ${MOC_SRCS} ${UI_SRCS} ${RES_SRCS} ${ITF_HDRS} ${TRANSLATIONS})
-target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES} ${LIBS})
+target_link_libraries(${PROJECT_NAME} PUBLIC Qt5::Core Qt5::Gui Qt5::Xml Qt5::Network ${LIBS})
 
 set("${PROJECT_NAME}_INCLUDE_PATH" "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE INTERNAL "${PROJECT_NAME} includes" FORCE)
 

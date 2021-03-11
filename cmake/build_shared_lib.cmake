@@ -1,6 +1,6 @@
 file(GLOB SRCS "${CMAKE_CURRENT_SOURCE_DIR}/cpp/*.cpp")
 file(GLOB HDRS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
-file(GLOB UIS "${CMAKE_CURRENT_SOURCE_DIR}/ui/*.ui")
+# file(GLOB UIS "${CMAKE_CURRENT_SOURCE_DIR}/ui/*.ui")
 file(GLOB RES "${CMAKE_CURRENT_SOURCE_DIR}/resources/*.qrc")
 file(GLOB TSS "${CMAKE_CURRENT_SOURCE_DIR}/lang/*.ts")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
@@ -14,8 +14,7 @@ if(UNIX)
 endif()
 
 # Look for Qt libraries
-find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE})
+find_package(Qt5 REQUIRED COMPONENTS Core Gui Xml Network LinguistTools Test)
 add_definitions(${QT_DEFINITIONS})
 if(NOT ${CMAKE_BUILD_TYPE} MATCHES "Debug")
     add_definitions(-DQT_NO_DEBUG)
@@ -31,16 +30,16 @@ foreach(MOC ${MOCS})
     set(META_SRCS ${META_SRCS} include/${MOC})
 endforeach()
 set(MOC_SRCS "")#To build test folder library related to unit tests.
-qt4_wrap_cpp(MOC_SRCS ${META_SRCS})
+qt5_wrap_cpp(MOC_SRCS ${META_SRCS})
 
 # Wrap UI
-qt4_wrap_ui(UI_SRCS ${UIS})
+# qt5_wrap_ui(MOC_SRCS ${UIS})
 
 # Resources
-qt4_add_resources(RES_SRCS ${RES})
+qt5_add_resources(RES_SRCS ${RES})
 
 # Translations
-qt4_add_translation(TRANSLATIONS ${TSS})
+qt5_add_translation(TRANSLATIONS ${TSS})
 
 # Add OPENGL includes
 include(add_opengl)
@@ -51,7 +50,7 @@ if(UNIX AND QDCM_TESTS_COVERAGE)
 endif()
 
 add_library(${PROJECT_NAME} SHARED ${SRCS} ${MOC_SRCS} ${UI_SRCS} ${RES_SRCS} ${HDRS} ${TRANSLATIONS})
-target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES} ${LIBS} ${GCOV})
+target_link_libraries(${PROJECT_NAME} PUBLIC Qt5::Core Qt5::Gui Qt5::Xml Qt5::Network ${LIBS} ${GCOV})
 
 set("${PROJECT_NAME}_INCLUDE_PATH" "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE INTERNAL "${PROJECT_NAME} includes" FORCE)
 

@@ -13,8 +13,7 @@ if(UNIX)
 endif()
 
 # Look for Qt libraries
-find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE})
+find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets LinguistTools)
 add_definitions(${QT_DEFINITIONS})
 if(NOT ${CMAKE_BUILD_TYPE} MATCHES "Debug")
     add_definitions(-DQT_NO_DEBUG)
@@ -29,16 +28,16 @@ set(META_SRCS "")
 foreach (MOC ${MOCS})
     set(META_SRCS ${META_SRCS} include/${MOC})
 endforeach()
-qt4_wrap_cpp(MOC_SRCS ${META_SRCS})
+qt5_wrap_cpp(MOC_SRCS ${META_SRCS})
 
 # Wrap UI
-qt4_wrap_ui(UI_SRCS ${UIS})
+qt5_wrap_ui(UI_SRCS ${UIS})
 
 # Resources
-qt4_add_resources(RES_SRCS ${RES})
+qt5_add_resources(RES_SRCS ${RES})
 
 # Translations
-qt4_add_translation(TRANSLATIONS ${TSS})
+qt5_add_translation(TRANSLATIONS ${TSS})
 
 # Add OPENGL includes
 include(add_opengl)
@@ -56,7 +55,7 @@ if(${PROJECT_NAME}_DISABLE_CONSOLE)
 endif()
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_GUI} ${SRCS} ${MOC_SRCS} ${UI_SRCS} ${RES_SRCS} ${HDRS} ${TRANSLATIONS})
-target_link_libraries(${PROJECT_NAME} ${${PROJECT_NAME}_QT_MAIN} ${QT_LIBRARIES} ${LIBS} ${GCOV})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_QT_MAIN} Qt5::Core Qt5::Gui Qt5::Widgets ${LIBS} ${GCOV})
 
 # Link OPENGL libraries
 include(link_opengl)

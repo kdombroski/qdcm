@@ -15,25 +15,12 @@ if(QDCM_BUILD_TESTS AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/")
         get_filename_component(FILENAME ${TEST} NAME_WE)
 
         # Generate Qt moc file
-        qt4_wrap_cpp(MOC_${FILENAME} ${TEST})
+        qt5_wrap_cpp(MOC_${FILENAME} ${TEST})
 
         # Generate test main source file
         set(TEST_SRC "${CMAKE_CURRENT_BINARY_DIR}/test/test_${FILENAME}.cpp")
-        if(WIN32)
-            add_custom_command(
-                OUTPUT "${TEST_SRC}"
-                COMMAND ${CMAKE_COMMAND} -E echo "\#include \\\"${TEST}\\\"" > ${TEST_SRC}
-                COMMAND ${CMAKE_COMMAND} -E echo "QTEST_MAIN(${FILENAME})" >> ${TEST_SRC}
-                DEPENDS ${TEST}
-            )
-        else(WIN32)
-            add_custom_command(
-                OUTPUT "${TEST_SRC}"
-                COMMAND echo "\"""#include""\\\"${TEST}\\\"" "\"" > ${TEST_SRC}
-                COMMAND echo "\"QTEST_MAIN(${FILENAME})\"" >> ${TEST_SRC}
-                DEPENDS ${TEST}
-            )
-        endif(WIN32)
+        file(WRITE ${TEST_SRC} "#include \"${TEST}\"\n")
+        file(APPEND ${TEST_SRC} "QTEST_MAIN(${FILENAME})\n")
 
         set(GCOV "")
         if(UNIX AND QDCM_TESTS_COVERAGE)
@@ -44,10 +31,10 @@ if(QDCM_BUILD_TESTS AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/")
         # Link target
         set(TEST_TARGET "${PROJECT_NAME}_${FILENAME}")
         add_executable(${TEST_TARGET} ${TEST_SRC} ${MOC_${FILENAME}} ${TEST})
-        target_link_libraries(${TEST_TARGET} ${PROJECT_NAME} ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY} ${LIBS})
+		target_link_libraries(${TEST_TARGET} PRIVATE ${PROJECT_NAME} Qt5::Test ${LIBS})
 
         #Link unit-test library and the related library
-        target_link_libraries(${TEST_TARGET} ${GCOV})
+        target_link_libraries(${TEST_TARGET} PRIVATE ${GCOV})
 
         add_test(${TEST_TARGET} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_TARGET})
     endforeach()
