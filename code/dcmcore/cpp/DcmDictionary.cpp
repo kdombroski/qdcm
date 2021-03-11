@@ -13,8 +13,8 @@
 #include <QFile>
 #include <QTextStream>
 #include <QStringList>
-#include <QtXml/QXmlStreamWriter>
-#include <QtXml/QDomDocument>
+#include <QXmlStreamWriter>
+#include <QDomDocument>
 #include "DcmDictionary.h"
 
 /* XML tags used to parse the dictionary file */
