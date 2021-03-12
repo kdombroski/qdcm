@@ -91,7 +91,11 @@ int DcmImage::height() const
 
 int DcmImage::frames() const
 {
-    QVariant v = m_dataset.tagValue("Frames");
+    QVariant v = m_dataset.tagValue("NumberOfFrames");
+    if (v.isValid()) {
+        return v.toInt();
+    }
+    v = m_dataset.tagValue("Frames");
     if (v.isValid()) {
         return v.toInt();
     }
