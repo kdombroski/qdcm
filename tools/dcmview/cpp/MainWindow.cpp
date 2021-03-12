@@ -94,6 +94,7 @@ void MainWindow::onOpenAction()
             dicomWindow->setWindowTitle(fileName);
             dicomWindow->setWindowFilePath(fileName);
             dicomWindow->resize(dicomWindow->sizeHint());
+            dicomWindow->setAttribute( Qt::WA_DeleteOnClose );
             m_mdiArea->addSubWindow(dicomWindow);
             dicomWindow->show();
             if (!dicomWindow->containsImage()) {
