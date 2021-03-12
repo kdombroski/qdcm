@@ -85,11 +85,23 @@ QWidget* DicomWindow::createDicomImageWidget()
 
         tf.addReferencePoint(windowCenter - windowWidth / 2, QColor(0, 0, 0));
         tf.addReferencePoint(windowCenter + windowWidth / 2, QColor(255, 255, 255));
-        QImage qImage = monoImage.toQImage(tf);
-        QLabel *imageLabel = new QLabel();
-        imageLabel->setPixmap(QPixmap::fromImage(qImage));
-        imageLabel->setAlignment(Qt::AlignCenter);
-        return imageLabel;
+
+        QWidget *w = new QWidget(this);
+        QHBoxLayout *l = new QHBoxLayout(w);
+        w->setLayout(l);
+
+        auto frames = monoImage.frames();
+        for (int frame = 0; frame < frames; ++frame) {
+            QImage qImage = monoImage.toQImage(tf, frame);
+
+            QLabel *imageLabel = new QLabel(w);
+            imageLabel->setPixmap(QPixmap::fromImage(qImage));
+            imageLabel->setAlignment(Qt::AlignCenter);
+
+            l->addWidget(imageLabel);
+        }
+
+        return w;
     }
 
     return 0;
