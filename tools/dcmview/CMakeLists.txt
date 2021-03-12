@@ -7,8 +7,8 @@ set(MOCS
    )
 
 set(LIBS
-        dcmcore
-        dcmimage
+        qdcmcore
+        qdcmimage
    )
 
 set(dcmview_DISABLE_CONSOLE TRUE)

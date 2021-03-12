@@ -1,6 +1,6 @@
-project(dcmimage)
+project(qdcmimage)
 
-set(LIBS dcmcore)
+set(LIBS qdcmcore)
 
 include(build_shared_lib)
 include(build_test)

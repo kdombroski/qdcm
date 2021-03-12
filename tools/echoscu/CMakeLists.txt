@@ -8,8 +8,8 @@ set(MOCS
     )
 
 set(LIBS
-    dcmcore
-    dcmnet
+    qdcmcore
+    qdcmnet
     )
 
 include(build_qt_executable)

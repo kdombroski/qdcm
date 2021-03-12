@@ -1,4 +1,4 @@
-project(dcmcore)
+project(qdcmcore)
 
 set(QT_USE_QTXML TRUE)
 set(QT_DONT_USE_QTGUI TRUE)
