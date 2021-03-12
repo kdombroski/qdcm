@@ -52,7 +52,7 @@ public:
      * be retained by the image constructed.
      * \param dataset DICOM dataset.
      */
-    DcmImage(DcmDataset &dataset);
+    DcmImage(DcmDataset const &dataset);
 
     /**
      * Copy constructor.

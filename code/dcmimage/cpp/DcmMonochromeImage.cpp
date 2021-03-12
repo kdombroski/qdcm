@@ -23,7 +23,7 @@ DcmMonochromeImage::DcmMonochromeImage(int width,
 {
 }
 
-DcmMonochromeImage::DcmMonochromeImage(DcmDataset &dataset)
+DcmMonochromeImage::DcmMonochromeImage(DcmDataset const &dataset)
     : DcmImage(dataset)
 {
 }

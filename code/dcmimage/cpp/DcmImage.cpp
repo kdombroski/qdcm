@@ -50,7 +50,7 @@ DcmImage::DcmImage(int width,
     m_tagPixelDataPtr = dynamic_cast<DcmTagPixelData*>(m_dataset.findTag(DcmTagKey::PixelData));
 }
 
-DcmImage::DcmImage(DcmDataset &dataset)
+DcmImage::DcmImage(DcmDataset const &dataset)
 {
     m_dataset = dataset;
     DcmTag *tagPtr = m_dataset.findTag(DcmTagKey::PixelData);

@@ -50,7 +50,7 @@ public:
      * Construct monochromatic image from DICOM dataset.
      * \param dataset A vaid DICOM dataset.
      */
-    DcmMonochromeImage(DcmDataset &dataset);
+    DcmMonochromeImage(DcmDataset const &dataset);
 
     /**
      * Copy ocnstructor.
