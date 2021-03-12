@@ -128,7 +128,10 @@ void DcmMonochromeImage::setRescaledPixel(double p, int x, int y, int frame)
 
 QImage DcmMonochromeImage::toQImage(const DcmImageTransferFunction &tf, int frame) const
 {
-    QImage qImage(width(), height(), QImage::Format_ARGB32);
+    int w = width();
+    int h = height();
+
+    QImage qImage(w, h, QImage::Format_ARGB32_Premultiplied);
 
     double slope = rescaleSlope();
     double offset = rescaleIntercept();
@@ -139,31 +142,33 @@ QImage DcmMonochromeImage::toQImage(const DcmImageTransferFunction &tf, int fram
     const DcmUnsignedByte *rawBytePtr = (const DcmUnsignedByte*) tagPixelDataPtr->constData();
     const DcmUnsignedShort *rawShortPtr = (DcmUnsignedShort*)rawBytePtr;
 
-    int idx = frame * width() * height();
+    int idx = frame * w * h;
 
     int colorTableSize = bitsAllocated() > 8 ? 65536 : 256;
 
-    QColor *colorTable = new QColor[colorTableSize];
+    QRgb *colorTable = new QRgb[colorTableSize];
     for (int v = 0; v < colorTableSize; v++) {
-        colorTable[v] = tf.colorForPixelValue(((double)v) * slope + offset);
+        colorTable[v] = tf.colorForPixelValue(((double)v) * slope + offset).rgba();
     }
 
-    // Somehow optimized, but still rather slow
+    QRgb *dest = reinterpret_cast<QRgb*>(qImage.bits());
 
     if (bitsAllocated() > 8) {
-        for (int y = 0; y < height(); y++) {
-            QRgb *scanLine = (QRgb*)qImage.scanLine(y);
-            for (int x = 0; x < width(); x++) {
-                DcmUnsignedShort raw = rawShortPtr[idx++];
-                scanLine[x] = colorTable[raw].rgba();
+        auto *src = rawShortPtr + idx;
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                *dest = colorTable[*src];
+                dest++;
+                src++;
             }
         }
     } else {
-        for (int y = 0; y < height(); y++) {
-            QRgb *scanLine = (QRgb*)qImage.scanLine(y);
-            for (int x = 0; x < width(); x++) {
-                DcmUnsignedShort raw = rawBytePtr[idx++];
-                scanLine[x] = colorTable[raw].rgba();
+        auto *src = rawBytePtr + idx;
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                *dest = colorTable[*src];
+                dest++;
+                src++;
             }
         }
     }
